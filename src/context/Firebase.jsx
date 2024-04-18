@@ -19,12 +19,21 @@ const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
 
 
-export const signUpUser = ( email, password)=>{
-  createUserWithEmailAndPassword(firebaseAuth, email, password);
-}
 
 
 export const FirebaseProvider = (props)=> {
+
+  const signUpUser = async( email, password)=>{
+    try{
+    await createUserWithEmailAndPassword(firebaseAuth, email, password);
+
+    }
+    catch(error){
+      alert(error);
+    }
+  }
+
+
   const signInUser = async( email, password)=>{
     try{
      await signInWithEmailAndPassword(firebaseAuth, email, password);
