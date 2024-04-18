@@ -27,9 +27,9 @@ const SignUp = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async(e) => {
     e.preventDefault();
-    firebase.signUpUser(email,password);
+    await firebase.signUpUser(email,password);
     navigate('/sign-in');
 
   }
@@ -90,7 +90,7 @@ const SignUp = () => {
             fullWidth
             variant='contained'
             style={{ margin: '24px 0 16px' }}
-            color='primary'
+            // color='primary'
           >
             Sign Up
           </Button>
@@ -119,7 +119,7 @@ const SignUp = () => {
       </div>
       <Box mt={8}>
         <Typography variant='body2' color='textSecondary' align='center'>
-          
+
           <Link color='inherit' href='/sign-in'>
             sign in
           </Link>
