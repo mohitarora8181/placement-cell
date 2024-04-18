@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useContext } from 'react';
 import { FirebaseContext } from '../context/Firebase';
 
+
 import {
   Avatar,
   Button,
@@ -118,10 +119,11 @@ const SignUp = () => {
       </div>
       <Box mt={8}>
         <Typography variant='body2' color='textSecondary' align='center'>
-          {'Created by '}
-          <Link color='inherit' href='https://developer-yuvraj.netlify.app/'>
-            The God
+          
+          <Link color='inherit' href='/sign-in'>
+            sign in
           </Link>
+
         </Typography>
       </Box>
     </Container>
