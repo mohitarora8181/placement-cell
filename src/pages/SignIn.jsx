@@ -118,9 +118,9 @@ const SignIn = () => {
       </div>
       <Box mt={8}>
         <Typography variant='body2' color='textSecondary' align='center'>
-          {'Created by '}
-          <Link color='inherit' href='https://developer-yuvraj.netlify.app/'>
-            The God
+
+          <Link color='inherit' href='/sign-up'>
+            Sign Up
           </Link>
         </Typography>
       </Box>
