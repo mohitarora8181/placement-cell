@@ -1,5 +1,7 @@
 import {useContext, createContext, useState} from 'react';
 import {initializeApp} from 'firebase/app';
+import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import { Password } from '@mui/icons-material';
 
 export const FirebaseContext = createContext(null);
 // export const useFirebase =  useContext(firebaseContext);
@@ -13,15 +15,29 @@ const firebaseConfig = {
   appId: "1:204794261592:web:281b9447cc20fe63a89a2d",
   measurementId: "G-9X9QZ3QBD5"
 };
-const firebaseApp = initializeApp(firebaseConfig); 
+const firebaseApp = initializeApp(firebaseConfig);
+const firebaseAuth = getAuth(firebaseApp);
+
+
+export const signUpUser = ( email, password)=>{
+  createUserWithEmailAndPassword(firebaseAuth, email, password);
+}
+
 
 export const FirebaseProvider = (props)=> {
-  const [name, setName] = useState("Yuvraj");
-  const [count, setCount] = useState(0);
+  const signInUser = async( email, password)=>{
+    try{
+     await signInWithEmailAndPassword(firebaseAuth, email, password);
+    }
+    catch(error){
+      alert("Error", error);
+    }
+  }
   return(
     <>
     <FirebaseContext.Provider value={{
-      name,count
+      signInUser,
+      signUpUser,
 
     }
 
