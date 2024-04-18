@@ -1,18 +1,19 @@
-import Navbar from "./components/Navbar";
-import { FirebaseContext } from "./context/Firebase";
-import { useContext } from "react";
-
+import { FirebaseContext } from './context/Firebase'
+import { useContext } from 'react'
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
 
 function App() {
-  const firebase = useContext(FirebaseContext);
-  console.log(firebase);
+  const firebase = useContext(FirebaseContext)
+  console.log(firebase)
   return (
-   <>
-   <Navbar/>
-   <h1>Hello</h1>
-
-   </>
-  );
+    <>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/profile' element = {<h1>Profile</h1>}/>
+      </Routes>
+    </>
+  )
 }
 
-export default App;
+export default App
