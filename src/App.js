@@ -7,7 +7,7 @@ import SignUp from './pages/SignUp'
 
 function App() {
   const firebase = useContext(FirebaseContext)
-  console.log(firebase)
+  
   return (
     <>
       <Routes>

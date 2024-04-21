@@ -1,6 +1,6 @@
-import {useContext, createContext, useState} from 'react';
+import {useContext, createContext, useState, useEffect} from 'react';
 import {initializeApp} from 'firebase/app';
-import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, onAuthStateChanged} from 'firebase/auth';
 import { Password } from '@mui/icons-material';
 
 export const FirebaseContext = createContext(null);
@@ -22,10 +22,21 @@ const firebaseAuth = getAuth(firebaseApp);
 
 
 export const FirebaseProvider = (props)=> {
+  const [user, setUser] = useState(null);
+  //setting logged in state; 
+  useEffect(()=>{
+    onAuthStateChanged(firebaseAuth, (user)=>{
+      setUser(user);
+    })
+  })
+
+  const loggedIn = user;
+
 
   const signUpUser = async( email, password)=>{
     try{
     await createUserWithEmailAndPassword(firebaseAuth, email, password);
+
 
     }
     catch(error){
@@ -47,6 +58,7 @@ export const FirebaseProvider = (props)=> {
     <FirebaseContext.Provider value={{
       signInUser,
       signUpUser,
+      loggedIn
 
     }
 

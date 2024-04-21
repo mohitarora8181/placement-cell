@@ -156,13 +156,13 @@ const Navbar = ()=>{
   return(
     <>
 
-<Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+<Box sx={{ flexGrow: 1, }}>
+      <AppBar position="static" sx={{backgroundColor:'#ef4444'}} >
         <Toolbar>
           <IconButton
             size="large"
             edge="start"
-            color="inherit"
+            color="red"
             aria-label="open drawer"
             sx={{ mr: 2 }}
           >
@@ -174,7 +174,7 @@ const Navbar = ()=>{
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            MSIT Placement Cell
           </Typography>
           <Search>
             <SearchIconWrapper>

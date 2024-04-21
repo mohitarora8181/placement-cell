@@ -30,7 +30,11 @@ const SignIn = () => {
   const handleSignIn = async (e) => {
 
     e.preventDefault();
+    if(firebase.loggedIn){
+      navigate('/');
+    }
     await firebase.signInUser(email, password);
+
   }
 
   return (
@@ -89,7 +93,7 @@ const SignIn = () => {
             fullWidth
             variant='contained'
             style={{ margin: '24px 0 16px' }}
-            color='primary'
+            // color='primary'
           >
             Sign In
           </Button>
