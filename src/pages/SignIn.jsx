@@ -33,6 +33,7 @@ const SignIn = () => {
     if(firebase.loggedIn){
       navigate('/');
     }
+    
     await firebase.signInUser(email, password);
 
   }

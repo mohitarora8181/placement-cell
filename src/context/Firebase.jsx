@@ -95,6 +95,10 @@ export const FirebaseProvider = (props) => {
     }
   };
 
+  const signOutUser = ()=>{
+    firebaseAuth.signOut();
+  }
+
   return (
     <FirebaseContext.Provider
       value={{
@@ -102,7 +106,8 @@ export const FirebaseProvider = (props) => {
         signInUser,
         loggedIn: !!user, // Convert user object to boolean for logged-in state
         currentUser: user,
-        resumeURL
+        resumeURL,
+        signOutUser
       }}
     >
       {props.children}
