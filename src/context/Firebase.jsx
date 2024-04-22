@@ -4,7 +4,7 @@ import { createContext, useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, doc, setDoc, getDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export const FirebaseContext = createContext(null);
 
@@ -53,21 +53,13 @@ export const FirebaseProvider = (props) => {
     return () => unsubscribe(); // Cleanup the subscription
   }, [firebaseAuth, fireStore]);
 
-
-
   const signUpUser = async (email, password, name, dob, course, degree, resume) => {
     try {
-      // Create a reference to the resume file in Firebase Storage
       const resumeRef = ref(storage, `uploads/resumes/${Date.now()}${resume?.name}`);
-
-      // Upload the resume file to Firebase Storage
       const uploadResult = await uploadBytes(resumeRef, resume);
-
-      // Create a new user using email and password authentication
       const newUserCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
       const userId = newUserCredential.user.uid;
 
-      // Update the user document in Firestore with user details and resume path
       await setDoc(doc(fireStore, 'users', userId), {
         name: name,
         dob: dob,
@@ -84,13 +76,22 @@ export const FirebaseProvider = (props) => {
     }
   };
 
+  const resumeURL = async (path) => {
+    try {
+      const downloadURL = await getDownloadURL(ref(storage, path));
+      return downloadURL;
+    } catch (error) {
+      console.error('Error retrieving resume URL:', error);
+      return null; // Return null or handle error accordingly
+    }
+  };
 
   const signInUser = async (email, password) => {
     try {
       await signInWithEmailAndPassword(firebaseAuth, email, password);
     } catch (error) {
-      alert('Error signing in:', error);
-      // throw error; // Propagate the error for higher-level error handling
+      console.error('Error signing in:', error);
+      throw error; // Propagate the error for higher-level error handling
     }
   };
 
@@ -100,11 +101,11 @@ export const FirebaseProvider = (props) => {
         signUpUser,
         signInUser,
         loggedIn: !!user, // Convert user object to boolean for logged-in state
-        currentUser: user
+        currentUser: user,
+        resumeURL
       }}
     >
       {props.children}
     </FirebaseContext.Provider>
   );
 };
-
