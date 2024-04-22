@@ -1,182 +1,136 @@
-import { useNavigate } from 'react-router-dom'
 import React, { useState } from 'react';
-import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { TextField, Button, Typography, Avatar, CssBaseline, Container, Link, Box } from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { FirebaseContext } from '../context/Firebase';
 
-
-import {
-  Avatar,
-  Button,
-  CssBaseline,
-  TextField,
-
-  Link,
-
-  Box,
-  Typography,
-  Container,
-} from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-
 const SignUp = () => {
-  const firebase = useContext(FirebaseContext);
+  const firebase = React.useContext(FirebaseContext);
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
   const [name, setName] = useState('');
   const [degree, setDegree] = useState('');
   const [course, setCourse] = useState('');
   const [dob, setDob] = useState(null);
-  const [cgpa, setCGPA] = useState('');
+  const [resume, setResume] = useState(null); // File state
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-
-  const handleSignUp = async(e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    await firebase.signUpUser(email,password);
-    navigate('/sign-in');
 
-  }
+    try {
+      await firebase.signUpUser(email, password, name, dob, course, degree, resume);
+      navigate('/sign-in');
+    } catch (error) {
+      setError('Error signing up: ' + error.message);
+    }
+  };
 
   return (
-    <Container component='main' maxWidth='xs'>
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Avatar style={{ margin: '8px', backgroundColor: '#ea580c' }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component='h1' variant='h5'>
+        <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
-        <form
-          style={{ width: '100%', marginTop: '8px' }}
-          onSubmit={handleSignUp}
-        >
-            <TextField
-            variant='outlined'
-            margin='normal'
+        <form style={{ width: '100%', marginTop: '8px' }} onSubmit={handleSignUp}>
+          <TextField
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            name='name'
-            label='Name'
-            type='text'
-            id='name'
-            autoComplete='current-password'
+            label="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-
-<TextField
-            variant='outlined'
-            margin='normal'
+          <TextField
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            name='dob'
-            label='Date of Birth'
-            type='date'
-            id='dob'
-            // autoComplete='current-password'
-            value={dob}
-            onChange={(e) => setDob(e.target.value)}
-          />
-
-<TextField
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            name='degree'
-            label='degree'
-            type='text'
-            id='degree'
-            // autoComplete='current-password'
+            label="Degree"
             value={degree}
             onChange={(e) => setDegree(e.target.value)}
           />
-
-<TextField
-            variant='outlined'
-            margin='normal'
+          <TextField
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            name='course'
-            label='course'
-            type='type'
-            id='text'
-            // autoComplete='current-password'
+            label="Course"
             value={course}
             onChange={(e) => setCourse(e.target.value)}
           />
-
-
           <TextField
-            variant='outlined'
-            margin='normal'
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            id='email'
-            label='Email Address'
-            name='email'
-            autoComplete='email'
-            autoFocus
+            label="Date of Birth"
+            type="date"
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Email Address"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
-            variant='outlined'
-            margin='normal'
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            name='password'
-            label='Password'
-            type='password'
-            id='password'
-            autoComplete='current-password'
+            label="Password"
+            type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
-          <Button
-            sx={{ background: '#ea580c' }}
-            type='submit'
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
             fullWidth
-            variant='contained'
-            style={{ margin: '24px 0 16px' }}
-            // color='primary'
+            label="Resume"
+            type="file"
+            onChange={(e) => setResume(e.target.files[0])}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            style={{ margin: '24px 0 16px', background: '#ea580c', color: 'white' }}
           >
             Sign Up
           </Button>
-
           {error && (
-            <Typography
-              variant='body2'
-              color='error'
-              style={{ marginTop: '16px' }}
-            >
+            <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
               {error}
             </Typography>
           )}
         </form>
       </div>
       <Box mt={8}>
-        <Typography variant='body2' color='textSecondary' align='center'>
-
-          <Link color='inherit' href='/sign-in'>
-            sign in
+        <Typography variant="body2" color="textSecondary" align="center">
+          <Link href="/sign-in" color="inherit">
+            Sign In
           </Link>
-
         </Typography>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
 export default SignUp;

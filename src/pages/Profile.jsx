@@ -3,17 +3,32 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Navbar from '../components/Navbar';
-import Link from '@mui/material/Link'; // Import Link component from Material-UI
+import Link from '@mui/material/Link';
 import { FirebaseContext } from '../context/Firebase';
 
 const Profile = () => {
   const firebase = useContext(FirebaseContext);
   const [user, setUser] = useState(null);
+  const [resumeUrl, setResumeUrl] = useState(null);
 
   useEffect(() => {
-    if (firebase.currentUser) {
-      setUser(firebase.currentUser); // Assuming firebase.currentUser holds user data
-    }
+    const fetchUserData = async () => {
+      if (firebase.currentUser) {
+        setUser(firebase.currentUser);
+
+        if (firebase.currentUser.resume) {
+          try {
+            const url = await firebase.resumeURL(firebase.currentUser.resume);
+            setResumeUrl(url);
+          } catch (error) {
+            console.error('Error fetching resume URL:', error);
+            setResumeUrl(null);
+          }
+        }
+      }
+    };
+
+    fetchUserData();
   }, [firebase]);
 
   return (
@@ -36,9 +51,8 @@ const Profile = () => {
             <Typography variant="body1">Date of Birth: {user ? user.dob : 'Loading...'}</Typography>
             <Typography variant="body1">Course: {user ? user.course : 'Loading...'}</Typography>
             <Typography variant="body1">Degree: {user ? user.degree : 'Loading...'}</Typography>
-            {/* Make Resume a clickable link */}
             <Typography variant="body1">
-              Resume: {user ? <Link href={user.resume}>View Resume</Link> : 'Loading...'}
+              Resume: {resumeUrl ? <Link href={resumeUrl}>View Resume</Link> : 'No resume available'}
             </Typography>
           </Grid>
         </Grid>
