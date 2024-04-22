@@ -3,7 +3,7 @@
 import { createContext, useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, doc, setDoc, getDoc, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, setDoc, getDoc, addDoc, getDocs } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export const FirebaseContext = createContext(null);
@@ -113,6 +113,10 @@ export const FirebaseProvider = (props) => {
     })
   }
 
+  const listAllJobs = ()=>{
+    return getDocs(collection(fireStore, 'jobs'));
+  }
+
 
   return (
     <FirebaseContext.Provider
@@ -123,7 +127,8 @@ export const FirebaseProvider = (props) => {
         currentUser: user,
         resumeURL,
         signOutUser,
-        postJob
+        postJob,
+        listAllJobs
       }}
     >
       {props.children}
