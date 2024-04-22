@@ -3,7 +3,7 @@
 import { createContext, useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, doc, setDoc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, setDoc, getDoc, addDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export const FirebaseContext = createContext(null);
@@ -25,6 +25,7 @@ const storage = getStorage(firebaseApp);
 
 export const FirebaseProvider = (props) => {
   const [user, setUser] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (authUser) => {
@@ -36,7 +37,8 @@ export const FirebaseProvider = (props) => {
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
             setUser(userData);
-            console.log("User data:", userData);
+            setLoggedIn(user);
+
           } else {
             console.error('User document does not exist');
             setUser(null); // Reset user state
@@ -51,7 +53,7 @@ export const FirebaseProvider = (props) => {
     });
 
     return () => unsubscribe(); // Cleanup the subscription
-  }, [firebaseAuth, fireStore]);
+  }, [loggedIn, user]);
 
   const signUpUser = async (email, password, name, dob, course, degree, resume) => {
     try {
@@ -99,15 +101,29 @@ export const FirebaseProvider = (props) => {
     firebaseAuth.signOut();
   }
 
+  const postJob = async(jobTitle, companyName, ctc, jobDescription, jobImage)=>{
+    const jobImageRef = ref(storage, `uploads/jobs/${Date.now()}-${jobImage.name}`);
+    const uploadResult = await uploadBytes(jobImageRef, jobImage);
+    await addDoc(collection(fireStore, 'jobs' ), {
+      jobTitle,
+      companyName,
+      jobDescription,
+      ctc,
+      imageURL: uploadResult.ref.fullPath
+    })
+  }
+
+
   return (
     <FirebaseContext.Provider
       value={{
         signUpUser,
         signInUser,
-        loggedIn: !!user, // Convert user object to boolean for logged-in state
+        loggedIn, // Convert user object to boolean for logged-in state
         currentUser: user,
         resumeURL,
-        signOutUser
+        signOutUser,
+        postJob
       }}
     >
       {props.children}
