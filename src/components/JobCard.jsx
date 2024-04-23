@@ -7,7 +7,7 @@ const JobCard = ({ job }) => {
   const getURL = async () => {
     const link = await firebase.getURL(job.imageURL)
     setURL(link);
-    console.log(link);
+    
   }
   useEffect(() => {
     getURL();
