@@ -37,7 +37,7 @@ export const FirebaseProvider = (props) => {
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
             setUser(userData);
-            setLoggedIn(user);
+            setLoggedIn(!!user);
 
           } else {
             console.error('User document does not exist');

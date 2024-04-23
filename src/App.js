@@ -1,32 +1,24 @@
-import { FirebaseContext } from './context/Firebase'
-import { useContext, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Profile from './pages/Profile'
-import { useNavigate } from 'react-router-dom'
 import AdminPage from './pages/AdminPage'
+import ProtectedRoute from './components/ProtectedRoute'; 
+
 
 function App() {
-  const firebase = useContext(FirebaseContext);
-  const navigate = useNavigate();
-  useEffect(()=>{
-    // if(!firebase.loggedIn){
-    //   navigate('sign-in');
-    // }
-
-
-  },[firebase.loggedIn, navigate]);
+ 
   return (
     <>
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/profile' element = {<h1>Profile</h1>}/>
-        <Route path='/sign-in' element = {<SignIn/>}/>
-        <Route path="/sign-up" element={<SignUp/>}/>
-        <Route path="/user-profile" element={<Profile/>}/>
-        <Route path="/admin" element={<AdminPage/>}/>
+      <Route path='/' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+      <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/user-profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
+
+      <Route path='/sign-in' element={<SignIn />} />
+      <Route path="/sign-up" element={<SignUp />} />
 
       </Routes>
     </>
