@@ -1,34 +1,31 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { FirebaseContext } from '../context/Firebase';
+import React, { useState, useContext, useEffect } from 'react'
+import { FirebaseContext } from '../context/Firebase'
 
 const JobCard = ({ job }) => {
-  const firebase = useContext(FirebaseContext);
-  const [url,setURL] = useState('');
-  useEffect(()=>{
-    const getURL = async()=>{
-      const link = await firebase.getURL(job.imageURL);
-      setURL(url);
-      console.log(url);
-    }
-
-
-  })
+  const firebase = useContext(FirebaseContext)
+  const [url, setURL] = useState('')
+  const getURL = async () => {
+    const link = await firebase.getURL(job.imageURL)
+    setURL(link);
+    console.log(link);
+  }
+  useEffect(() => {
+    getURL();
+  }, [])
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg">
-      <h3 className="text-xl font-semibold mb-2">{job.jobTitle}</h3>
-      <p className="text-gray-600 mb-2">{job.companyName}</p>
-      <p className="mb-4">{job.jobDescription}</p>
-      {job.jobImage && (
-        <img
-          src={url}
-          alt={job.jobTitle}
-          className="w-full rounded-lg"
-        />
+    <div className='p-4 bg-white shadow-md rounded-lg w-72 h-auto m-2'>
+       {job.imageURL && (
+        <img src={url} alt={job.jobTitle} className=' rounded-lg h-48 w-64' />
       )}
-      <p className="text-gray-500">CTC: {job.ctc}</p>
-    </div>
-  );
-};
+      <h3 className='text-xl font-semibold mb-2'>{job.jobTitle}</h3>
+      <p className='text-gray-600 mb-2'>{job.companyName}</p>
+      <p className='mb-4'>{job.jobDescription}</p>
 
-export default JobCard;
+      <p className='text-gray-500'>CTC: {job.ctc}</p>
+      <button className='bg-blue-500 hover:bg-blue-700 font-bold rounded-sm mt-2 px-4 py-2 text-white '>Apply Now</button>
+    </div>
+  )
+}
+
+export default JobCard
