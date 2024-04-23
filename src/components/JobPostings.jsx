@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Use Axios for making HTTP requests
+import React, { useState, useEffect, useContext } from 'react';
+import { FirebaseContext } from '../context/Firebase';
+import JobCard from './JobCard';
+
 
 const JobPostings = () => {
+  const firebase = useContext(FirebaseContext);
   const [jobPostings, setJobPostings] = useState([]);
 
-  // Function to fetch job postings from the backend
   const fetchJobPostings = async () => {
-    try {
-      const response = await axios.get('/api/job-postings'); // Replace with actual API endpoint
-      setJobPostings(response.data); // Assuming the response data is an array of job postings
-    } catch (error) {
-      console.error('Error fetching job postings:', error);
-    }
+    const jobs= firebase.listAllJobs().then((docs) => setJobPostings(docs.docs));
+    console.log(jobPostings?.[0]?.data());
+    console.log(jobPostings);
+
+
+    // setJobPostings(jobs);
   };
 
   // Fetch job postings when the component mounts
@@ -27,22 +29,7 @@ const JobPostings = () => {
       ) : (
         <div className="grid gap-4">
           {jobPostings.map((job) => (
-            <div
-              key={job.id}
-              className="p-4 bg-white shadow-md rounded-lg"
-            >
-              <h3 className="text-xl font-semibold mb-2">{job.jobTitle}</h3>
-              <p className="text-gray-600 mb-2">{job.companyName}</p>
-              <p className="mb-4">{job.jobDescription}</p>
-              {job.jobImage && (
-                <img
-                  src={job.jobImage}
-                  alt={job.jobTitle}
-                  className="w-full rounded-lg"
-                />
-              )}
-              <p className="text-gray-500">CTC: {job.ctc}</p>
-            </div>
+            <JobCard job={job.data()}/>
           ))}
         </div>
       )}
