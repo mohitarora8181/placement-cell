@@ -1,22 +1,18 @@
-import { useContext, useEffect, useState } from "react";
-import { FirebaseContext } from "../context/Firebase";
-import { useNavigate } from "react-router-dom";
-const ProtectedRoute = (props)=>{
-  const {Component} = props;
-  const firebase = useContext(FirebaseContext);
-  const [loggedIn, setLoggedIn] = useState('');
-  const navigate  = useNavigate();
+import React, { useContext } from 'react';
+import { Navigate } from 'react-router-dom';
+import { FirebaseContext } from '../context/Firebase';
 
-  // useEffect(()=>{
-  //   setLoggedIn(firebase.loggedIn);
-  //   if(!loggedIn){
-  //     navigate('/sign-in');
-  //   }
-  // },[loggedIn, firebase.loggedIn]);
-  return(
-    <>
-    <Component/>
-    </>
-  )
+function ProtectedRoute({ children }) {
+  const { loggedIn } = useContext(FirebaseContext);
+
+  if (!loggedIn) {
+    // Redirect them to the /sign-in page, but save the current location they were
+    // trying to go to when they were redirected. This allows us to send them
+    // along to that location after they sign in.
+    return <Navigate to="/sign-in" replace />;
+  }
+
+  return children;
 }
-export default ProtectedRoute;
+
+export default ProtectedRoute
