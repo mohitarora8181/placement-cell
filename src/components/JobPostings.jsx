@@ -9,8 +9,8 @@ const JobPostings = () => {
 
   const fetchJobPostings = async () => {
     const jobs= firebase.listAllJobs().then((docs) => setJobPostings(docs.docs));
-    console.log(jobPostings?.[0]?.data());
-    console.log(jobPostings);
+    // console.log(jobPostings?.[0]?.data());
+    // console.log(jobPostings);
 
 
     // setJobPostings(jobs);
@@ -22,14 +22,14 @@ const JobPostings = () => {
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-[80%] mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-4">Job Postings</h2>
       {jobPostings.length === 0 ? (
         <p>No job postings available.</p>
       ) : (
-        <div className="grid gap-4">
+        <div className="flex flex-row flex-wrap">
           {jobPostings.map((job) => (
-            <JobCard job={job.data()}/>
+            <JobCard key={job.id} job={job.data()}/>
           ))}
         </div>
       )}
