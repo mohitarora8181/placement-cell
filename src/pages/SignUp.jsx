@@ -11,8 +11,8 @@ const SignUp = () => {
   const [name, setName] = useState('');
   const [degree, setDegree] = useState('');
   const [course, setCourse] = useState('');
-  const [dob, setDob] = useState(null);
-  const [resume, setResume] = useState(null); // File state
+  const [dob, setDob] = useState('');
+  const [resume, setResume] = useState(''); // File state
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

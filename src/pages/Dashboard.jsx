@@ -2,8 +2,10 @@ import React from 'react';
 import AdminPage from './AdminPage';
 
 const Dashboard = () => {
-  // Sample authenticated check or role-based authorization logic
-  const isAdmin = true;
+  // Simulate authenticated check or role-based authorization logic
+  const isAdmin = true; // Adjust this based on your actual authentication/authorization logic
+
+  console.log('isAdmin:', isAdmin); // Log isAdmin value for debugging
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">

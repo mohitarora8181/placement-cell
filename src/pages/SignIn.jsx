@@ -25,15 +25,15 @@ const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  console.log(firebase);
+
 
   const handleSignIn = async (e) => {
 
     e.preventDefault();
-    if(firebase.loggedIn){
-      navigate('/');
-    }
-    
+    // if(firebase.loggedIn){
+    //   navigate('/');
+    // }
+
     await firebase.signInUser(email, password);
 
   }

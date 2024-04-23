@@ -25,7 +25,7 @@ const storage = getStorage(firebaseApp);
 
 export const FirebaseProvider = (props) => {
   const [user, setUser] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (authUser) => {
@@ -33,27 +33,33 @@ export const FirebaseProvider = (props) => {
         try {
           const userDocRef = doc(fireStore, 'users', authUser.uid);
           const userDocSnap = await getDoc(userDocRef);
+          console.log(user);
 
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
             setUser(userData);
-            setLoggedIn(user);
-
+            setLoggedIn(true); // Update loggedIn state to true
           } else {
             console.error('User document does not exist');
             setUser(null); // Reset user state
+            setLoggedIn(false); // Update loggedIn state to false
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
           setUser(null); // Reset user state on error
+          setLoggedIn(false); // Update loggedIn state to false
         }
       } else {
         setUser(null); // Set user state to null if not authenticated
+        setLoggedIn(false); // Update loggedIn state to false
+        console.log(user);
+
       }
     });
 
     return () => unsubscribe(); // Cleanup the subscription
-  }, [loggedIn, user]);
+  }, []); // No dependencies needed here, since it runs only once on component mount
+
 
   const signUpUser = async (email, password, name, dob, course, degree, resume) => {
     try {
@@ -78,7 +84,7 @@ export const FirebaseProvider = (props) => {
     }
   };
 
-  const resumeURL = async (path) => {
+  const getURL = async (path) => {
     try {
       const downloadURL = await getDownloadURL(ref(storage, path));
       return downloadURL;
@@ -101,7 +107,7 @@ export const FirebaseProvider = (props) => {
     firebaseAuth.signOut();
   }
 
-  const postJob = async(jobTitle, companyName, ctc, jobDescription, jobImage)=>{
+  const postJob = async(jobTitle, companyName, ctc, jobDescription, jobImage, applyLink)=>{
     const jobImageRef = ref(storage, `uploads/jobs/${Date.now()}-${jobImage.name}`);
     const uploadResult = await uploadBytes(jobImageRef, jobImage);
     await addDoc(collection(fireStore, 'jobs' ), {
@@ -109,6 +115,7 @@ export const FirebaseProvider = (props) => {
       companyName,
       jobDescription,
       ctc,
+      applyLink,
       imageURL: uploadResult.ref.fullPath
     })
   }
@@ -125,7 +132,7 @@ export const FirebaseProvider = (props) => {
         signInUser,
         loggedIn, // Convert user object to boolean for logged-in state
         currentUser: user,
-        resumeURL,
+        getURL,
         signOutUser,
         postJob,
         listAllJobs

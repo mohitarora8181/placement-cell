@@ -18,7 +18,7 @@ const Profile = () => {
 
         if (firebase.currentUser.resume) {
           try {
-            const url = await firebase.resumeURL(firebase.currentUser.resume);
+            const url = await firebase.getURL(firebase.currentUser.resume);
             setResumeUrl(url);
           } catch (error) {
             console.error('Error fetching resume URL:', error);
