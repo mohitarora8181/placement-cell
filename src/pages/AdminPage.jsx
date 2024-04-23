@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { FirebaseContext } from '../context/Firebase';
 
 const AdminPage = () => {
@@ -9,6 +8,7 @@ const AdminPage = () => {
   const [jobImage, setJobImage] = useState(null);
   const [companyName, setCompanyName] = useState('');
   const [ctc, setCTC] = useState('');
+  const [applyLink, setApplyLink] = useState('');
 
   const handleJobTitleChange = (e) => {
     setJobTitle(e.target.value);
@@ -31,13 +31,16 @@ const AdminPage = () => {
     setCTC(e.target.value);
   };
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    await firebase.postJob(jobTitle, companyName, ctc, jobDescription, jobImage);
+  const handleApplyLinkChange = (e) => {
+    setApplyLink(e.target.value);
+  };
 
-    // // Ensure required fields are not empty
-    // if (!jobTitle || !jobDescription || !companyName || !ctc) {
-    //   alert('Please enter job title, company name, CTC, and description');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Ensure required fields are not empty
+    // if (!jobTitle || !jobDescription || !companyName || !ctc || !applyLink) {
+    //   alert('Please fill in all required fields.');
     //   return;
     // }
 
@@ -47,19 +50,26 @@ const AdminPage = () => {
     // formData.append('jobDescription', jobDescription);
     // formData.append('companyName', companyName);
     // formData.append('ctc', ctc);
+    // formData.append('applyLink', applyLink);
     // if (jobImage) {
     //   formData.append('jobImage', jobImage);
     // }
 
-    // // Send formData to backend for processing (e.g., posting job with image)
-    // console.log('Form data:', formData);
-
-    // // Reset form fields after submission
-    setJobTitle('');
-    setJobDescription('');
-    setJobImage(null);
-    setCompanyName('');
-    setCTC('');
+    // Send formData to backend for processing (e.g., posting job with image)
+    try {
+      await firebase.postJob(jobTitle, companyName, ctc, jobDescription, jobImage, applyLink );
+      alert('Job posted successfully!');
+      // Reset form fields after successful submission
+      setJobTitle('');
+      setJobDescription('');
+      setJobImage(null);
+      setCompanyName('');
+      setCTC('');
+      setApplyLink('');
+    } catch (error) {
+      console.error('Error posting job:', error);
+      alert('Failed to post job. Please try again.');
+    }
   };
 
   return (
@@ -102,6 +112,19 @@ const AdminPage = () => {
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             value={ctc}
             onChange={handleCTCChange}
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="applyLink" className="block text-sm font-medium text-gray-700">
+            Apply Link
+          </label>
+          <input
+            type="text"
+            id="applyLink"
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            value={applyLink}
+            onChange={handleApplyLinkChange}
             required
           />
         </div>

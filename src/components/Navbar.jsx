@@ -74,9 +74,11 @@ const Navbar = () => {
     setMobileMoreAnchorEl(null)
   }
   const logOut = () => {
+    firebase.signOutUser();
+    console.log(firebase.loggedIn); 
+
     setAnchorEl(null);
     handleMobileMenuClose();
-    // firebase.signOutUser();
 
 
   }
