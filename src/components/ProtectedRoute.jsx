@@ -5,12 +5,12 @@ import { FirebaseContext } from '../context/Firebase';
 function ProtectedRoute({ children }) {
   const { loggedIn } = useContext(FirebaseContext);
 
-  if (!loggedIn) {
-    // Redirect them to the /sign-in page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that location after they sign in.
-    return <Navigate to="/sign-in" replace />;
-  }
+  // if (!loggedIn) {
+  //   // Redirect them to the /sign-in page, but save the current location they were
+  //   // trying to go to when they were redirected. This allows us to send them
+  //   // along to that location after they sign in.
+  //   return <Navigate to="/sign-in" replace />;
+  // }
 
   return children;
 }

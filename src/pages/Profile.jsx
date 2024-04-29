@@ -40,7 +40,7 @@ const Profile = () => {
             <Avatar
               sx={{ width: 150, height: 150 }}
               alt={user ? user.displayName : ''}
-              src={user ? user.photoURL : ''}
+              src={user ? user.photoURL : 'https://source.unsplash.com/200x200/?profile pic'}
             />
           </Grid>
           <Grid item>
