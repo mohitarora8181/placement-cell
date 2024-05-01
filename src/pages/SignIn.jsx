@@ -30,9 +30,9 @@ const SignIn = () => {
   const handleSignIn = async (e) => {
 
     e.preventDefault();
-    // if(firebase.loggedIn){
-    //   navigate('/');
-    // }
+    if(firebase.loggedIn){
+      navigate('/');
+    }
 
     await firebase.signInUser(email, password);
 

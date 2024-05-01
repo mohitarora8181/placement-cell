@@ -135,7 +135,8 @@ export const FirebaseProvider = (props) => {
         getURL,
         signOutUser,
         postJob,
-        listAllJobs
+        listAllJobs,
+        user
       }}
     >
       {props.children}
