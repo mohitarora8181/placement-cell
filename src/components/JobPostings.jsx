@@ -22,12 +22,12 @@ const JobPostings = () => {
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
   return (
-    <div className="max-w-[80%] mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-4">Job Postings</h2>
+    <div className="max-w-[80%] mx-auto px-4 py-8 ">
+      <h2 className="text-2xl font-bold mb-4  text-center">Job Postings</h2>
       {jobPostings.length === 0 ? (
         <p>No job postings available.</p>
       ) : (
-        <div className="flex flex-row flex-wrap">
+        <div className="flex flex-row flex-wrap justify-center">
           {jobPostings.map((job) => (
             <JobCard key={job.id} job={job.data()}/>
           ))}
