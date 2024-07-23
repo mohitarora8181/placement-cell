@@ -9,6 +9,8 @@ const JobCard = ({ job }) => {
     setURL(link);
 
   }
+
+  
   useEffect(() => {
     getURL();
   }, [])

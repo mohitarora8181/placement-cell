@@ -33,7 +33,7 @@ export const FirebaseProvider = (props) => {
         try {
           const userDocRef = doc(fireStore, 'users', authUser.uid);
           const userDocSnap = await getDoc(userDocRef);
-          console.log(user);
+          console.log(user, authUser, userDocRef, userDocSnap.data() );
 
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();

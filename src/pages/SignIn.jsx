@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import React, { useState } from 'react';
 
 
@@ -21,18 +21,32 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 const SignIn = () => {
   const firebase = useContext(FirebaseContext);
   const navigate = useNavigate();
-
+  // const para = useSearchParams();
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+
+  // Using useSearchParams to get the query parameters
+  const [searchParams] = useSearchParams();
+
+  // Get the value of the 'cb' parameter
+  const callbackUrl = searchParams.get('cb');
+
 
 
   const handleSignIn = async (e) => {
 
     e.preventDefault();
-    if(firebase.loggedIn){
-      navigate('/');
+    if(firebase.loggedIn ){
+      if(callbackUrl){
+        navigate(callbackUrl);
+      }
+      else{
+        navigate('/');
+
+      }
     }
+    console.log(callbackUrl);
 
     await firebase.signInUser(email, password);
 
