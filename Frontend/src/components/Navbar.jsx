@@ -17,7 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import MoreIcon from '@mui/icons-material/MoreVert'
 import { NavLink } from 'react-router-dom'
 import { useContext } from 'react';
-import { FirebaseContext } from '../context/Firebase'
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,

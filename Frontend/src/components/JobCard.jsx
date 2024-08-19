@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { FirebaseContext } from '../context/Firebase'
+
 
 const JobCard = ({ job }) => {
   const firebase = useContext(FirebaseContext)

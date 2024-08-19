@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { FirebaseContext } from '../context/Firebase';
+
 
 const AdminPage = () => {
-  const firebase = useContext(FirebaseContext);
+  
   const [jobTitle, setJobTitle] = useState('');
   const [jobDescription, setJobDescription] = useState('');
   const [jobImage, setJobImage] = useState(null);
@@ -56,20 +56,7 @@ const AdminPage = () => {
     // }
 
     // Send formData to backend for processing (e.g., posting job with image)
-    try {
-      await firebase.postJob(jobTitle, companyName, ctc, jobDescription, jobImage, applyLink );
-      alert('Job posted successfully!');
-      // Reset form fields after successful submission
-      setJobTitle('');
-      setJobDescription('');
-      setJobImage(null);
-      setCompanyName('');
-      setCTC('');
-      setApplyLink('');
-    } catch (error) {
-      console.error('Error posting job:', error);
-      alert('Failed to post job. Please try again.');
-    }
+    
   };
 
   return (

@@ -4,32 +4,20 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Navbar from '../components/Navbar';
 import Link from '@mui/material/Link';
-import { FirebaseContext } from '../context/Firebase';
+
 
 const Profile = () => {
-  const firebase = useContext(FirebaseContext);
+  
   const [user, setUser] = useState(null);
   const [resumeUrl, setResumeUrl] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (firebase.currentUser) {
-        setUser(firebase.currentUser);
-
-        if (firebase.currentUser.resume) {
-          try {
-            const url = await firebase.getURL(firebase.currentUser.resume);
-            setResumeUrl(url);
-          } catch (error) {
-            console.error('Error fetching resume URL:', error);
-            setResumeUrl(null);
-          }
-        }
-      }
+      
     };
 
     fetchUserData();
-  }, [firebase]);
+  });
 
   return (
     <>

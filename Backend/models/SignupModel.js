@@ -116,12 +116,20 @@ const userSchema = new mongoose.Schema(
     }
 );
 
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    //console.log("Stored password hash:", this.password); // Log stored hash
+    const match = await bcrypt.compare(enteredPassword, this.password);
+    //console.log("Password match result:", match); // Log result of comparison
+    return match;
+};
+
 // Hash the password before saving the user
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
     this.password = await bcrypt.hash(this.password, 12);
     next();
 });
+
 
 const User = mongoose.model('User', userSchema);
 

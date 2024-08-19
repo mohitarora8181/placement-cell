@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 
 import { useContext } from 'react';
-import { FirebaseContext } from '../context/Firebase';
+
 
 import {
   Avatar,
@@ -19,7 +19,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 
 const SignIn = () => {
-  const firebase = useContext(FirebaseContext);
+  
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('')
@@ -30,12 +30,7 @@ const SignIn = () => {
   const handleSignIn = async (e) => {
 
     e.preventDefault();
-    if(firebase.loggedIn){
-      navigate('/');
-    }
-
-    await firebase.signInUser(email, password);
-
+    
   }
 
   return (

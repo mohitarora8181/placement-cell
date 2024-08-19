@@ -11,10 +11,11 @@ import {
   Box,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { FirebaseContext } from '../context/Firebase';
+
+import axios from 'axios';
 
 const SignUp = () => {
-  const firebase = React.useContext(FirebaseContext);
+  
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
@@ -45,14 +46,27 @@ const SignUp = () => {
   const [backlogs4, setBacklogs4] = useState('');
   const [backlogs5, setBacklogs5] = useState('');
   const [backlogs6, setBacklogs6] = useState('');
+  const[loading,setLoading] = useState(false);
 
   const [error, setError] = useState('');
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
+  
+  const handleSignUp = async () => {
+    
+    //setLoading(true);
+
+    
+
+   
 
     try {
-      await firebase.signUpUser({
+      const config = {
+        headers: {
+          "Content-type": "application/json"
+        },
+      };
+
+      const { data } = await axios.post('/api/users', {
         name,
         email,
         password,
@@ -81,10 +95,15 @@ const SignUp = () => {
         backlogs4,
         backlogs5,
         backlogs6,
-      });
-      navigate('/sign-in');
+      }, config);
+
+      alert('Registration Successful');
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      
+      navigate("/sign-in");
     } catch (error) {
-      setError('Error signing up: ' + error.message);
+      alert(`Error: ${error.response?.data?.message || 'An error occurred'}`);
+      //setLoading(false);
     }
   };
 

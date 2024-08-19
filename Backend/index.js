@@ -2,6 +2,9 @@ import dotenv from "dotenv"
 import connectDB from "./db/index.js"
 import userRoutes from "./Routes/userRoutes.js"
 import {app} from "./app.js"
+import express from "express"
+import cors from 'cors'
+app.use(cors());
 dotenv.config({
     path:'./.env'
 })
