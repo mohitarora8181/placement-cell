@@ -70,9 +70,21 @@ const SignUp = () => {
       };
 
       const { data } = await axios.post('/api/users/sign-up', formData, config);
+      const { _id, token, ...rest } = data;
+
+        // Check if _id is defined
+        if (_id) {
+            console.log('User ID:', _id);
+            localStorage.setItem('userId', _id); // Store the user ID
+        } else {
+            console.error('User ID is missing in the response');
+        }
+
 
       alert('Registration Successful');
       localStorage.setItem('userInfo', JSON.stringify(data));
+      
+
       navigate('/sign-in');
     } catch (error) {
       setError(error.response?.data?.message || 'An error occurred');

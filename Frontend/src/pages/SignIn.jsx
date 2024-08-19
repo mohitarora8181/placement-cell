@@ -26,6 +26,15 @@ const SignIn = () => {
       console.log('Password:', password);  // Debug password value
 
       const { data } = await axios.post('/api/users/sign-in', { email, password });
+      const { _id, token, ...rest } = data;
+
+        // Check if _id is defined
+        if (_id) {
+            console.log('User ID:', _id);
+            localStorage.setItem('userId', _id); // Store the user ID
+        } else {
+            console.error('User ID is missing in the response');
+        }
       console.log('Response Data:', data);
 
       // Store the token or user data as needed

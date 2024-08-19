@@ -17,6 +17,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import MoreIcon from '@mui/icons-material/MoreVert'
 import { NavLink } from 'react-router-dom'
 import { useContext } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -59,12 +61,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const Navbar = () => {
-  const firebase = useContext(FirebaseContext);
+ 
   const [anchorEl, setAnchorEl] = useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
 
   const isMenuOpen = Boolean(anchorEl)
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
+  const navigate = useNavigate();
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget)
@@ -74,11 +77,10 @@ const Navbar = () => {
     setMobileMoreAnchorEl(null)
   }
   const logOut = () => {
-    firebase.signOutUser();
-    console.log(firebase.loggedIn); 
+    
 
-    setAnchorEl(null);
-    handleMobileMenuClose();
+    localStorage.clear();
+    navigate('/sign-in');
 
 
   }

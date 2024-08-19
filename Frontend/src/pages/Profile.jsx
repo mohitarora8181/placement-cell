@@ -4,20 +4,37 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Navbar from '../components/Navbar';
 import Link from '@mui/material/Link';
+import axios from 'axios';
 
 
 const Profile = () => {
   
   const [user, setUser] = useState(null);
-  const [resumeUrl, setResumeUrl] = useState(null);
+  
+  const userId = localStorage.getItem('userId');
+  console.log('UserId from localStorage:', userId);
+
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      
-    };
+    if (userId) {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get(`/api/users/profile/${userId}`);
+          setUser(response.data);
+         
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
 
-    fetchUserData();
-  });
+      fetchUserData();
+    }
+  }, [userId]);
+
+  if (!user) {
+    return <p>Loading...</p>;
+  }
+
 
   return (
     <>
@@ -27,21 +44,19 @@ const Profile = () => {
           <Grid item>
             <Avatar
               sx={{ width: 150, height: 150 }}
-              alt={user ? user.displayName : ''}
+              alt={user ? user.username : ''}
               src={user ? user.photoURL : 'https://source.unsplash.com/200x200/?profile pic'}
             />
           </Grid>
           <Grid item>
             <Typography variant="h4">
-              Name: {user ? user.name : 'Loading...'}
+              Name: {user ? user.username : 'Loading...'}
             </Typography>
             <Typography variant="body1">Email: {user ? user.email : 'Loading...'}</Typography>
             <Typography variant="body1">Date of Birth: {user ? user.dob : 'Loading...'}</Typography>
             <Typography variant="body1">Course: {user ? user.course : 'Loading...'}</Typography>
             <Typography variant="body1">Degree: {user ? user.degree : 'Loading...'}</Typography>
-            <Typography variant="body1">
-              Resume: {resumeUrl ? <Link href={resumeUrl}>View Resume</Link> : 'No resume available'}
-            </Typography>
+           
           </Grid>
         </Grid>
       </div>
