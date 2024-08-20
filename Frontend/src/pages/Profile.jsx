@@ -17,7 +17,7 @@ const Profile = () => {
         try {
           const userResponse = await axios.get(`/api/users/profile/${userId}`);
           setUser(userResponse.data);
-          console.log(userResponse);
+          setResumeURL(userResponse.data.resumeURL || ''); // Pre-fill resume URL if present
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
@@ -86,7 +86,7 @@ const Profile = () => {
                 value={resumeURL}
                 onChange={handleResumeURLChange}
               />
-              <Button variant="contained" color="primary" onClick={handleSubmitURL} className="mt-2">
+              <Button variant="contained" color="primary" onClick={handleSubmitURL} className="mt-5">
                 Update Resume URL
               </Button>
             </div>

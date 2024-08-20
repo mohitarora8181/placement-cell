@@ -16,7 +16,7 @@ router.get('/profile/:userId', async (req, res) => {
 
     
     const user = await User.findById(userId)
-      .select('username email nationality dob course degree'); 
+      .select('username email nationality dob course degree resumeURL'); 
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
