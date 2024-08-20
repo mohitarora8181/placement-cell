@@ -45,7 +45,7 @@ const Profile = () => {
           <Grid item xs={12} md={4} style={{ textAlign: 'center' }}>
             <Avatar
               sx={{ width: 150, height: 150, margin: '0 auto' }}
-              alt={user.nationality || 'Profile Picture'}
+              alt={user.fullname || 'Profile Picture'}
               src={user.photoURL || 'https://source.unsplash.com/200x200/?profile pic'}
             />
           </Grid>
