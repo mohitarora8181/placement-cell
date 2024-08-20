@@ -5,11 +5,14 @@ import Grid from '@mui/material/Grid';
 import Navbar from '../components/Navbar';
 import Link from '@mui/material/Link';
 import axios from 'axios';
+import { Button, TextField } from '@mui/material';
 
 
 const Profile = () => {
   
   const [user, setUser] = useState(null);
+  const [resumeURL, setResumeURL] = useState('');
+
   
   const userId = localStorage.getItem('userId');
   console.log('UserId from localStorage:', userId);
@@ -34,6 +37,24 @@ const Profile = () => {
   if (!user) {
     return <p>Loading...</p>;
   }
+  const handleResumeURLChange = (event) => {
+    setResumeURL(event.target.value);
+  };
+
+  const handleSubmitURL = async () => {
+    if (!resumeURL) {
+      alert('Please provide a resume URL.');
+      return;
+    }
+
+    try {
+      await axios.post(`/api/users/update-resume/${userId}`, { resumeURL });
+      alert('Resume URL updated successfully!');
+    } catch (error) {
+      console.error('Error updating resume URL:', error);
+      alert('Failed to update resume URL.');
+    }
+  };
 
 
   return (
@@ -56,6 +77,20 @@ const Profile = () => {
             <Typography variant="body1">Date of Birth: {user ? user.dob : 'Loading...'}</Typography>
             <Typography variant="body1">Course: {user ? user.course : 'Loading...'}</Typography>
             <Typography variant="body1">Degree: {user ? user.degree : 'Loading...'}</Typography>
+
+            <div>
+              <TextField
+                label="Resume URL"
+                variant="outlined"
+                fullWidth
+                value={resumeURL}
+                onChange={handleResumeURLChange}
+                margin="normal"
+              />
+              <Button variant="contained" onClick={handleSubmitURL}>
+                Update Resume URL
+              </Button>
+            </div>
            
           </Grid>
         </Grid>

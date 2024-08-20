@@ -108,6 +108,10 @@ const userSchema = new mongoose.Schema({
     },
     backlogs6: {
         type: Number
+    },
+    resumeURL: {
+        type: String,
+        trim: true
     }
 }, {
     timestamps: true
