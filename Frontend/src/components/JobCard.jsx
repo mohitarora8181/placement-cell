@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import axios from 'axios';
 
 const JobCard = ({ job }) => {
+  const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false); // State to control the modal
   const [redirected, setRedirected] = useState(false); // State to check if the user is redirected
+  const userId = localStorage.getItem('userId')?.trim();
 
   const handleApplyClick = () => {
     // Open job URL in a new tab
@@ -13,25 +16,21 @@ const JobCard = ({ job }) => {
     setRedirected(true);
   };
 
-  const handleConfirm = async (applied) => {
-    if (applied) {
+  
+  const handleConfirm = async (confirmed) => {
+    if (confirmed) {
       try {
-        const userId = localStorage.getItem('userId');
-        if (userId) {
-          // Assuming you have a backend API endpoint to handle job application
-          await fetch(`/api/users/${userId}/apply-job/${job._id}`, {
-            method: 'POST',
-          });
-          alert("Job application recorded successfully!");
-        } else {
-          alert("User not logged in.");
-        }
+        
+        const response = await axios.post('/api/users/apply', { userId, jobId: job._id });
+        console.log(response.data.message); 
+
+        
       } catch (error) {
-        console.error('Error recording job application:', error);
-        alert("Failed to record job application.");
+        console.error('Error applying for job:', error);
+       
       }
     }
-    setRedirected(false); // Close the modal
+    handleClose();
   };
 
   const handleClose = () => {

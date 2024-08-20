@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {authUser, signup} from '../controller/user.controller.js'
 import express from 'express';
 import User from '../models/SignupModel.js';
+import Job from '../models/Job.model.js'
 
 
 
@@ -51,18 +52,21 @@ router.get('/profile/:userId', async (req, res) => {
     }
   });
 
-  router.get('/applied-jobs/:userId', async (req, res) => {
-    const { userId } = req.params;
-    try {
-      const user = await User.findById(userId).populate('appliedJobs');
-      if (!user) return res.status(404).send('User not found.');
-  
-      res.status(200).json(user.appliedJobs);
-    } catch (error) {
-      console.error('Error fetching applied jobs:', error);
-      res.status(500).send('Server error.');
-    }
-  });
+ 
+
+ router.post('/apply', async (req, res) => {
+  const { userId, jobId } = req.body;
+
+  try {
+    await User.findByIdAndUpdate(userId, { $addToSet: { appliedJobs: jobId } });
+
+    await Job.findByIdAndUpdate(jobId, { $addToSet: { applicants: userId } });
+
+    res.status(200).json({ message: 'Application successful' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error applying for job', error });
+  }
+});
 
 
 export default router;
