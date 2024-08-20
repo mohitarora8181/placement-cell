@@ -51,5 +51,18 @@ router.get('/profile/:userId', async (req, res) => {
     }
   });
 
+  router.get('/applied-jobs/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const user = await User.findById(userId).populate('appliedJobs');
+      if (!user) return res.status(404).send('User not found.');
+  
+      res.status(200).json(user.appliedJobs);
+    } catch (error) {
+      console.error('Error fetching applied jobs:', error);
+      res.status(500).send('Server error.');
+    }
+  });
+
 
 export default router;

@@ -112,7 +112,13 @@ const userSchema = new mongoose.Schema({
     resumeURL: {
         type: String,
         trim: true
-    }
+    },
+    appliedJobs:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref: 'Job'
+        }
+    ]
 }, {
     timestamps: true
 });

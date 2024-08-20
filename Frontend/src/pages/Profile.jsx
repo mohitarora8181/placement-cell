@@ -5,21 +5,24 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
+import JobCard from '../components/JobCard'; // Import JobCard
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [resumeURL, setResumeURL] = useState('');
+  const [appliedJobs, setAppliedJobs] = useState([]);
   const userId = localStorage.getItem('userId')?.trim();
-
-  console.log('UserId from localStorage:', userId);
 
   useEffect(() => {
     if (userId) {
       const fetchUserData = async () => {
         try {
-          const response = await axios.get(`/api/users/profile/${userId}`);
-          console.log('API Response:', response.data); 
-          setUser(response.data);
+          const userResponse = await axios.get(`/api/users/profile/${userId}`);
+          setUser(userResponse.data);
+
+          
+          const jobsResponse = await axios.get(`/api/users/applied-jobs/${userId}`);
+          setAppliedJobs(jobsResponse.data);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
@@ -28,16 +31,10 @@ const Profile = () => {
       fetchUserData();
     }
   }, [userId]);
-
   const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-
-  if (!user) {
-    return <Typography variant="h6" align="center" mt={5}>Loading...</Typography>;
-  }
   const handleResumeURLChange = (event) => {
     setResumeURL(event.target.value);
   };
@@ -56,6 +53,10 @@ const Profile = () => {
       alert('Failed to update resume URL.');
     }
   };
+
+  if (!user) {
+    return <Typography variant="h6" align="center" mt={5}>Loading...</Typography>;
+  }
 
   return (
     <>
@@ -98,6 +99,20 @@ const Profile = () => {
                 Update Resume URL
               </Button>
             </div>
+            <div style={{ marginTop: '20px' }}>
+              <Typography variant="h6">Applied Jobs</Typography>
+              <Grid container spacing={3}>
+                {appliedJobs.length === 0 ? (
+                  <Typography>No applied jobs</Typography>
+                ) : (
+                  appliedJobs.map((job) => (
+                    <Grid item xs={12} md={4} key={job._id}>
+                      <JobCard job={job} />
+                    </Grid>
+                  ))
+                )}
+              </Grid>
+            </div>
           </Grid>
         </Grid>
       </div>
@@ -106,4 +121,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
