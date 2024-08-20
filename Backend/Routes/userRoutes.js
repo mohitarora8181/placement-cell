@@ -30,6 +30,26 @@ router.get('/profile/:userId', async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+  router.post('/update-resume/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const { resumeURL } = req.body;
+    if (!resumeURL || !/^https?:\/\/.+/.test(resumeURL)) {
+      return res.status(400).json({ message: 'Invalid URL provided.' });
+    }
+
+    try {
+      const updatedUser = await User.findByIdAndUpdate(userId, { resumeURL: resumeURL }, { new: true });
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+
+      res.json({ message: 'Resume URL updated successfully!', user: updatedUser });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ message: 'Failed to update user with resume URL.' });
+    }
+  });
 
 
 export default router;
