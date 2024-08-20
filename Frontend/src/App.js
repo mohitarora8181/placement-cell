@@ -4,6 +4,7 @@ import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Profile from './pages/Profile'
 import AdminPage from './pages/AdminPage'
+import AddJob from './pages/Jobadd'
 //import ProtectedRoute from './components/ProtectedRoute'; 
 
 
@@ -16,9 +17,11 @@ function App() {
       <Route path='/profile' element={<Profile />} />
       <Route path="/home/user-profile" element={<Profile />} />
       <Route path="/admin" element={<AdminPage />} />
+      <Route path="/job" element={<AddJob />} />
 
       <Route path='/home' element={<Home />} />
       <Route path="/sign-in" element={<SignIn />} />
+      <Route path="/sign-up" element={<SignUp />} />
 
       </Routes>
     </>

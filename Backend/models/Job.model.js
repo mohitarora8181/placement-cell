@@ -35,7 +35,7 @@ const jobSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  applyurl:{
+  applyURL:{
     type:String,
     required:true,
   },

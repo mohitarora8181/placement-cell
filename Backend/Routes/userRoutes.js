@@ -12,25 +12,20 @@ const router = express.Router();
 router.route('/sign-up').post(signup);
 router.post('/sign-in',authUser)
 router.get('/profile/:userId', async (req, res) => {
-    try {
-      const userId = req.params.userId;
-      
-      
-      const user = await User.findById(userId)
-        .select('username fullname email dob course degree'); 
-  
-  
+  try {
+      const user = await User.findById(req.params.userId)
+          .populate('appliedJobs', 'jobTitle companyName location type imageURL ctc')
+          .select('username fullname email dob course degree appliedJobs');
+
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+          return res.status(404).json({ message: 'User not found' });
       }
-  
-      
       res.json(user);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  });
+  } catch (error) {
+      res.status(500).json({ message: 'Internal server error', error });
+  }
+});
+
   router.post('/update-resume/:userId', async (req, res) => {
     const userId = req.params.userId;
     const { resumeURL } = req.body;
@@ -54,19 +49,43 @@ router.get('/profile/:userId', async (req, res) => {
 
  
 
- router.post('/apply', async (req, res) => {
-  const { userId, jobId } = req.body;
-
-  try {
-    await User.findByIdAndUpdate(userId, { $addToSet: { appliedJobs: jobId } });
-
-    await Job.findByIdAndUpdate(jobId, { $addToSet: { applicants: userId } });
-
-    res.status(200).json({ message: 'Application successful' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error applying for job', error });
-  }
-});
+  router.post('/apply', async (req, res) => {
+    console.log('Apply route hit');
+    const { userId, jobId } = req.body;
+  
+    try {
+      const user = await User.findById(userId);
+      const job = await Job.findById(jobId);
+  
+      if (!user || !job) {
+        return res.status(404).json({ message: 'User or Job not found' });
+      }
+  
+      
+      if (user.appliedJobs.includes(jobId)) {
+        return res.status(400).json({ message: 'You have already applied for this job.' });
+      }
+  
+      
+      if (job.applicants.includes(userId)) {
+        return res.status(400).json({ message: 'You have already applied for this job.' });
+      }
+  
+      
+      user.appliedJobs.push(jobId);
+      await user.save();
+  
+   
+      job.applicants.push(userId);
+      await job.save();
+  
+      res.status(200).json({ message: 'Job applied successfully!' });
+    } catch (error) {
+      console.error('Error applying for job:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
 
 
 export default router;

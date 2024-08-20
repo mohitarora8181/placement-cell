@@ -3,38 +3,35 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/
 import axios from 'axios';
 
 const JobCard = ({ job }) => {
-  const [user, setUser] = useState(null);
-  const [open, setOpen] = useState(false); // State to control the modal
-  const [redirected, setRedirected] = useState(false); // State to check if the user is redirected
+  const [open, setOpen] = useState(false); 
+  const [redirected, setRedirected] = useState(false); 
   const userId = localStorage.getItem('userId')?.trim();
 
   const handleApplyClick = () => {
-    // Open job URL in a new tab
     window.open(job.applyURL, '_blank');
-    
-    // Set redirected state to true to show the confirmation dialog
     setRedirected(true);
   };
 
-  
   const handleConfirm = async (confirmed) => {
     if (confirmed) {
       try {
-        
+    
         const response = await axios.post('/api/users/apply', { userId, jobId: job._id });
-        console.log(response.data.message); 
 
-        
+        if (response.status === 200) {
+          console.log(response.data.message);
+        } else {
+          console.error('Failed to apply for the job.');
+        }
       } catch (error) {
         console.error('Error applying for job:', error);
-       
       }
     }
     handleClose();
   };
 
   const handleClose = () => {
-    setRedirected(false); // Close the modal without applying
+    setRedirected(false); 
   };
 
   return (

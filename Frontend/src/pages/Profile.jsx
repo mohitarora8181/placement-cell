@@ -5,12 +5,10 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
-import JobCard from '../components/JobCard'; // Import JobCard
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [resumeURL, setResumeURL] = useState('');
-  const [appliedJobs, setAppliedJobs] = useState([]);
   const userId = localStorage.getItem('userId')?.trim();
 
   useEffect(() => {
@@ -19,10 +17,7 @@ const Profile = () => {
         try {
           const userResponse = await axios.get(`/api/users/profile/${userId}`);
           setUser(userResponse.data);
-
-          
-          const jobsResponse = await axios.get(`/api/users/applied-jobs/${userId}`);
-          setAppliedJobs(jobsResponse.data);
+          console.log(userResponse);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
@@ -31,10 +26,7 @@ const Profile = () => {
       fetchUserData();
     }
   }, [userId]);
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+
   const handleResumeURLChange = (event) => {
     setResumeURL(event.target.value);
   };
@@ -61,9 +53,9 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      <div style={{ margin: '20px 40px', padding: '20px', borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      <div className="container mx-auto p-5">
         <Grid container spacing={3}>
-          <Grid item xs={12} md={4} style={{ textAlign: 'center' }}>
+          <Grid item xs={12} md={4} className="text-center">
             <Avatar
               sx={{ width: 150, height: 150, margin: '0 auto' }}
               alt={user.fullname || 'Profile Picture'}
@@ -78,7 +70,7 @@ const Profile = () => {
               <strong>Email:</strong> {user.email || 'Loading...'}
             </Typography>
             <Typography variant="body1" color="textSecondary" paragraph>
-              <strong>Date of Birth:</strong> {formatDate(user.dob) || 'Loading...'}
+              <strong>Date of Birth:</strong> {user.dob ? new Date(user.dob).toLocaleDateString() : 'Loading...'}
             </Typography>
             <Typography variant="body1" color="textSecondary" paragraph>
               <strong>Course:</strong> {user.course || 'Loading...'}
@@ -86,35 +78,64 @@ const Profile = () => {
             <Typography variant="body1" color="textSecondary" paragraph>
               <strong>Degree:</strong> {user.degree || 'Loading...'}
             </Typography>
-            <div>
+          
+            <div className="flex flex-col items-start mt-3">
               <TextField
                 label="Resume URL"
-                variant="outlined"
                 fullWidth
                 value={resumeURL}
                 onChange={handleResumeURLChange}
-                margin="normal"
               />
-              <Button variant="contained" onClick={handleSubmitURL}>
+              <Button variant="contained" color="primary" onClick={handleSubmitURL} className="mt-2">
                 Update Resume URL
               </Button>
             </div>
-            <div style={{ marginTop: '20px' }}>
-              <Typography variant="h6">Applied Jobs</Typography>
-              <Grid container spacing={3}>
-                {appliedJobs.length === 0 ? (
-                  <Typography>No applied jobs</Typography>
-                ) : (
-                  appliedJobs.map((job) => (
-                    <Grid item xs={12} md={4} key={job._id}>
-                      <JobCard job={job} />
-                    </Grid>
-                  ))
-                )}
-              </Grid>
-            </div>
           </Grid>
         </Grid>
+        <div className="mt-8">
+          <Typography variant="h5" gutterBottom>
+            Applied Jobs
+          </Typography>
+          <Grid container spacing={2}>
+            {user.appliedJobs && user.appliedJobs.length > 0 ? (
+              user.appliedJobs.map((job) => (
+                <Grid item xs={12} md={6} lg={4} key={job._id}>
+                  <div className="p-4 bg-white shadow-md rounded-lg w-full h-auto">
+                    {job.imageURL ? (
+                      <img src={job.imageURL} alt={job.jobTitle} className="rounded-lg h-44 w-full object-cover mb-4" />
+                    ) : (
+                      <div className="h-44 w-full bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <Typography variant="body2" color="textSecondary">No Image Available</Typography>
+                      </div>
+                    )}
+                    <Typography variant="h6" gutterBottom className="font-semibold mb-2">
+                      {job.jobTitle}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary" className="mb-2">
+                      <strong>Company:</strong> {job.companyName}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary" className="mb-2">
+                      <strong>Location:</strong> {job.location}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary" className="mb-2">
+                      <strong>Type:</strong> {job.type}
+                    </Typography>
+                    <Typography variant="body2" className="mb-4">
+                      {job.jobDescription}
+                    </Typography>
+                    <Typography variant="body2" color="textGray-500">
+                      <strong>CTC:</strong> {job.ctc ? `${job.ctc} lacs` : 'Not Specified'}
+                    </Typography>
+                  </div>
+                </Grid>
+              ))
+            ) : (
+              <Typography variant="body1" color="textSecondary" align="center">
+                No jobs applied yet.
+              </Typography>
+            )}
+          </Grid>
+        </div>
       </div>
     </>
   );
