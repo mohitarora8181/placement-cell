@@ -16,7 +16,7 @@ router.get('/profile/:userId', async (req, res) => {
       
       
       const user = await User.findById(userId)
-        .select('username email dob course degree'); 
+        .select('username fullname email dob course degree'); 
   
   
       if (!user) {
