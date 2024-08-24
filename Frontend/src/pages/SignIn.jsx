@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { FirebaseContext } from '../context/Firebase';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
   Avatar,
   Button,
@@ -14,11 +14,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const SignIn = () => {
-  const firebase = useContext(FirebaseContext);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const callbackUrl = searchParams.get('cb');
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -26,16 +22,29 @@ const SignIn = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      await firebase.signInUser(email, password);
-      if (firebase.loggedIn) {
-        if (callbackUrl) {
-          navigate(callbackUrl);
+      console.log('Email:', email);  // Debug email value
+      console.log('Password:', password);  // Debug password value
+
+      const { data } = await axios.post('/api/users/sign-in', { email, password });
+      const { _id, token, ...rest } = data;
+
+        // Check if _id is defined
+        if (_id) {
+            console.log('User ID:', _id);
+            localStorage.setItem('userId', _id); // Store the user ID
         } else {
-          navigate('/');
+            console.error('User ID is missing in the response');
         }
-      }
+      console.log('Response Data:', data);
+
+      // Store the token or user data as needed
+      localStorage.setItem('token', data.token);
+
+      // Navigate to the home page
+      navigate('/home');
     } catch (error) {
-      setError(error.message);
+      console.error('Sign In Error:', error.response?.data?.message);
+      setError(error.response?.data?.message || 'An error occurred');
     }
   };
 
@@ -53,12 +62,9 @@ const SignIn = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Sign in
+          Sign In
         </Typography>
-        <form
-          style={{ width: '100%', marginTop: '8px' }}
-          onSubmit={handleSignIn}
-        >
+        <form style={{ width: '100%', marginTop: '8px' }} onSubmit={handleSignIn}>
           <TextField
             variant='outlined'
             margin='normal'
@@ -91,15 +97,12 @@ const SignIn = () => {
             fullWidth
             variant='contained'
             style={{ margin: '24px 0 16px' }}
+            disabled={!email || !password}
           >
             Sign In
           </Button>
           {error && (
-            <Typography
-              variant='body2'
-              color='error'
-              style={{ marginTop: '16px' }}
-            >
+            <Typography variant='body2' color='error' style={{ marginTop: '16px' }}>
               {error}
             </Typography>
           )}
