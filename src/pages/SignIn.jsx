@@ -1,56 +1,43 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import React, { useState } from 'react';
-
-
-import { useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FirebaseContext } from '../context/Firebase';
-
 import {
   Avatar,
   Button,
   CssBaseline,
   TextField,
-
   Link,
   Box,
   Typography,
   Container,
-} from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+} from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const SignIn = () => {
   const firebase = useContext(FirebaseContext);
   const navigate = useNavigate();
-  // const para = useSearchParams();
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-
-  // Using useSearchParams to get the query parameters
   const [searchParams] = useSearchParams();
-
-  // Get the value of the 'cb' parameter
   const callbackUrl = searchParams.get('cb');
 
-
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSignIn = async (e) => {
-
     e.preventDefault();
-    if(firebase.loggedIn ){
-      if(callbackUrl){
-        navigate(callbackUrl);
+    try {
+      await firebase.signInUser(email, password);
+      if (firebase.loggedIn) {
+        if (callbackUrl) {
+          navigate(callbackUrl);
+        } else {
+          navigate('/');
+        }
       }
-      else{
-        navigate('/');
-
-      }
+    } catch (error) {
+      setError(error.message);
     }
-    console.log(callbackUrl);
-
-    await firebase.signInUser(email, password);
-
-  }
+  };
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -98,32 +85,15 @@ const SignIn = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          /> */}
           <Button
             sx={{ background: '#ea580c' }}
             type='submit'
             fullWidth
             variant='contained'
             style={{ margin: '24px 0 16px' }}
-            // color='primary'
           >
             Sign In
           </Button>
-          {/* <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid> */}
           {error && (
             <Typography
               variant='body2'
@@ -137,14 +107,13 @@ const SignIn = () => {
       </div>
       <Box mt={8}>
         <Typography variant='body2' color='textSecondary' align='center'>
-
           <Link color='inherit' href='/sign-up'>
             Sign Up
           </Link>
         </Typography>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
 export default SignIn;
