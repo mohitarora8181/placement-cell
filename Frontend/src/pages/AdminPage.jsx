@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import AdminNav from '../components/AdminNav';
 import AdminSidebar from '../components/AdminSidebar';
 import AdminStudents from '../components/AdminStudents';
+import AdminCompanies from '../components/AdminCompanies';
 
 
 const AdminPage = () => {
@@ -16,8 +17,9 @@ const AdminPage = () => {
   <AdminNav/>
   <div className='flex flex-row h-screen '>
     <AdminSidebar onData={getDisplayValue}/>
-    { display==='student' &&
+    { display==='student' ?
       <AdminStudents />
+      : <AdminCompanies/>
 
     }
 
