@@ -6,6 +6,8 @@ import Profile from './pages/Profile'
 import AdminPage from './pages/AdminPage'
 import AddJob from './pages/AddJob'
 import SearchJobs from './pages/SearchJobs';
+import UserProfile from './pages/UserProfile'
+import JobDetails from './pages/JobDetails'
 // import PostJob from './pages/PostJob'
 //import ProtectedRoute from './components/ProtectedRoute';
 
@@ -24,6 +26,8 @@ function App() {
       <Route path='/home' element={<Home />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/sign-up" element={<SignUp />} />
+      <Route path="/user-profile/:userId" element={<UserProfile />} />
+      <Route path="/job/:jobId" element={<JobDetails />} /> 
 
       </Routes>
     </>

@@ -85,6 +85,30 @@ router.get('/profile/:userId', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   });
+
+  router.get('/find', async (req, res) => {
+    try {
+      const users = await User.find().select('username fullname email course'); // Select fields you want to include in the response
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error', error });
+    }
+  });
+
+  router.get('/:userId', async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId)
+        .populate('appliedJobs', 'jobTitle companyName location type imageURL ctc jobDescription') // Adjust fields as necessary
+        .select('fullname email dob course degree appliedJobs'); // Adjust fields as necessary
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error', error });
+    }
+  });
   
 
 
