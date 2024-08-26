@@ -61,6 +61,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    if (event.key === 'Enter') {
+      navigate(`/search?query=${searchQuery}`);
+    }
+  };
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -185,7 +196,10 @@ const Navbar = () => {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder='Search…'
+                placeholder='Search jobs...'
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchSubmit}
                 inputProps={{ 'aria-label': 'search' }}
               />
             </Search>

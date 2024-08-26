@@ -41,14 +41,22 @@ router.post('/jobs', async (req, res) => {
     res.status(500).send('Server error.'); 
   }
 });
+
 router.get('/jobs', async (req, res) => {
   try {
-    const jobs = await Job.find(); 
+    const { search } = req.query;
+
+    
+    const query = {};
+    if (search && typeof search === 'string') {
+      query.jobTitle = { $regex: search, $options: 'i' }; 
+    }
+
+    const jobs = await Job.find(query);
     res.status(200).json(jobs);
   } catch (error) {
     console.error('Error fetching job postings:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-export default router; 
+export default router
