@@ -24,12 +24,6 @@ const SignUp = () => {
     dob: '',
     degree: '',
     course: '',
-    sgpa1: '',
-    sgpa2: '',
-    sgpa3: '',
-    sgpa4: '',
-    sgpa5: '',
-    sgpa6: '',
     twelfthPercentage: '',
     diplomaPercentage: '',
     nationality: '',
@@ -38,14 +32,9 @@ const SignUp = () => {
     school12th: '',
     tenthPercentage: '',
     gapYear: '',
-    specialisation: '',
     yearOfPassing: '',
-    backlogs1: '',
-    backlogs2: '',
-    backlogs3: '',
-    backlogs4: '',
-    backlogs5: '',
-    backlogs6: '',
+    activeBacklogs: '',
+    contactNumber: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -72,19 +61,16 @@ const SignUp = () => {
       const { data } = await axios.post('/api/users/sign-up', formData, config);
       const { _id, token, ...rest } = data;
 
-        // Check if _id is defined
-        if (_id) {
-            console.log('User ID:', _id);
-            localStorage.setItem('userId', _id); // Store the user ID
-        } else {
-            console.error('User ID is missing in the response');
-        }
-
+      // Check if _id is defined
+      if (_id) {
+        console.log('User ID:', _id);
+        localStorage.setItem('userId', _id); // Store the user ID
+      } else {
+        console.error('User ID is missing in the response');
+      }
 
       alert('Registration Successful');
       localStorage.setItem('userInfo', JSON.stringify(data));
-      
-
       navigate('/sign-in');
     } catch (error) {
       setError(error.response?.data?.message || 'An error occurred');
@@ -113,7 +99,7 @@ const SignUp = () => {
               fullWidth
               label={key.replace(/([A-Z])/g, ' $1').trim()}
               name={key}
-              type={key === 'password' ? 'password' : (key === 'dob' ? 'date' : 'text')}
+              type={key === 'password' ? 'password' : key === 'dob' ? 'date' : 'text'}
               value={formData[key]}
               onChange={handleChange}
               InputLabelProps={key === 'dob' ? { shrink: true } : {}}

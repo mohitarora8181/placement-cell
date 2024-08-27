@@ -12,11 +12,11 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import AddIcon from '@mui/icons-material/Add';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -48,7 +48,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
+    
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -86,6 +86,10 @@ const AdminNav = () => {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleAddJobClick = () => {
+    navigate('/admin/post-job'); // Redirect to post-job page
   };
 
   const menuId = 'primary-search-account-menu';
@@ -128,14 +132,6 @@ const AdminNav = () => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
-          <Badge badgeContent={0} color='error'>
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
         <IconButton size='large' aria-label='show 17 new notifications' color='inherit'>
           <Badge badgeContent={0} color='error'>
             <NotificationsIcon />
@@ -154,6 +150,16 @@ const AdminNav = () => {
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
+      </MenuItem>
+      <MenuItem onClick={handleAddJobClick}>
+        <IconButton
+          size='large'
+          aria-label='add new job'
+          color='inherit'
+        >
+          <AddIcon />
+        </IconButton>
+        <p>Add Job</p>
       </MenuItem>
     </Menu>
   );
@@ -193,12 +199,11 @@ const AdminNav = () => {
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <IconButton
                 size='large'
-                aria-label='show 4 new mails'
+                aria-label='add new job'
                 color='inherit'
+                onClick={handleAddJobClick}
               >
-                <Badge badgeContent={0} color='error'>
-                  <MailIcon />
-                </Badge>
+                <AddIcon />
               </IconButton>
               <IconButton
                 size='large'

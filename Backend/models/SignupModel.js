@@ -40,24 +40,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    sgpa1: {
-        type: Number
-    },
-    sgpa2: {
-        type: Number
-    },
-    sgpa3: {
-        type: Number
-    },
-    sgpa4: {
-        type: Number
-    },
-    sgpa5: {
-        type: Number
-    },
-    sgpa6: {
-        type: Number
-    },
     twelfthPercentage: {
         type: Number
     },
@@ -85,43 +67,35 @@ const userSchema = new mongoose.Schema({
     gapYear: {
         type: Number
     },
-    specialisation: {
-        type: String
-    },
     yearOfPassing: {
-        type: Number
-    },
-    backlogs1: {
-        type: Number
-    },
-    backlogs2: {
-        type: Number
-    },
-    backlogs3: {
-        type: Number
-    },
-    backlogs4: {
-        type: Number
-    },
-    backlogs5: {
-        type: Number
-    },
-    backlogs6: {
         type: Number
     },
     resumeURL: {
         type: String,
         trim: true
     },
-    appliedJobs:[
+    appliedJobs: [
         {
-            type:mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Job'
         }
-    ]
+    ],
+    activeBacklogs: {
+        type: Number
+    },
+    contactNumber: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });
+
 
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();

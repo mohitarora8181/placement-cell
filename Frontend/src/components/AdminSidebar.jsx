@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { PiStudentBold } from "react-icons/pi";
 import { CgOrganisation } from "react-icons/cg";
+import UserCard from "./UserCard";
+import axios from "axios";
+import JobData from "./JobData";
 const AdminSidebar = ({onData})=>{
   const [currentVal, setCurrentVal] = useState('student');
+  const [users, setUsers] = useState([]);
+  const [jobs, setJobs] = useState([]);
 
   const setToCompany = ()=>{
     setCurrentVal('company');
@@ -13,9 +18,28 @@ const AdminSidebar = ({onData})=>{
 
 
 
-  useEffect(()=>{
+  useEffect(() => {
     onData(currentVal);
-  },[currentVal]);
+
+    if (currentVal === 'student') {
+      axios.get('/api/users/find')
+        .then(response => {
+          setUsers(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching users:', error);
+        });
+    }
+    if (currentVal === 'company') {
+      axios.get('/api/jobs') // Fetch job data
+        .then(response => {
+          setJobs(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching jobs:', error);
+        });
+    }
+  }, [currentVal, onData]);
 
   return(
     <>
@@ -32,6 +56,14 @@ const AdminSidebar = ({onData})=>{
           </li>
         </ul>
       </nav>
+      <div className="flex flex-wrap">
+        {currentVal === 'student' && users.map(user => (
+          <UserCard key={user._id} user={user} />
+        ))}
+        {currentVal === 'company' && jobs.map(job => (
+          <JobData key={job._id} job={job} />
+        ))}
+      </div>
     </>
   )
 }
