@@ -14,9 +14,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import AddIcon from '@mui/icons-material/Add';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -48,7 +48,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -61,6 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const AdminNav = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -90,6 +90,19 @@ const AdminNav = () => {
 
   const handleAddJobClick = () => {
     navigate('/admin/post-job'); // Redirect to post-job page
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+     
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
   };
 
   const menuId = 'primary-search-account-menu';
@@ -193,6 +206,9 @@ const AdminNav = () => {
               <StyledInputBase
                 placeholder='Search…'
                 inputProps={{ 'aria-label': 'search' }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={handleKeyPress} // Handle key press event
               />
             </Search>
             <Box sx={{ flexGrow: 1 }} />

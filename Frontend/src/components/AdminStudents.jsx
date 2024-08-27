@@ -1,7 +1,7 @@
 const AdminStudents =()=>{
   return(
     <>
-    Student List
+   
     </>
   )
 }

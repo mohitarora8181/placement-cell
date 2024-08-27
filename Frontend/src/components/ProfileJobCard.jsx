@@ -16,7 +16,7 @@ const ProfileJobCard = ({ job }) => {
         <Typography variant="h6" component="div" gutterBottom>
           {job.jobTitle}
         </Typography>
-        <Typography variant="subtitle1" color="textSecondary">
+        <Typography variant="subtitle1" color="textSecondary">a
           {job.companyName}
         </Typography>
         <Typography variant="body2" color="textSecondary" paragraph>
