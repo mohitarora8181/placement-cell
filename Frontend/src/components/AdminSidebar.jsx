@@ -4,6 +4,7 @@ import { CgOrganisation } from "react-icons/cg";
 import UserCard from "./UserCard";
 import axios from "axios";
 import JobData from "./JobData";
+import JobCard from "./JobCard";
 const AdminSidebar = ({onData})=>{
   const [currentVal, setCurrentVal] = useState('student');
   const [users, setUsers] = useState([]);

@@ -2,7 +2,6 @@
 import express from "express"
 const router = express.Router();
 import Job from '../models/Job.model.js'
-import User from "../models/SignupModel.js";
 // const User = require('../models/User');
 // const Job = require('../models/Job.model.js');
 
@@ -42,45 +41,14 @@ router.post('/jobs', async (req, res) => {
     res.status(500).send('Server error.'); 
   }
 });
-
 router.get('/jobs', async (req, res) => {
   try {
-    const { search } = req.query;
-
-    
-    const query = {};
-    if (search && typeof search === 'string') {
-      query.jobTitle = { $regex: search, $options: 'i' }; 
-    }
-
-    const jobs = await Job.find(query);
+    const jobs = await Job.find(); 
     res.status(200).json(jobs);
   } catch (error) {
     console.error('Error fetching job postings:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
-router.get('/jobs/:jobId', async (req, res) => {
-  try {
-    
-    const job = await Job.findById(req.params.jobId)
-      .populate({
-        path: 'applicants', 
-        select: 'fullname email course degree'
-      });
 
-    if (!job) {
-      console.log(`Job with ID ${req.params.jobId} not found.`);
-      return res.status(404).json({ message: 'Job not found' });
-    }
-
-    
-    res.json({ job });
-  } catch (error) {
-    console.error('Error fetching job details:', error);
-    res.status(500).json({ message: 'Internal server error', error });
-  }
-});
-
-
-export default router
+export default router; 
