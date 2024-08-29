@@ -2,6 +2,7 @@
 import express from "express"
 const router = express.Router();
 import Job from '../models/Job.model.js'
+import protect from "../middlewares/authMiddleware.js";
 // const User = require('../models/User');
 // const Job = require('../models/Job.model.js');
 
@@ -30,7 +31,7 @@ import Job from '../models/Job.model.js'
 //     res.status(500).send('Server error.');
 //   }
 // });
-router.get('/jobs/:jobId', async (req, res) => {
+router.get('/jobs/:jobId',protect, async (req, res) => {
   try {
 
     const job = await Job.findById(req.params.jobId)
@@ -64,12 +65,19 @@ router.post('/jobs', async (req, res) => {
 });
 router.get('/jobs', async (req, res) => {
   try {
-    const jobs = await Job.find(); 
+    const jobs = await Job.find().sort({ createdAt: -1 });
     res.status(200).json(jobs);
   } catch (error) {
     console.error('Error fetching job postings:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
+
+
+
+
+
 
 export default router; 

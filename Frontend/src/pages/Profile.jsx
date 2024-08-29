@@ -10,12 +10,15 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [resumeURL, setResumeURL] = useState('');
   const userId = localStorage.getItem('userId')?.trim();
+  const token = localStorage.getItem('token')?.trim();
 
   useEffect(() => {
-    if (userId) {
+    if (userId && token) {
       const fetchUserData = async () => {
         try {
-          const userResponse = await axios.get(`/api/users/profile/${userId}`);
+          const userResponse = await axios.get(`/api/users/profile/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
           setUser(userResponse.data);
           setResumeURL(userResponse.data.resumeURL || ''); // Pre-fill resume URL if present
         } catch (error) {
@@ -25,7 +28,7 @@ const Profile = () => {
 
       fetchUserData();
     }
-  }, [userId]);
+  }, [userId, token]);
 
   const handleResumeURLChange = (event) => {
     setResumeURL(event.target.value);
@@ -38,7 +41,9 @@ const Profile = () => {
     }
 
     try {
-      await axios.post(`/api/users/update-resume/${userId}`, { resumeURL });
+      await axios.post(`/api/users/update-resume/${userId}`, { resumeURL }, {
+        headers: { Authorization: `Bearer ${token}` } // Include token here as well
+      });
       alert('Resume URL updated successfully!');
     } catch (error) {
       console.error('Error updating resume URL:', error);

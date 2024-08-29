@@ -22,27 +22,23 @@ const SignIn = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      console.log('Email:', email);  // Debug email value
-      console.log('Password:', password);  // Debug password value
-
       const { data } = await axios.post('/api/users/sign-in', { email, password });
-      const { _id, token, ...rest } = data;
-
-        // Check if _id is defined
-        if (_id) {
-            console.log('User ID:', _id);
-            localStorage.setItem('userId', _id); // Store the user ID
-            localStorage.setItem('token', token);
-        } else {
-            console.error('User ID is missing in the response');
-        }
-      console.log('Response Data:', data);
-
-      // Store the token or user data as needed
-      localStorage.setItem('token', data.token);
-
-      // Navigate to the home page
-      navigate('/home');
+      console.log('Sign-In Response:', data); // Log the response to check `isAdmin`
+      const { _id, token, isAdmin } = data;
+  
+      if (_id) {
+        localStorage.setItem('userId', _id);
+        localStorage.setItem('token', token);
+        localStorage.setItem('role', isAdmin ? 'admin' : 'user'); 
+      } else {
+        console.error('User ID is missing in the response');
+      }
+  
+      if (isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/home');
+      }
     } catch (error) {
       console.error('Sign In Error:', error.response?.data?.message);
       setError(error.response?.data?.message || 'An error occurred');

@@ -91,7 +91,8 @@ const userSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false
-    }
+    },
+    
 }, {
     timestamps: true
 });
@@ -105,7 +106,7 @@ userSchema.pre('save', async function (next) {
     next();
 });
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    console.log('Comparing enteredPassword:', enteredPassword, 'with hashedPassword:', this.password);
+    
     return await bcrypt.compare(enteredPassword, this.password);
 };
 

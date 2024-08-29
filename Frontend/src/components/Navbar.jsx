@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -15,6 +15,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -23,7 +24,7 @@ const Search = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  width: '60%', // Set width directly here or use sx prop when rendering
+  width: '60%',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
     width: 'auto',
@@ -54,7 +55,11 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [newJobsCount, setNewJobsCount] = useState(0);
+  const [lastChecked, setLastChecked] = useState(new Date().toISOString());
   const navigate = useNavigate();
+
+  
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -63,6 +68,7 @@ const Navbar = () => {
   const handleSearchSubmit = (event) => {
     if (event.key === 'Enter') {
       navigate(`/search?query=${searchQuery}`);
+      setLastChecked(new Date().toISOString()); 
     }
   };
 
@@ -73,6 +79,10 @@ const Navbar = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     setMobileMoreAnchorEl(null);
+  };
+
+  const handleNotificationClick = () => {
+    navigate('/home'); 
   };
 
   const logOut = () => {
@@ -131,8 +141,13 @@ const Navbar = () => {
         <p>Messages</p>
       </MenuItem>
       <MenuItem>
-        <IconButton size='large' aria-label='show 17 new notifications' color='inherit'>
-          <Badge badgeContent={0} color='error'>
+        <IconButton 
+          size='large' 
+          aria-label='show new notifications' 
+          color='inherit'
+          onClick={handleNotificationClick}
+        >
+          <Badge badgeContent={newJobsCount} color='error'>
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -177,8 +192,13 @@ const Navbar = () => {
                 <MailIcon />
               </Badge>
             </IconButton>
-            <IconButton size='large' aria-label='show 17 new notifications' color='inherit'>
-              <Badge badgeContent={0} color='error'>
+            <IconButton 
+              size='large' 
+              aria-label='show new notifications' 
+              color='inherit'
+              onClick={handleNotificationClick}
+            >
+              <Badge badgeContent={newJobsCount} color='error'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -200,7 +220,7 @@ const Navbar = () => {
               aria-label='show more'
               aria-controls={mobileMenuId}
               aria-haspopup='true'
-              onClick={() => setMobileMoreAnchorEl(true)}
+              onClick={(event) => setMobileMoreAnchorEl(event.currentTarget)}
               color='inherit'
             >
               <MoreIcon />
