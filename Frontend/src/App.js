@@ -10,6 +10,7 @@ import SearchJobs from './pages/SearchJobs';
 import UserProfile from './pages/UserProfile'
 import JobDetails from './pages/JobDetails'
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 // import PostJob from './pages/PostJob'
 //import ProtectedRoute from './components/ProtectedRoute';
 
@@ -17,6 +18,7 @@ import axios from 'axios';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const navigate = useNavigate();
+  const path = useLocation();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -33,7 +35,12 @@ function App() {
 
           if (response.status === 200) {
             setIsAuthenticated(true);
-            navigate('/home'); // Redirect to home if authenticated
+            if((path.pathname==='/' || path.pathname==='/sign-in'|| path.pathname === '/sign-up') && isAuthenticated===true){
+              navigate('/home'); // Redirect to home if authenticated
+              
+
+
+            }
           } else {
             setIsAuthenticated(false);
           }
@@ -66,7 +73,7 @@ function App() {
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/user-profile/:userId" element={<UserProfile />} />
-      <Route path="/job/:jobId" element={<JobDetails />} /> 
+      <Route path="/job/:jobId" element={<JobDetails />} />
 
       </Routes>
     </>
