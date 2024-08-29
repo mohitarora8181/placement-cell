@@ -48,16 +48,16 @@ const AdminSidebar = ({onData})=>{
     <>
       <nav className="hidden md:flex flex-col h-full w-[20%] bg-[#099934] text-white font-semibold pt-4 text-md shadow-lg mr-4">
         <ul className="flex flex-col p-4">
-          <li className="cursor-pointer mb-2" onClick={setToStudent}>
+          <li className= {currentVal==='student'?"cursor-pointer mb-2 font-bold": "cursor-pointer mb-2"} onClick={setToStudent}>
             <span className="flex justify-between pb-2 items-center">Students <PiStudentBold className="text-3xl" /></span>
             <hr/>
           </li>
-          <li className="cursor-pointer mb-2" onClick={setToCompany}>
+          <li className= {currentVal==='company'?"cursor-pointer mb-2 font-bold": "cursor-pointer mb-2"}  onClick={setToCompany}>
           <span className="flex justify-between pb-2 items-center">Companies <CgOrganisation className="text-3xl" /></span>
 
             <hr></hr>
           </li>
-          <Link to='/post-job'>
+          <Link to='/admin/post-job'>
           <li className="cursor-pointer mb-2" onClick={setToCompany}>
           <span className="flex justify-between pb-2 items-center">Post Jobs<FaPlus className="text-3xl" /></span>
 
