@@ -32,6 +32,7 @@ const SignIn = () => {
         if (_id) {
             console.log('User ID:', _id);
             localStorage.setItem('userId', _id); // Store the user ID
+            localStorage.setItem('token', token);
         } else {
             console.error('User ID is missing in the response');
         }

@@ -3,6 +3,7 @@ import {authUser, signup} from '../controller/user.controller.js'
 import express from 'express';
 import User from '../models/SignupModel.js';
 import Job from '../models/Job.model.js'
+import protect from '../middlewares/authMiddleware.js';
 
 
 
@@ -11,7 +12,7 @@ const router = express.Router();
 
 router.route('/sign-up').post(signup);
 router.post('/sign-in',authUser)
-router.get('/profile/:userId', async (req, res) => {
+router.get('/profile/:userId',protect, async (req, res) => {
   try {
       const user = await User.findById(req.params.userId)
           .populate('appliedJobs', 'jobTitle companyName location type imageURL ctc')
@@ -95,7 +96,7 @@ router.get('/profile/:userId', async (req, res) => {
     }
   });
 
-  router.get('/:userId', async (req, res) => {
+  router.get('/:userId',protect, async (req, res) => {
     try {
       const user = await User.findById(req.params.userId)
         .populate('appliedJobs', 'jobTitle companyName location type imageURL ctc jobDescription') // Adjust fields as necessary

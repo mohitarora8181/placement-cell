@@ -80,12 +80,13 @@ const authUser = asyncHandler(async (req, res) => {
             const isMatch = await user.matchPassword(password);
 
             if (isMatch) {
+               
                 res.json({
                     _id: user._id,
                     username: user.username,
                     email: user.email,
                     isAdmin: user.isAdmin,
-                    token: generateToken(user._id),
+                    token: generateToken(user._id)
                 });
             } else {
                 res.status(400).json({ message: 'Invalid email or password' });
