@@ -6,9 +6,12 @@ import { Typography, Grid } from '@mui/material';
 const UserProfile = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
+  const token = localStorage.getItem('token')?.trim();
 
   useEffect(() => {
-    axios.get(`/api/users/${userId}`)
+    axios.get(`/api/users/${userId}`,{
+      headers: { Authorization: `Bearer ${token}` }
+    })
       .then(response => {
         setUser(response.data);
       })
