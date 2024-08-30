@@ -11,6 +11,7 @@ import AddJob from './pages/AddJob';
 import SearchJobs from './pages/SearchJobs';
 import UserProfile from './pages/UserProfile';
 import JobDetails from './pages/JobDetails';
+import SearchUsers from './components/SearchUsers';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -74,6 +75,7 @@ function App() {
       <Route path="/admin/post-job" element={<AddJob />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/search" element={<SearchJobs />} />
+      <Route path="/admin/user-search" element={<SearchUsers />} />
       <Route path="/home" element={<Home />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/sign-up" element={<SignUp />} />

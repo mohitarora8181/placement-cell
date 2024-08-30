@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -15,6 +15,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import AddIcon from '@mui/icons-material/Add';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
@@ -46,6 +48,8 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
+  backgroundColor: 'Transparent', // Updated background color
+  borderRadius: theme.shape.borderRadius,
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
@@ -61,10 +65,16 @@ const AdminNav = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [searchType, setSearchType] = useState('jobs'); // default to searching for jobs
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const navigate = useNavigate();
+
+  // Retrieve the search type from local storage on component mount
+  useEffect(() => {
+    const savedSearchType = localStorage.getItem('searchType') || 'jobs';
+    setSearchType(savedSearchType);
+  }, []);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -94,14 +104,21 @@ const AdminNav = () => {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-     
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      const route = searchType === 'jobs' ? `/search?query=${encodeURIComponent(searchQuery)}` : `/admin/user-search?query=${encodeURIComponent(searchQuery)}`;
+      navigate(route);
     }
   };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       handleSearch();
+    }
+  };
+
+  const handleSearchTypeChange = (event, newSearchType) => {
+    if (newSearchType) {
+      setSearchType(newSearchType);
+      localStorage.setItem('searchType', newSearchType); // Persist the search type
     }
   };
 
@@ -199,18 +216,41 @@ const AdminNav = () => {
             >
               MSIT Placement Cell
             </Typography>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder='Search…'
-                inputProps={{ 'aria-label': 'search' }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={handleKeyPress} // Handle key press event
-              />
-            </Search>
+            <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 2 }}>
+              <ToggleButtonGroup
+                value={searchType}
+                exclusive
+                onChange={handleSearchTypeChange}
+                aria-label="search type"
+                sx={{ mr: 2 }}
+                
+                        >
+                          <ToggleButton 
+                    value="jobs" 
+                      sx={{ color: 'green' }} 
+                      >
+                Jobs
+              </ToggleButton>
+              <ToggleButton 
+                value="users" 
+                sx={{ color: 'green' }} 
+              >
+                Users
+    </ToggleButton>
+              </ToggleButtonGroup>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder={searchType === 'jobs' ? 'Search Jobs...' : 'Search Users...'}
+                  inputProps={{ 'aria-label': 'search' }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+              </Search>
+            </Box>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <IconButton

@@ -59,8 +59,6 @@ const Navbar = () => {
   const [lastChecked, setLastChecked] = useState(new Date().toISOString());
   const navigate = useNavigate();
 
-  
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -68,7 +66,7 @@ const Navbar = () => {
   const handleSearchSubmit = (event) => {
     if (event.key === 'Enter') {
       navigate(`/search?query=${searchQuery}`);
-      setLastChecked(new Date().toISOString()); 
+      setLastChecked(new Date().toISOString());
     }
   };
 
@@ -82,7 +80,7 @@ const Navbar = () => {
   };
 
   const handleNotificationClick = () => {
-    navigate('/home'); 
+    navigate('/home');
   };
 
   const logOut = () => {
@@ -141,9 +139,9 @@ const Navbar = () => {
         <p>Messages</p>
       </MenuItem>
       <MenuItem>
-        <IconButton 
-          size='large' 
-          aria-label='show new notifications' 
+        <IconButton
+          size='large'
+          aria-label='show new notifications'
           color='inherit'
           onClick={handleNotificationClick}
         >
@@ -167,6 +165,28 @@ const Navbar = () => {
       </MenuItem>
     </Menu>
   );
+
+  useEffect(() => {
+    const fetchNewJobsCount = async () => {
+      try {
+        const response = await axios.get('/api/jobs/new-count', {
+          params: { since: lastChecked }
+        });
+        setNewJobsCount(response.data.count);
+      } catch (error) {
+        console.error('Error fetching new jobs count:', error);
+      }
+    };
+
+    fetchNewJobsCount();
+
+    // Poll every 30 seconds
+    const interval = setInterval(() => {
+      fetchNewJobsCount();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [lastChecked]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -192,9 +212,9 @@ const Navbar = () => {
                 <MailIcon />
               </Badge>
             </IconButton>
-            <IconButton 
-              size='large' 
-              aria-label='show new notifications' 
+            <IconButton
+              size='large'
+              aria-label='show new notifications'
               color='inherit'
               onClick={handleNotificationClick}
             >

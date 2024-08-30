@@ -5,23 +5,28 @@ import UserCard from "./UserCard";
 import axios from "axios";
 import JobData from "./JobData";
 import { FaPlus } from "react-icons/fa";
-import JobCard from "./JobCard";
 import { Link } from "react-router-dom";
-const AdminSidebar = ({onData})=>{
-  const [currentVal, setCurrentVal] = useState('student');
+
+const AdminSidebar = ({ onData }) => {
+  // Initialize state with a value from local storage or default to 'student'
+  const [currentVal, setCurrentVal] = useState(() => {
+    const savedVal = localStorage.getItem('currentVal');
+    return savedVal ? savedVal : 'student';
+  });
   const [users, setUsers] = useState([]);
   const [jobs, setJobs] = useState([]);
 
-  const setToCompany = ()=>{
+  const setToCompany = () => {
     setCurrentVal('company');
-  }
-  const setToStudent = ()=>{
+  };
+
+  const setToStudent = () => {
     setCurrentVal('student');
-  }
-
-
+  };
 
   useEffect(() => {
+    // Save the currentVal to local storage whenever it changes
+    localStorage.setItem('currentVal', currentVal);
     onData(currentVal);
 
     if (currentVal === 'student') {
@@ -44,25 +49,38 @@ const AdminSidebar = ({onData})=>{
     }
   }, [currentVal, onData]);
 
-  return(
+  return (
     <>
       <nav className="hidden md:flex flex-col h-full w-[20%] bg-[#099934] text-white font-semibold pt-4 text-md shadow-lg mr-4">
         <ul className="flex flex-col p-4">
-          <li className= {currentVal==='student'?"cursor-pointer mb-2 font-bold": "cursor-pointer mb-2"} onClick={setToStudent}>
-            <span className="flex justify-between pb-2 items-center">Students <PiStudentBold className="text-3xl" /></span>
-            <hr/>
+          <li
+            className={currentVal === 'student' ? "cursor-pointer mb-2 font-bold" : "cursor-pointer mb-2"}
+            onClick={setToStudent}
+          >
+            <span className="flex justify-between pb-2 items-center">
+              Students <PiStudentBold className="text-3xl" />
+            </span>
+            <hr />
           </li>
-          <li className= {currentVal==='company'?"cursor-pointer mb-2 font-bold": "cursor-pointer mb-2"}  onClick={setToCompany}>
-          <span className="flex justify-between pb-2 items-center">Companies <CgOrganisation className="text-3xl" /></span>
-
-            <hr></hr>
+          <li
+            className={currentVal === 'company' ? "cursor-pointer mb-2 font-bold" : "cursor-pointer mb-2"}
+            onClick={setToCompany}
+          >
+            <span className="flex justify-between pb-2 items-center">
+              Companies <CgOrganisation className="text-3xl" />
+            </span>
+            <hr />
           </li>
           <Link to='/admin/post-job'>
-          <li className="cursor-pointer mb-2" onClick={setToCompany}>
-          <span className="flex justify-between pb-2 items-center">Post Jobs<FaPlus className="text-3xl" /></span>
-
-            <hr></hr>
-          </li>
+            <li
+              className="cursor-pointer mb-2"
+              onClick={setToCompany}
+            >
+              <span className="flex justify-between pb-2 items-center">
+                Post Jobs <FaPlus className="text-3xl" />
+              </span>
+              <hr />
+            </li>
           </Link>
         </ul>
       </nav>
@@ -75,6 +93,7 @@ const AdminSidebar = ({onData})=>{
         ))}
       </div>
     </>
-  )
-}
+  );
+};
+
 export default AdminSidebar;
