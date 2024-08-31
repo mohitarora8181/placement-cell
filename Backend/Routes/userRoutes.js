@@ -116,4 +116,15 @@ router.get('/user-profile/:userId', protect, adminOnly, async (req, res) => {
   }
 });
 
+router.put('/update-profile/:id', protect, async (req, res) => {
+  const userId = req.params.id;
+  const updatedData = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
 export default router;

@@ -12,6 +12,7 @@ import SearchJobs from './pages/SearchJobs';
 import UserProfile from './pages/UserProfile';
 import JobDetails from './pages/JobDetails';
 import SearchUsers from './components/SearchUsers';
+import EditProfile from './pages/EditProfile';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -101,6 +102,7 @@ function App() {
 
      
       <Route path="/search" element={<SearchJobs />} />
+      <Route path="/edit-profile" element={<EditProfile />} />
 
      
       <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />

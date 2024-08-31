@@ -5,12 +5,15 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [resumeURL, setResumeURL] = useState('');
   const userId = localStorage.getItem('userId')?.trim();
   const token = localStorage.getItem('token')?.trim();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     if (userId && token) {
@@ -55,6 +58,10 @@ const Profile = () => {
     return <Typography variant="h6" align="center" mt={5}>Loading...</Typography>;
   }
 
+  const handleEditProfile = () => {
+    navigate('/edit-profile');
+  };
+
   return (
     <>
       <Navbar />
@@ -94,6 +101,14 @@ const Profile = () => {
               <Button variant="contained" color="primary" onClick={handleSubmitURL} className="mt-5">
                 Update Resume URL
               </Button>
+              <Button
+              variant="contained"
+              color="primary"
+              onClick={handleEditProfile}
+              className="mt-5"
+            >
+              Edit Profile
+            </Button>
             </div>
           </Grid>
         </Grid>
