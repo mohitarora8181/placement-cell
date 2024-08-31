@@ -5,20 +5,27 @@ import {app} from "./app.js"
 import express from "express"
 import cors from 'cors'
 import jobRoutes from './Routes/JobRoutes.js'; 
-app.use(cors());
+import setupSocketIO from './socket.js';
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods:['GET','POST']
+}));
 dotenv.config({
     path:'./.env'
 })
+const { server, io } = setupSocketIO(app);
 
 connectDB()
 .then(()=>{
     app.use('/api/users', userRoutes);
     app.use('/api', jobRoutes); 
-    app.listen(process.env.PORT || 8000,()=>{
+    server.listen(process.env.PORT || 8000,()=>{
         console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
     })
 })
 .catch((err) => {
     console.log("MONGO db connection failed !!! ", err);
 })
+export { io };
 

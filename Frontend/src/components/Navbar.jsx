@@ -16,6 +16,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
+import io from 'socket.io-client';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -57,7 +58,31 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [newJobsCount, setNewJobsCount] = useState(0);
   const [lastChecked, setLastChecked] = useState(new Date().toISOString());
+  const [notifications, setNotifications] = useState([]); // Store notifications
+  const [notificationOpen, setNotificationOpen] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const socket = io('http://localhost:8000'); // Replace with your server's URL
+    
+    socket.on('connect', () => {
+      console.log('Socket connected:', socket.id);
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('Socket disconnected');
+    });
+
+    socket.on('newJob', (job) => {
+      console.log('New job received:', job);
+      setNotifications((prevNotifications) => [...prevNotifications, { company: job.companyName, title: job.jobTitle }]);
+      setNewJobsCount((prevCount) => prevCount + 1);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -79,13 +104,16 @@ const Navbar = () => {
     setMobileMoreAnchorEl(null);
   };
 
-  const handleNotificationClick = () => {
-    navigate('/home');
-  };
+  //const handleNotificationClick = () => {
+  //  navigate('/home');
+  //};
 
   const logOut = () => {
     localStorage.clear();
     navigate('/sign-in');
+  };
+  const handleNotificationClick = () => {
+    setNotificationOpen(!notificationOpen); // Toggle notification box
   };
 
   const isMenuOpen = Boolean(anchorEl);
@@ -166,27 +194,27 @@ const Navbar = () => {
     </Menu>
   );
 
-  useEffect(() => {
-    const fetchNewJobsCount = async () => {
-      try {
-        const response = await axios.get('/api/jobs/new-count', {
-          params: { since: lastChecked }
-        });
-        setNewJobsCount(response.data.count);
-      } catch (error) {
-        console.error('Error fetching new jobs count:', error);
-      }
-    };
-
-    fetchNewJobsCount();
-
-    // Poll every 30 seconds
-    const interval = setInterval(() => {
-      fetchNewJobsCount();
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [lastChecked]);
+ // useEffect(() => {
+ //   const fetchNewJobsCount = async () => {
+ //     try {
+ //       const response = await axios.get('/api/jobs/new-count', {
+ //         params: { since: lastChecked }
+ //       });
+ //       setNewJobsCount(response.data.count);
+ //     } catch (error) {
+ //       console.error('Error fetching new jobs count:', error);
+ //     }
+ //   };
+//
+ //   fetchNewJobsCount();
+//
+ //   // Poll every 30 seconds
+ //   const interval = setInterval(() => {
+ //     fetchNewJobsCount();
+ //   }, 30000);
+//
+ //   return () => clearInterval(interval);
+ // }, [lastChecked]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -214,7 +242,7 @@ const Navbar = () => {
             </IconButton>
             <IconButton
               size='large'
-              aria-label='show new notifications'
+              aria-label={`show ${newJobsCount} new notifications`}
               color='inherit'
               onClick={handleNotificationClick}
             >
@@ -250,6 +278,34 @@ const Navbar = () => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {notificationOpen && (
+        <Box
+          sx={{
+            position: 'absolute',
+            right: 20,
+            top: 70,
+            width: 300,
+            bgcolor: 'background.paper',
+            boxShadow: 1,
+            borderRadius: 1,
+            p: 2,
+            zIndex: 1201,
+          }}
+        >
+          <Typography variant="h6">Notifications</Typography>
+          <ul>
+      {notifications.length === 0 ? (
+        <li>No new notifications</li>
+      ) : (
+        notifications.map((notification, index) => (
+          <li key={index}>
+            A new company {notification.company || 'Unknown'} is here: {notification.title || 'No title available'}
+          </li>
+        ))
+      )}
+    </ul>
+        </Box>
+      )}
     </Box>
   );
 };
