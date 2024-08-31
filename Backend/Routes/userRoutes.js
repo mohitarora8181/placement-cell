@@ -14,7 +14,8 @@ router.get('/profile/:userId', protect,async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
       .populate('appliedJobs', 'jobTitle companyName location type imageURL ctc')
-      .select('username fullname email dob course degree resumeURL appliedJobs');
+      //.select('username fullname email dob course degree resumeURL appliedJobs');
+      .select('fullname email dob degree course twelfthPercentage diplomaPercentage nationality cgpa address school12th tenthPercentage gapYear yearOfPassing activeBacklogs contactNumber resumeURL');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
