@@ -2,7 +2,7 @@
 import express from "express"
 const router = express.Router();
 import Job from '../models/Job.model.js'
-import protect from "../middlewares/authMiddleware.js";
+import {protect} from "../middlewares/authMiddleware.js";
 // const User = require('../models/User');
 // const Job = require('../models/Job.model.js');
 
@@ -31,7 +31,7 @@ import protect from "../middlewares/authMiddleware.js";
 //     res.status(500).send('Server error.');
 //   }
 // });
-router.get('/jobs/:jobId',protect, async (req, res) => {
+router.get('/jobs/:jobId', async (req, res) => {
   try {
 
     const job = await Job.findById(req.params.jobId)
@@ -53,7 +53,7 @@ router.get('/jobs/:jobId',protect, async (req, res) => {
   }
 });
 
-router.post('/jobs', async (req, res) => {
+router.post('/jobs', protect,async (req, res) => {
   try {
     const newJob = new Job(req.body); 
     await newJob.save(); 

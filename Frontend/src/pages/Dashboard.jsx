@@ -2,8 +2,8 @@ import React from 'react';
 import AdminPage from './AdminPage';
 
 const Dashboard = () => {
-  // Simulate authenticated check or role-based authorization logic
-  const isAdmin = true; // Adjust this based on your actual authentication/authorization logic
+ 
+  const isAdmin = true; 
 
   console.log('isAdmin:', isAdmin); // Log isAdmin value for debugging
 

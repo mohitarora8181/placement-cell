@@ -3,14 +3,14 @@ import { authUser, signup } from '../controller/user.controller.js';
 import express from 'express';
 import User from '../models/SignupModel.js';
 import Job from '../models/Job.model.js';
-import protect from '../middlewares/authMiddleware.js';
+import { protect, adminOnly } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
 router.post('/sign-up', signup);
 router.post('/sign-in', authUser);
 
-router.get('/profile/:userId', protect, async (req, res) => {
+router.get('/profile/:userId', protect,async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
       .populate('appliedJobs', 'jobTitle companyName location type imageURL ctc')
@@ -93,7 +93,7 @@ router.get('/:userId', protect, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
       .populate('appliedJobs', 'jobTitle companyName location type imageURL ctc jobDescription')
-      .select('fullname email dob course degree appliedJobs');
+      .select('fullname email dob course degree appliedJobs isAdmin ');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -101,6 +101,18 @@ router.get('/:userId', protect, async (req, res) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Internal server error', error });
+  }
+});
+router.get('/user-profile/:userId', protect, adminOnly, async (req, res) => {
+  try {
+      const user = await User.findById(req.params.userId);
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
+  } catch (error) {
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ message: 'Internal server error' });
   }
 });
 

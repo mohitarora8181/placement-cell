@@ -8,7 +8,7 @@ import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const AdminSidebar = ({ onData }) => {
-  // Initialize state with a value from local storage or default to 'student'
+ 
   const [currentVal, setCurrentVal] = useState(() => {
     const savedVal = localStorage.getItem('currentVal');
     return savedVal ? savedVal : 'student';
