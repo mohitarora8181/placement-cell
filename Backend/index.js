@@ -6,6 +6,7 @@ import express from "express"
 import cors from 'cors'
 import jobRoutes from './Routes/JobRoutes.js'; 
 import setupSocketIO from './socket.js';
+import path from 'path';
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -14,6 +15,7 @@ app.use(cors({
 dotenv.config({
     path:'./.env'
 })
+const _dirname=path.resolve();
 const { server, io } = setupSocketIO(app);
 
 connectDB()
@@ -27,5 +29,14 @@ connectDB()
 .catch((err) => {
     console.log("MONGO db connection failed !!! ", err);
 })
+app.use(express.static(path.join(_dirname,"/Frontend/build")));
+app.get("*", (req, res) =>
+    res.sendFile(path.join(_dirname, "Frontend","build", "index.html"))
+  );
+
+
+
+
+
 export { io };
 
