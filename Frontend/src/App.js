@@ -14,7 +14,7 @@ import JobDetails from './pages/JobDetails';
 import SearchUsers from './components/SearchUsers';
 import EditProfile from './pages/EditProfile';
 
-const backendURL = 'https://placement-cell-iczn.onrender.com/'; // Update this URL as required
+const backendURL = 'https://placement-cell-iczn.onrender.com/'; 
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);

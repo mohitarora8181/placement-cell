@@ -15,8 +15,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
-import axiosInstance from './axiosConfig'; // Importing the configured axios instance
 import io from 'socket.io-client';
+import axiosInstance from './axiosConfig.js'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -70,7 +70,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchStoredNotifications = async () => {
       try {
-        const response = await axiosInstance.get(`/api/notifications/${userId}`);
+        const response = await axiosInstance.get(`/notifications/${userId}`);
         const unreadNotifications = response.data.filter(notification => !notification.isRead);
         setNotifications(response.data);
         setNewJobsCount(unreadNotifications.length);
@@ -80,13 +80,13 @@ const Navbar = () => {
     };
 
     fetchStoredNotifications();
-  
+
     const socket = io('https://placement-cell-iczn.onrender.com'); // Updated Socket.IO URL
-  
+
     socket.on('connect', () => {
       console.log('Socket connected:', socket.id);
     });
-  
+
     socket.on('disconnect', () => {
       console.log('Socket disconnected');
     });
@@ -108,12 +108,12 @@ const Navbar = () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [userId]);
 
   const handleNotificationClick = async () => {
     if (clickCount === 1) { 
       try {
-        await axiosInstance.delete(`/api/notifications/${userId}`);
+        await axiosInstance.delete(`/notifications/${userId}`);
         setNotifications([]); 
         setNewJobsCount(0); 
       } catch (error) {
