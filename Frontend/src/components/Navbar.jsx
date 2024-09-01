@@ -82,18 +82,8 @@ const Navbar = () => {
     };
 
     fetchStoredNotifications();
-  //  const fetchUnreadCount = async () => {
-  //    try {
-  //      const response = await axios.get(`/api/notifications/unreadCount/${userId}`, {
-  //      });
-  //      setNewJobsCount(response.data.count);
-  //    } catch (error) {
-  //      console.error('Error fetching unread notifications count:', error);
-  //    }
-  //  };
-  //
-  //  fetchUnreadCount();
-    const socket = io('http://localhost:8000'); // Replace with your server's URL
+  
+    const socket = io('http://localhost:8000'); 
     
     socket.on('connect', () => {
       console.log('Socket connected:', socket.id);
@@ -123,27 +113,19 @@ const Navbar = () => {
   }, []);
 
   
-  //const handleNotificationClick = async () => {
-  //  try {
-  //    await axios.put(`/api/notifications/mark-as-read/${userId}`);
-  //    setNewJobsCount(0);
-  //    setNotificationOpen(!notificationOpen);
-  //  } catch (error) {
-  //    console.error('Error marking notifications as read:', error);
-  //  }
-  //};
+  
   const handleNotificationClick = async () => {
-    if (clickCount === 1) { // Second click
+    if (clickCount === 1) { 
       try {
         await axios.delete(`/api/notifications/${userId}`);
-        setNotifications([]); // Clear notifications from state
-        setNewJobsCount(0); // Reset new jobs count
+        setNotifications([]); 
+        setNewJobsCount(0); 
       } catch (error) {
         console.error('Error clearing notifications:', error);
       }
     }
-    setClickCount(prevCount => prevCount + 1); // Increment click count
-    setNotificationOpen(!notificationOpen); // Toggle notification panel
+    setClickCount(prevCount => prevCount + 1); 
+    setNotificationOpen(!notificationOpen); 
   };
 
 
@@ -168,9 +150,7 @@ const Navbar = () => {
     setMobileMoreAnchorEl(null);
   };
 
-  //const handleNotificationClick = () => {
-  //  navigate('/home');
-  //};
+  
 
   const logOut = () => {
     localStorage.clear();
@@ -256,27 +236,7 @@ const Navbar = () => {
     </Menu>
   );
 
- // useEffect(() => {
- //   const fetchNewJobsCount = async () => {
- //     try {
- //       const response = await axios.get('/api/jobs/new-count', {
- //         params: { since: lastChecked }
- //       });
- //       setNewJobsCount(response.data.count);
- //     } catch (error) {
- //       console.error('Error fetching new jobs count:', error);
- //     }
- //   };
-//
- //   fetchNewJobsCount();
-//
- //   // Poll every 30 seconds
- //   const interval = setInterval(() => {
- //     fetchNewJobsCount();
- //   }, 30000);
-//
- //   return () => clearInterval(interval);
- // }, [lastChecked]);
+ 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
