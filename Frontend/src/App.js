@@ -14,6 +14,8 @@ import JobDetails from './pages/JobDetails';
 import SearchUsers from './components/SearchUsers';
 import EditProfile from './pages/EditProfile';
 
+const backendURL = 'https://placement-cell-iczn.onrender.com/'; // Update this URL as required
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [role, setRole] = useState(null);
@@ -27,7 +29,7 @@ function App() {
         const userId = localStorage.getItem('userId');
 
         if (token && userId) {
-          const response = await axios.get(`https://placement-cell-iczn.onrender.com/api/users/${userId}`, {
+          const response = await axios.get(`${backendURL}/api/users/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
 
@@ -76,38 +78,34 @@ function App() {
 
   return (
     <div className='bg-[#F5F5DC] h-full'>
-    <Routes>
-      <Route path="/" element={<SignIn />} />
-      <Route path="/sign-in" element={<SignIn />} />
-      <Route path="/sign-up" element={<SignUp />} />
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
 
+        {role === 'user' && (
+          <>
+            <Route path="/home" element={<Home />} />
+            <Route path="/home/user-profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile />} />
+          </>
+        )}
 
-      {role === 'user' && (
-        <>
-          <Route path="/home" element={<Home />} />
-          <Route path="/home/user-profile" element={<Profile />} />
-          <Route path="/profile" element={<Profile />} />
-        </>
-      )}
+        {role === 'admin' && (
+          <>
+            <Route path="/user-profile/:userId" element={<UserProfile />} />
+            <Route path="/job/:jobId" element={<JobDetails />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/post-job" element={<AddJob />} />
+            <Route path="/admin/user-search" element={<SearchUsers />} />
+          </>
+        )}
 
+        <Route path="/search" element={<SearchJobs />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
 
-      {role === 'admin' && (
-        <>
-          <Route path="/user-profile/:userId" element={<UserProfile />} />
-          <Route path="/job/:jobId" element={<JobDetails />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/admin/post-job" element={<AddJob />} />
-          <Route path="/admin/user-search" element={<SearchUsers />} />
-        </>
-      )}
-
-
-      <Route path="/search" element={<SearchJobs />} />
-      <Route path="/edit-profile" element={<EditProfile />} />
-
-
-      <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
-    </Routes>
+        <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
+      </Routes>
     </div>
   );
 }

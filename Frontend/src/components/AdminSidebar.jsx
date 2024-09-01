@@ -71,7 +71,7 @@ const AdminSidebar = ({ onData }) => {
             </span>
             <hr />
           </li>
-          <Link to='https://placement-cell-iczn.onrender.com/admin/post-job'>
+          <Link to='/admin/post-job'>
             <li
               className="cursor-pointer mb-2"
               onClick={setToCompany}

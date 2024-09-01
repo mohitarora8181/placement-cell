@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import UserCard from '../components/UserCard'; 
+import UserCard from '../components/UserCard';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -15,33 +15,31 @@ const SearchUsers = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-        try {
-          console.log('Fetching users...');
-          const response = await axios.get('https://placement-cell-iczn.onrender.com/api/users/find');
-          console.log('Response data:', response.data);
+      try {
+        console.log('Fetching users...');
+        const response = await axios.get('https://placement-cell-iczn.onrender.com/api/users/find'); // Updated URL
+        console.log('Response data:', response.data);
       
-          const filteredUsers = response.data.filter((user) => {
-            const username = user.username || '';
-            const email = user.email || '';
-            const fullname = user.fullname || '';
-            
-            return (
-              username.toLowerCase().includes(query.toLowerCase()) ||
-              email.toLowerCase().includes(query.toLowerCase()) ||
-              fullname.toLowerCase().includes(query.toLowerCase())
-            );
-          });
+        const filteredUsers = response.data.filter((user) => {
+          const username = user.username || '';
+          const email = user.email || '';
+          const fullname = user.fullname || '';
+          
+          return (
+            username.toLowerCase().includes(query.toLowerCase()) ||
+            email.toLowerCase().includes(query.toLowerCase()) ||
+            fullname.toLowerCase().includes(query.toLowerCase())
+          );
+        });
       
-          setUsers(filteredUsers);
-        } catch (error) {
-          console.error('Error fetching users:', error);
-          setError('Failed to load users. Please try again later.');
-        } finally {
-          setLoading(false);
-        }
-      };
-      
-      
+        setUsers(filteredUsers);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        setError('Failed to load users. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchUsers();
   }, [query]);

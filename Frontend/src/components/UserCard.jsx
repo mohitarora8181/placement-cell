@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 const UserCard = ({ user }) => {
   const navigate = useNavigate();
 
-const handleClick = () => {
-  navigate(`https://placement-cell-iczn.onrender.com/user-profile/${user._id}`);
-};
+  const handleClick = () => {
+    navigate(`/user-profile/${user._id}`);
+  };
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg w-80 h-auto m-4 cursor-pointer" onClick={handleClick}>

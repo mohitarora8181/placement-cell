@@ -99,12 +99,12 @@ const AdminNav = () => {
   };
 
   const handleAddJobClick = () => {
-    navigate('https://placement-cell-iczn.onrender.com/admin/post-job'); // Redirect to post-job page
+    navigate('/admin/post-job'); // Redirect to post-job page
   };
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      const route = searchType === 'jobs' ? `https://placement-cell-iczn.onrender.com/search?query=${encodeURIComponent(searchQuery)}` : `/admin/user-search?query=${encodeURIComponent(searchQuery)}`;
+      const route = searchType === 'jobs' ? `/search?query=${encodeURIComponent(searchQuery)}` : `/admin/user-search?query=${encodeURIComponent(searchQuery)}`;
       navigate(route);
     }
   };
@@ -139,7 +139,7 @@ const AdminNav = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => { navigate('https://placement-cell-iczn.onrender.com/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem>
+      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem>
       <MenuItem onClick={logOut}>Log Out</MenuItem>
     </Menu>
   );
@@ -169,7 +169,7 @@ const AdminNav = () => {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={() => { navigate('https://placement-cell-iczn.onrender.com/home/user-profile'); handleMobileMenuClose(); }}>
+      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMobileMenuClose(); }}>
         <IconButton
           size='large'
           aria-label='account of current user'
@@ -205,6 +205,7 @@ const AdminNav = () => {
               color='inherit'
               aria-label='open drawer'
               sx={{ mr: 2 }}
+              onClick={() => navigate('/')} // Home link
             >
               <MenuIcon />
             </IconButton>
@@ -223,20 +224,19 @@ const AdminNav = () => {
                 onChange={handleSearchTypeChange}
                 aria-label="search type"
                 sx={{ mr: 2 }}
-                
-                        >
-                          <ToggleButton 
-                    value="jobs" 
-                      sx={{ color: 'green' }} 
-                      >
-                Jobs
-              </ToggleButton>
-              <ToggleButton 
-                value="users" 
-                sx={{ color: 'green' }} 
               >
-                Users
-    </ToggleButton>
+                <ToggleButton 
+                  value="jobs" 
+                  sx={{ color: 'green' }} 
+                >
+                  Jobs
+                </ToggleButton>
+                <ToggleButton 
+                  value="users" 
+                  sx={{ color: 'green' }} 
+                >
+                  Users
+                </ToggleButton>
               </ToggleButtonGroup>
               <Search>
                 <SearchIconWrapper>
@@ -265,6 +265,7 @@ const AdminNav = () => {
                 size='large'
                 aria-label='show 17 new notifications'
                 color='inherit'
+                onClick={() => navigate('/notifications')} // Link to notifications page
               >
                 <Badge badgeContent={0} color='error'>
                   <NotificationsIcon />

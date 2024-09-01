@@ -15,7 +15,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
-import axios from 'axios';
+import axiosInstance from './axiosConfig'; // Importing the configured axios instance
 import io from 'socket.io-client';
 
 const Search = styled('div')(({ theme }) => ({
@@ -57,11 +57,9 @@ const Navbar = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [newJobsCount, setNewJobsCount] = useState(0);
-  const [lastChecked, setLastChecked] = useState(new Date().toISOString());
   const [notifications, setNotifications] = useState([]); // Store notifications
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [clickCount, setClickCount] = useState(0);
-  //const [lastNotificationClickTime, setLastNotificationClickTime] = useState(null);
   const [lastNotificationClickTime, setLastNotificationClickTime] = useState(() => {
     const storedTime = localStorage.getItem('lastNotificationClickTime');
     return storedTime ? parseInt(storedTime, 10) : null;
@@ -72,7 +70,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchStoredNotifications = async () => {
       try {
-        const response = await axios.get(`https://placement-cell-iczn.onrender.com/api/notifications/${userId}`);
+        const response = await axiosInstance.get(`/api/notifications/${userId}`);
         const unreadNotifications = response.data.filter(notification => !notification.isRead);
         setNotifications(response.data);
         setNewJobsCount(unreadNotifications.length);
@@ -83,8 +81,8 @@ const Navbar = () => {
 
     fetchStoredNotifications();
   
-    const socket = io('https://placement-cell-iczn.onrender.com/'); 
-    
+    const socket = io('https://placement-cell-iczn.onrender.com'); // Updated Socket.IO URL
+  
     socket.on('connect', () => {
       console.log('Socket connected:', socket.id);
     });
@@ -103,7 +101,7 @@ const Navbar = () => {
         message: `A new job "${job.jobTitle}" has been posted by ${job.companyName}.`,
         createdAt: new Date(),
       };
-      setNotifications((prevNotifications) => [...prevNotifications, { company: job.companyName, title: job.jobTitle }]);
+      setNotifications((prevNotifications) => [...prevNotifications, newNotification]);
       setNewJobsCount((prevCount) => prevCount + 1);
     });
 
@@ -112,12 +110,10 @@ const Navbar = () => {
     };
   }, []);
 
-  
-  
   const handleNotificationClick = async () => {
     if (clickCount === 1) { 
       try {
-        await axios.delete(`https://placement-cell-iczn.onrender.com/api/notifications/${userId}`);
+        await axiosInstance.delete(`/api/notifications/${userId}`);
         setNotifications([]); 
         setNewJobsCount(0); 
       } catch (error) {
@@ -128,16 +124,13 @@ const Navbar = () => {
     setNotificationOpen(!notificationOpen); 
   };
 
-
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
   const handleSearchSubmit = (event) => {
     if (event.key === 'Enter') {
-      navigate(`https://placement-cell-iczn.onrender.com/search?query=${searchQuery}`);
-      setLastChecked(new Date().toISOString());
+      navigate(`/search?query=${searchQuery}`);
     }
   };
 
@@ -150,13 +143,10 @@ const Navbar = () => {
     setMobileMoreAnchorEl(null);
   };
 
-  
-
   const logOut = () => {
     localStorage.clear();
-    navigate('https://placement-cell-iczn.onrender.com/sign-in');
+    navigate('/sign-in');
   };
-  
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -178,7 +168,7 @@ const Navbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => { navigate('https://placement-cell-iczn.onrender.com/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem>
+      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem>
       <MenuItem onClick={logOut}>Log Out</MenuItem>
     </Menu>
   );
@@ -221,7 +211,7 @@ const Navbar = () => {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={() => { navigate('https://placement-cell-iczn.onrender.com/home/user-profile'); handleMenuClose(); }}>
+      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>
         <IconButton
           size='large'
           aria-label='account of current user'
@@ -235,8 +225,6 @@ const Navbar = () => {
       </MenuItem>
     </Menu>
   );
-
- 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -300,41 +288,6 @@ const Navbar = () => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-      {notificationOpen && (
-        <Box
-          sx={{
-            position: 'absolute',
-            right: 20,
-            top: 70,
-            width: 300,
-            bgcolor: 'background.paper',
-            boxShadow: 1,
-            borderRadius: 1,
-            p: 2,
-            zIndex: 1201,
-          }}
-        >
-          <Typography variant='h6' sx={{ mb: 2 }}>
-            Notifications
-          </Typography>
-          {notifications.length > 0 ? (
-            notifications.map((notification, index) => (
-              <Box key={index} sx={{ mb: 2 }}>
-                <Typography variant='body2' color='text.primary'>
-                  {notification.message}
-                </Typography>
-                <Typography variant='caption' color='text.secondary'>
-                  {new Date(notification.createdAt).toLocaleString()}
-                </Typography>
-              </Box>
-            ))
-          ) : (
-            <Typography variant='body2' color='text.secondary'>
-              No notifications.
-            </Typography>
-          )}
-        </Box>
-      )}
     </Box>
   );
 };

@@ -18,7 +18,7 @@ const JobData = ({ job }) => {
         });
   
         if (response.status === 200) {
-          navigate(`https://placement-cell-iczn.onrender.com/job/${job._id}`);
+          navigate(`/job/${job._id}`);
         }
       } else {
         alert('You need to log in to view this job.');
@@ -35,7 +35,6 @@ const JobData = ({ job }) => {
       }
     }
   };
-  
 
   return (
     <Card
