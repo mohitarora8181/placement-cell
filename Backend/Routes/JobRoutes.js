@@ -35,18 +35,18 @@ router.post('/jobs',async (req, res) => {
     const newJob = new Job(req.body); 
     await newJob.save(); 
     const users = await User.find(); 
-    users.forEach(async (user) => {
-      await Notification.create({
-        userId: user._id,
-        jobId: newJob._id,
-        message: `A new job "${newJob.jobTitle}" has been posted by ${newJob.companyName}.`,
-      });
-      if (user.isConnected) {
-        io.to(user.socketId).emit('newJob', newJob);
-      }
-    });
-   // io.emit('newJob', newJob);
-    console.log('New job emitted:', newJob);
+  //   users.forEach(async (user) => {
+  //     await Notification.create({
+  //       userId: user._id,
+  //       jobId: newJob._id,
+  //       message: `A new job "${newJob.jobTitle}" has been posted by ${newJob.companyName}.`,
+  //     });
+  //     if (user.isConnected) {
+  //       io.to(user.socketId).emit('newJob', newJob);
+  //     }
+  //   });
+  //  // io.emit('newJob', newJob);
+  //   console.log('New job emitted:', newJob);
     res.status(201).json(newJob); 
   } catch (error) {
     console.error('Error adding job:', error);
@@ -67,30 +67,30 @@ router.get('/jobs', async (req, res) => {
   }
 });
 // Notification route to fetch notifications for a user
-router.get('/notifications/:userId', async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const notifications = await Notification.find({ userId }).sort({ createdAt: -1 });
-    res.status(200).json(notifications);
-  } catch (error) {
-    console.error('Error fetching notifications:', error);
-    res.status(500).send('Server error.');
-  }
-});
+// router.get('/notifications/:userId', async (req, res) => {
+//   try {
+//     const userId = req.params.userId;
+//     const notifications = await Notification.find({ userId }).sort({ createdAt: -1 });
+//     res.status(200).json(notifications);
+//   } catch (error) {
+//     console.error('Error fetching notifications:', error);
+//     res.status(500).send('Server error.');
+//   }
+// });
 
-// Route to mark notifications as read
+// // Route to mark notifications as read
 
 
-router.delete('/notifications/:userId', async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    await Notification.deleteMany({ userId });
-    res.status(200).json({ message: 'Notifications cleared.' });
-  } catch (error) {
-    console.error('Error deleting notifications:', error);
-    res.status(500).json({ error: 'Server error.' });
-  }
-});
+// router.delete('/notifications/:userId', async (req, res) => {
+//   try {
+//     const userId = req.params.userId;
+//     await Notification.deleteMany({ userId });
+//     res.status(200).json({ message: 'Notifications cleared.' });
+//   } catch (error) {
+//     console.error('Error deleting notifications:', error);
+//     res.status(500).json({ error: 'Server error.' });
+//   }
+// });
 
 
 

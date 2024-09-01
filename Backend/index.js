@@ -3,41 +3,35 @@ import connectDB from './db/index.js';
 import userRoutes from './Routes/userRoutes.js';
 import express from 'express';
 import cors from 'cors';
-import jobRoutes from './Routes/JobRoutes.js'; 
-// import setupSocketIO from './socket.js';
+import jobRoutes from './Routes/JobRoutes.js';
 import path from 'path';
 
-// Initialize Express app
 const app = express();
 
-
-dotenv.config({ path: './.env' });
-
+dotenv.config({
+  path: './.env'
+});
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://placement-cell-iczn.onrender.com'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  }));
-
+  origin: ['http://localhost:3000', 'https://placement-cell-iczn.onrender.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+// API Routes
 app.use('/api/users', userRoutes);
-app.use('/api/jobs', jobRoutes);
+app.use('/api', jobRoutes); // Correctly scoped route for jobs
 
-
+// Serve static files
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, 'Frontend', 'build')));
 
+// Wildcard route to serve React frontend
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'Frontend', 'build', 'index.html'));
 });
-
-// Setup Socket.IO
-// const { server, io } = setupSocketIO(app);
-
 
 connectDB()
   .then(() => {
@@ -46,8 +40,5 @@ connectDB()
     });
   })
   .catch((err) => {
-    console.error('MONGO DB connection failed !!!', err);
+    console.log('MONGO DB connection failed !!!', err);
   });
-
-
-

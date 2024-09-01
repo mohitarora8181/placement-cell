@@ -16,7 +16,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 // import io from 'socket.io-client';
-import axiosInstance from './axiosConfig.js'
+// import axiosInstance from './axiosConfig.js'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
