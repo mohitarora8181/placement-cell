@@ -4,7 +4,7 @@ import userRoutes from './Routes/userRoutes.js';
 import express from 'express';
 import cors from 'cors';
 import jobRoutes from './Routes/JobRoutes.js'; 
-import setupSocketIO from './socket.js';
+// import setupSocketIO from './socket.js';
 import path from 'path';
 
 // Initialize Express app
@@ -36,12 +36,12 @@ app.get('*', (req, res) => {
 });
 
 // Setup Socket.IO
-const { server, io } = setupSocketIO(app);
+// const { server, io } = setupSocketIO(app);
 
 
 connectDB()
   .then(() => {
-    server.listen(process.env.PORT || 8000, () => {
+    app.listen(process.env.PORT || 8000, () => {
       console.log(`⚙️ Server is running at port : ${process.env.PORT || 8000}`);
     });
   })
@@ -50,4 +50,4 @@ connectDB()
   });
 
 
-export { io };
+

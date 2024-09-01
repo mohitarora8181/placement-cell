@@ -11,7 +11,14 @@ const JobPostings = () => {
     const fetchJobPostings = async () => {
       try {
         const response = await axios.get('https://placement-cell-iczn.onrender.com/api/jobs'); // Updated URL
-        setJobPostings(response.data);
+        console.log('Job postings response data:', response.data);
+        
+        // Ensure response.data is an array
+        if (Array.isArray(response.data)) {
+          setJobPostings(response.data);
+        } else {
+          throw new Error('Received data is not an array');
+        }
       } catch (error) {
         console.error('Error fetching job postings:', error);
         setError('Failed to load job postings. Please try again later.');

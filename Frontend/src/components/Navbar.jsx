@@ -15,7 +15,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import axiosInstance from './axiosConfig.js'
 
 const Search = styled('div')(({ theme }) => ({
@@ -68,55 +68,55 @@ const Navbar = () => {
   const userId = localStorage.getItem('userId')?.trim();
 
   useEffect(() => {
-    const fetchStoredNotifications = async () => {
-      try {
-        const response = await axiosInstance.get(`/notifications/${userId}`);
-        console.log('Response data:', response.data); // Log the response data
+    // const fetchStoredNotifications = async () => {
+    //   try {
+    //     const response = await axiosInstance.get(`/notifications/${userId}`);
+    //     console.log('Response data:', response.data); // Log the response data
         
-        // Check if response.data is an array before calling .filter
-        if (Array.isArray(response.data)) {
-          const unreadNotifications = response.data.filter(notification => !notification.isRead);
-          setNotifications(response.data);
-          setNewJobsCount(unreadNotifications.length);
-        } else {
-          console.error('Expected an array but got:', response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching notifications:', error);
-      }
-    };
+    //     // Check if response.data is an array before calling .filter
+    //     if (Array.isArray(response.data)) {
+    //       const unreadNotifications = response.data.filter(notification => !notification.isRead);
+    //       setNotifications(response.data);
+    //       setNewJobsCount(unreadNotifications.length);
+    //     } else {
+    //       console.error('Expected an array but got:', response.data);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching notifications:', error);
+    //   }
+    // };
 
-    fetchStoredNotifications();
+    // fetchStoredNotifications();
 
-    const socket = io('https://placement-cell-iczn.onrender.com', {
-      transports: ['websocket'], // Optional: specify transports
-    });
+    // const socket = io('https://placement-cell-iczn.onrender.com', {
+    //   transports: ['websocket'], // Optional: specify transports
+    // });
 
-    socket.on('connect', () => {
-      console.log('Socket connected:', socket.id);
-    });
+    // socket.on('connect', () => {
+    //   console.log('Socket connected:', socket.id);
+    // });
 
-    socket.on('disconnect', () => {
-      console.log('Socket disconnected');
-    });
+    // socket.on('disconnect', () => {
+    //   console.log('Socket disconnected');
+    // });
 
-    socket.on('newJob', (job) => {
-      console.log('New job received:', job);
-      const newNotification = {
-        userId,
-        jobId: job._id,
-        company: job.companyName,
-        title: job.jobTitle,
-        message: `A new job "${job.jobTitle}" has been posted by ${job.companyName}.`,
-        createdAt: new Date(),
-      };
-      setNotifications((prevNotifications) => [...prevNotifications, newNotification]);
-      setNewJobsCount((prevCount) => prevCount + 1);
-    });
+    // socket.on('newJob', (job) => {
+    //   console.log('New job received:', job);
+    //   const newNotification = {
+    //     userId,
+    //     jobId: job._id,
+    //     company: job.companyName,
+    //     title: job.jobTitle,
+    //     message: `A new job "${job.jobTitle}" has been posted by ${job.companyName}.`,
+    //     createdAt: new Date(),
+    //   };
+    //   setNotifications((prevNotifications) => [...prevNotifications, newNotification]);
+    //   setNewJobsCount((prevCount) => prevCount + 1);
+    // });
 
-    return () => {
-      socket.disconnect();
-    };
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, [userId]);
 
   const handleNotificationClick = async () => {
