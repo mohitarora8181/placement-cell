@@ -72,7 +72,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchStoredNotifications = async () => {
       try {
-        const response = await axios.get(`/api/notifications/${userId}`);
+        const response = await axios.get(`https://placement-cell-iczn.onrender.com/api/notifications/${userId}`);
         const unreadNotifications = response.data.filter(notification => !notification.isRead);
         setNotifications(response.data);
         setNewJobsCount(unreadNotifications.length);
@@ -83,7 +83,7 @@ const Navbar = () => {
 
     fetchStoredNotifications();
   
-    const socket = io('http://localhost:8000'); 
+    const socket = io('https://placement-cell-iczn.onrender.com/'); 
     
     socket.on('connect', () => {
       console.log('Socket connected:', socket.id);
@@ -117,7 +117,7 @@ const Navbar = () => {
   const handleNotificationClick = async () => {
     if (clickCount === 1) { 
       try {
-        await axios.delete(`/api/notifications/${userId}`);
+        await axios.delete(`https://placement-cell-iczn.onrender.com/api/notifications/${userId}`);
         setNotifications([]); 
         setNewJobsCount(0); 
       } catch (error) {
@@ -136,7 +136,7 @@ const Navbar = () => {
 
   const handleSearchSubmit = (event) => {
     if (event.key === 'Enter') {
-      navigate(`/search?query=${searchQuery}`);
+      navigate(`https://placement-cell-iczn.onrender.com/search?query=${searchQuery}`);
       setLastChecked(new Date().toISOString());
     }
   };
@@ -154,7 +154,7 @@ const Navbar = () => {
 
   const logOut = () => {
     localStorage.clear();
-    navigate('/sign-in');
+    navigate('https://placement-cell-iczn.onrender.com/sign-in');
   };
   
 
@@ -178,7 +178,7 @@ const Navbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem>
+      <MenuItem onClick={() => { navigate('https://placement-cell-iczn.onrender.com/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem>
       <MenuItem onClick={logOut}>Log Out</MenuItem>
     </Menu>
   );
@@ -221,7 +221,7 @@ const Navbar = () => {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>
+      <MenuItem onClick={() => { navigate('https://placement-cell-iczn.onrender.com/home/user-profile'); handleMenuClose(); }}>
         <IconButton
           size='large'
           aria-label='account of current user'

@@ -5,7 +5,7 @@ function setupSocketIO(app) {
     const server = http.createServer(app);
     const io = new SocketIoServer(server,{
         cors: {
-      origin: 'http://localhost:3000', // Frontend URL
+      origin: 'https://placement-cell-iczn.onrender.com/', // Frontend URL
       methods: ['GET', 'POST'],
     },
     }); // Use 'new' keyword to instantiate the server

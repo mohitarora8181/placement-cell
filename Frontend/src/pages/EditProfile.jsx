@@ -70,7 +70,7 @@ const EditProfile = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.put(`/api/users/update-profile/${userId}`, userData, {
+      await axios.put(`https://placement-cell-iczn.onrender.com/api/users/update-profile/${userId}`, userData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('Profile updated successfully!');

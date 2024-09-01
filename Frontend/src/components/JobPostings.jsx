@@ -10,7 +10,7 @@ const JobPostings = () => {
   useEffect(() => {
     const fetchJobPostings = async () => {
       try {
-        const response = await axios.get('/api/jobs');
+        const response = await axios.get('https://placement-cell-iczn.onrender.com/api/jobs');
         setJobPostings(response.data);
       } catch (error) {
         console.error('Error fetching job postings:', error);

@@ -11,14 +11,14 @@ const JobData = ({ job }) => {
       const token = localStorage.getItem('token');
   
       if (token) {
-        const response = await axios.get(`/api/jobs/${job._id}`, {
+        const response = await axios.get(`https://placement-cell-iczn.onrender.com/api/jobs/${job._id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
   
         if (response.status === 200) {
-          navigate(`/job/${job._id}`);
+          navigate(`https://placement-cell-iczn.onrender.com/job/${job._id}`);
         }
       } else {
         alert('You need to log in to view this job.');

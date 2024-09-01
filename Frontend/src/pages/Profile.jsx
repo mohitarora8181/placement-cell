@@ -44,7 +44,7 @@ const Profile = () => {
     }
 
     try {
-      await axios.post(`/api/users/update-resume/${userId}`, { resumeURL }, {
+      await axios.post(`https://placement-cell-iczn.onrender.com/api/users/update-resume/${userId}`, { resumeURL }, {
         headers: { Authorization: `Bearer ${token}` } // Include token here as well
       });
       alert('Resume URL updated successfully!');

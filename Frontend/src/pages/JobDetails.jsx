@@ -9,7 +9,7 @@ const JobDetails = () => {
 
   useEffect(() => {
     
-    axios.get(`/api/jobs/${jobId}`)
+    axios.get(`https://placement-cell-iczn.onrender.com/api/jobs/${jobId}`)
       .then(response => {
         
         setJob(response.data.job);

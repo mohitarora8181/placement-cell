@@ -27,7 +27,7 @@ function App() {
         const userId = localStorage.getItem('userId');
 
         if (token && userId) {
-          const response = await axios.get(`/api/users/${userId}`, {
+          const response = await axios.get(`https://placement-cell-iczn.onrender.com/api/users/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
 

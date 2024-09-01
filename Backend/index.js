@@ -9,7 +9,7 @@ import setupSocketIO from './socket.js';
 import path from 'path';
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://placement-cell-iczn.onrender.com/',
     methods:['GET','POST']
 }));
 dotenv.config({

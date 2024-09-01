@@ -17,7 +17,7 @@ const SearchUsers = () => {
     const fetchUsers = async () => {
         try {
           console.log('Fetching users...');
-          const response = await axios.get('/api/users/find');
+          const response = await axios.get('https://placement-cell-iczn.onrender.com/api/users/find');
           console.log('Response data:', response.data);
       
           const filteredUsers = response.data.filter((user) => {

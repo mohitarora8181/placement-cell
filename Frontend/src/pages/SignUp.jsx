@@ -58,7 +58,7 @@ const SignUp = () => {
         },
       };
 
-      const { data } = await axios.post('/api/users/sign-up', formData, config);
+      const { data } = await axios.post('https://placement-cell-iczn.onrender.com/api/users/sign-up', formData, config);
       const { _id, token, ...rest } = data;
 
       // Check if _id is defined

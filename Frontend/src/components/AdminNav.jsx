@@ -99,12 +99,12 @@ const AdminNav = () => {
   };
 
   const handleAddJobClick = () => {
-    navigate('/admin/post-job'); // Redirect to post-job page
+    navigate('https://placement-cell-iczn.onrender.com/admin/post-job'); // Redirect to post-job page
   };
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      const route = searchType === 'jobs' ? `/search?query=${encodeURIComponent(searchQuery)}` : `/admin/user-search?query=${encodeURIComponent(searchQuery)}`;
+      const route = searchType === 'jobs' ? `https://placement-cell-iczn.onrender.com/search?query=${encodeURIComponent(searchQuery)}` : `/admin/user-search?query=${encodeURIComponent(searchQuery)}`;
       navigate(route);
     }
   };
@@ -139,7 +139,7 @@ const AdminNav = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem>
+      <MenuItem onClick={() => { navigate('https://placement-cell-iczn.onrender.com/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem>
       <MenuItem onClick={logOut}>Log Out</MenuItem>
     </Menu>
   );
@@ -169,7 +169,7 @@ const AdminNav = () => {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMobileMenuClose(); }}>
+      <MenuItem onClick={() => { navigate('https://placement-cell-iczn.onrender.com/home/user-profile'); handleMobileMenuClose(); }}>
         <IconButton
           size='large'
           aria-label='account of current user'

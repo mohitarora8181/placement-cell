@@ -26,7 +26,7 @@ const AddJob = () => {
     };
 
     try {
-      const response = await axios.post('/api/jobs', jobData); 
+      const response = await axios.post('https://placement-cell-iczn.onrender.com/api/jobs', jobData); 
       if (response.status === 201) {
         alert('Job added successfully!');
         // Clear the form fields

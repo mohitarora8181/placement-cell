@@ -5,7 +5,7 @@ const UserCard = ({ user }) => {
   const navigate = useNavigate();
 
 const handleClick = () => {
-  navigate(`/user-profile/${user._id}`);
+  navigate(`https://placement-cell-iczn.onrender.com/user-profile/${user._id}`);
 };
 
   return (
