@@ -60,9 +60,38 @@ const Navbar = () => {
   const [lastChecked, setLastChecked] = useState(new Date().toISOString());
   const [notifications, setNotifications] = useState([]); // Store notifications
   const [notificationOpen, setNotificationOpen] = useState(false);
+  //const [lastNotificationClickTime, setLastNotificationClickTime] = useState(null);
+  const [lastNotificationClickTime, setLastNotificationClickTime] = useState(() => {
+    const storedTime = localStorage.getItem('lastNotificationClickTime');
+    return storedTime ? parseInt(storedTime, 10) : null;
+  });
   const navigate = useNavigate();
+  const userId = localStorage.getItem('userId')?.trim();
 
   useEffect(() => {
+    const fetchStoredNotifications = async () => {
+      try {
+        const response = await axios.get(`/api/notifications/${userId}`);
+        const unreadNotifications = response.data.filter(notification => !notification.isRead);
+        setNotifications(response.data);
+        setNewJobsCount(unreadNotifications.length);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    fetchStoredNotifications();
+  //  const fetchUnreadCount = async () => {
+  //    try {
+  //      const response = await axios.get(`/api/notifications/unreadCount/${userId}`, {
+  //      });
+  //      setNewJobsCount(response.data.count);
+  //    } catch (error) {
+  //      console.error('Error fetching unread notifications count:', error);
+  //    }
+  //  };
+  //
+  //  fetchUnreadCount();
     const socket = io('http://localhost:8000'); // Replace with your server's URL
     
     socket.on('connect', () => {
@@ -75,6 +104,14 @@ const Navbar = () => {
 
     socket.on('newJob', (job) => {
       console.log('New job received:', job);
+      const newNotification = {
+        userId,
+        jobId: job._id,
+        company: job.companyName,
+        title: job.jobTitle,
+        message: `A new job "${job.jobTitle}" has been posted by ${job.companyName}.`,
+        createdAt: new Date(),
+      };
       setNotifications((prevNotifications) => [...prevNotifications, { company: job.companyName, title: job.jobTitle }]);
       setNewJobsCount((prevCount) => prevCount + 1);
     });
@@ -83,6 +120,18 @@ const Navbar = () => {
       socket.disconnect();
     };
   }, []);
+
+  
+  const handleNotificationClick = async () => {
+    try {
+      await axios.put(`/api/notifications/mark-as-read/${userId}`);
+      setNewJobsCount(0);
+      setNotificationOpen(!notificationOpen);
+    } catch (error) {
+      console.error('Error marking notifications as read:', error);
+    }
+  };
+
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -112,9 +161,7 @@ const Navbar = () => {
     localStorage.clear();
     navigate('/sign-in');
   };
-  const handleNotificationClick = () => {
-    setNotificationOpen(!notificationOpen); // Toggle notification box
-  };
+  
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -169,7 +216,7 @@ const Navbar = () => {
       <MenuItem>
         <IconButton
           size='large'
-          aria-label='show new notifications'
+          aria-label={`show ${newJobsCount} new notifications`}
           color='inherit'
           onClick={handleNotificationClick}
         >
@@ -292,18 +339,25 @@ const Navbar = () => {
             zIndex: 1201,
           }}
         >
-          <Typography variant="h6">Notifications</Typography>
-          <ul>
-      {notifications.length === 0 ? (
-        <li>No new notifications</li>
-      ) : (
-        notifications.map((notification, index) => (
-          <li key={index}>
-            A new company {notification.company || 'Unknown'} is here: {notification.title || 'No title available'}
-          </li>
-        ))
-      )}
-    </ul>
+          <Typography variant='h6' sx={{ mb: 2 }}>
+            Notifications
+          </Typography>
+          {notifications.length > 0 ? (
+            notifications.map((notification, index) => (
+              <Box key={index} sx={{ mb: 2 }}>
+                <Typography variant='body2' color='text.primary'>
+                  {notification.message}
+                </Typography>
+                <Typography variant='caption' color='text.secondary'>
+                  {new Date(notification.createdAt).toLocaleString()}
+                </Typography>
+              </Box>
+            ))
+          ) : (
+            <Typography variant='body2' color='text.secondary'>
+              No notifications.
+            </Typography>
+          )}
         </Box>
       )}
     </Box>
