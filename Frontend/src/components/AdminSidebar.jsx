@@ -8,7 +8,7 @@ import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const AdminSidebar = ({ onData }) => {
- 
+
   const [currentVal, setCurrentVal] = useState(() => {
     const savedVal = localStorage.getItem('currentVal');
     return savedVal ? savedVal : 'student';
@@ -51,7 +51,7 @@ const AdminSidebar = ({ onData }) => {
 
   return (
     <>
-      <nav className="hidden md:flex flex-col h-full w-[20%] bg-[#099934] text-white font-semibold pt-4 text-md shadow-lg mr-4">
+      <nav className="hidden md:flex flex-col  w-[20%] bg-[#099934] text-white font-semibold pt-4 text-md shadow-lg mr-4">
         <ul className="flex flex-col p-4">
           <li
             className={currentVal === 'student' ? "cursor-pointer mb-2 font-bold" : "cursor-pointer mb-2"}

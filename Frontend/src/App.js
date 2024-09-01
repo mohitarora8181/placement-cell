@@ -16,7 +16,7 @@ import EditProfile from './pages/EditProfile';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [role, setRole] = useState(null); 
+  const [role, setRole] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -75,12 +75,13 @@ function App() {
   }
 
   return (
+    <div className='bg-[#F5F5DC] h-full'>
     <Routes>
       <Route path="/" element={<SignIn />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/sign-up" element={<SignUp />} />
 
-     
+
       {role === 'user' && (
         <>
           <Route path="/home" element={<Home />} />
@@ -89,7 +90,7 @@ function App() {
         </>
       )}
 
-      
+
       {role === 'admin' && (
         <>
           <Route path="/user-profile/:userId" element={<UserProfile />} />
@@ -100,13 +101,14 @@ function App() {
         </>
       )}
 
-     
+
       <Route path="/search" element={<SearchJobs />} />
       <Route path="/edit-profile" element={<EditProfile />} />
 
-     
+
       <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
     </Routes>
+    </div>
   );
 }
 

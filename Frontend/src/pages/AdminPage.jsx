@@ -15,7 +15,7 @@ const AdminPage = () => {
  return(
   <>
   <AdminNav/>
-  <div className='flex flex-row h-screen '>
+  <div className='flex flex-row  '>
     <AdminSidebar onData={getDisplayValue}/>
     { display==='student' ?
       <AdminStudents />
