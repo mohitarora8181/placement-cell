@@ -60,6 +60,7 @@ const Navbar = () => {
   const [lastChecked, setLastChecked] = useState(new Date().toISOString());
   const [notifications, setNotifications] = useState([]); // Store notifications
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
   //const [lastNotificationClickTime, setLastNotificationClickTime] = useState(null);
   const [lastNotificationClickTime, setLastNotificationClickTime] = useState(() => {
     const storedTime = localStorage.getItem('lastNotificationClickTime');
@@ -122,15 +123,29 @@ const Navbar = () => {
   }, []);
 
   
+  //const handleNotificationClick = async () => {
+  //  try {
+  //    await axios.put(`/api/notifications/mark-as-read/${userId}`);
+  //    setNewJobsCount(0);
+  //    setNotificationOpen(!notificationOpen);
+  //  } catch (error) {
+  //    console.error('Error marking notifications as read:', error);
+  //  }
+  //};
   const handleNotificationClick = async () => {
-    try {
-      await axios.put(`/api/notifications/mark-as-read/${userId}`);
-      setNewJobsCount(0);
-      setNotificationOpen(!notificationOpen);
-    } catch (error) {
-      console.error('Error marking notifications as read:', error);
+    if (clickCount === 1) { // Second click
+      try {
+        await axios.delete(`/api/notifications/${userId}`);
+        setNotifications([]); // Clear notifications from state
+        setNewJobsCount(0); // Reset new jobs count
+      } catch (error) {
+        console.error('Error clearing notifications:', error);
+      }
     }
+    setClickCount(prevCount => prevCount + 1); // Increment click count
+    setNotificationOpen(!notificationOpen); // Toggle notification panel
   };
+
 
 
   const handleSearchChange = (event) => {
