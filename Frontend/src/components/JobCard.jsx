@@ -3,8 +3,8 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/
 import axios from 'axios';
 
 const JobCard = ({ job }) => {
-  const [open, setOpen] = useState(false); 
-  const [redirected, setRedirected] = useState(false); 
+  const [open, setOpen] = useState(false);
+  const [redirected, setRedirected] = useState(false);
   const userId = localStorage.getItem('userId')?.trim();
 
   const handleApplyClick = () => {
@@ -30,24 +30,31 @@ const JobCard = ({ job }) => {
   };
 
   const handleClose = () => {
-    setRedirected(false); 
+    setRedirected(false);
   };
 
   return (
-    <div className='p-4 bg-white shadow-md rounded-lg w-80 h-auto m-4'>
+    <div className='p-4 bg-gray-50 hover:bg-white hover:scale-110 cursor-pointer shadow-md rounded-lg w-80 h-auto m-4 flex flex-col justify-between transition-transform duration-300 ease-in-out transform hover:shadow-lg'>
       {job.imageURL && (
-        <img src={job.imageURL} alt={job.jobTitle} className='rounded-lg h-44 w-full' />
+        <img src={job.imageURL} alt={job.jobTitle} className='rounded-lg h-44 w-full mb-2' />
       )}
-      <h3 className='text-xl font-semibold mb-2'>{job.jobTitle}</h3>
-      <p className='text-gray-600 mb-2'>{job.companyName}</p>
-      <p className='mb-4'>{job.jobDescription}</p>
-      <p className='text-gray-500'>CTC: {job.ctc} lacs</p>
-      <button
-        className='bg-blue-500 hover:bg-blue-700 font-bold rounded-sm mt-2 px-4 py-2 text-white'
-        onClick={handleApplyClick}
-      >
-        Apply Now
-      </button>
+      <div className='flex-grow'>
+        <h3 className='text-xl font-semibold mb-2'>{job.jobTitle}</h3>
+        <p className='text-gray-600 mb-2'>{job.companyName}</p>
+        <p className='mb-4 line-clamp-2'>{job.jobDescription}</p>
+      </div>
+      <div className='mt-auto'>
+        <span className='block mb-2'>
+          <p className='text-gray-500'>CTC: {job.ctc} lacs</p>
+          <p className='text-gray-500'>Applicants: <b>{job?.applicants?.length}</b></p>
+        </span>
+        <button
+          className='bg-blue-500 hover:bg-blue-700 font-bold rounded-sm px-4 py-2 text-white mb-5'
+          onClick={handleApplyClick}
+        >
+          Apply Now
+        </button>
+      </div>
 
       {/* Show the dialog only after redirection */}
       <Dialog open={redirected} onClose={handleClose}>
