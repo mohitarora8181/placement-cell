@@ -197,7 +197,7 @@ const AdminNav = () => {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position='static' sx={{ backgroundColor: 'F6E96B' }}>
+        <AppBar position='static' sx={{ backgroundColor: '#FABC3F' }}>
           <Toolbar>
             <IconButton
               size='large'
@@ -238,7 +238,7 @@ const AdminNav = () => {
               >
                 Users
     </ToggleButton>
-              >
+
                 <ToggleButton
                   value="jobs"
                   sx={{ color: 'green' }}
