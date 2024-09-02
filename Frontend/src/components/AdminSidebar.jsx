@@ -51,7 +51,7 @@ const AdminSidebar = ({ onData }) => {
 
   return (
     <>
-      <nav className="hidden md:flex flex-col  w-[20%] bg-[#FABC3F] text-white font-semibold pt-4 text-md shadow-lg mr-4">
+      <nav className="hidden md:flex flex-col  w-[20%] bg-[#FABC3F] text-gray-100 font-semibold pt-4 text-md shadow-lg mr-4">
         <ul className="flex flex-col p-4">
           <li
             className={currentVal === 'student' ? "cursor-pointer mb-2 font-bold" : "cursor-pointer mb-2"}
