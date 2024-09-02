@@ -15,6 +15,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
+import logo from '../imgage/logo-pc.png';
+
 // import io from 'socket.io-client';
 // import axiosInstance from './axiosConfig.js'
 
@@ -72,7 +74,7 @@ const Navbar = () => {
     //   try {
     //     const response = await axiosInstance.get(`/notifications/${userId}`);
     //     console.log('Response data:', response.data); // Log the response data
-        
+
     //     // Check if response.data is an array before calling .filter
     //     if (Array.isArray(response.data)) {
     //       const unreadNotifications = response.data.filter(notification => !notification.isRead);
@@ -120,17 +122,17 @@ const Navbar = () => {
   }, [userId]);
 
   const handleNotificationClick = async () => {
-    if (clickCount === 1) { 
+    if (clickCount === 1) {
       try {
         await axiosInstance.delete(`/notifications/${userId}`);
-        setNotifications([]); 
-        setNewJobsCount(0); 
+        setNotifications([]);
+        setNewJobsCount(0);
       } catch (error) {
         console.error('Error clearing notifications:', error);
       }
     }
-    setClickCount(prevCount => prevCount + 1); 
-    setNotificationOpen(!notificationOpen); 
+    setClickCount(prevCount => prevCount + 1);
+    setNotificationOpen(!notificationOpen);
   };
 
   const handleSearchChange = (event) => {
@@ -239,7 +241,8 @@ const Navbar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' sx={{ backgroundColor: '#ef4444' }}>
         <Toolbar>
-          <img className='h-24 w-24 mx-2' src='./pc-msit-logo.png' alt="msit-logo" />
+        <img className='h-24  mx-2' src={logo} alt="msit-logo" />
+
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
