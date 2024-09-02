@@ -1,42 +1,44 @@
-import dotenv from "dotenv"
-import connectDB from "./db/index.js"
-import userRoutes from "./Routes/userRoutes.js"
-import {app} from "./app.js"
-import express from "express"
-import cors from 'cors'
-import jobRoutes from './Routes/JobRoutes.js'; 
-import setupSocketIO from './socket.js';
+import dotenv from 'dotenv';
+import connectDB from './db/index.js';
+import userRoutes from './Routes/userRoutes.js';
+import express from 'express';
+import cors from 'cors';
+import jobRoutes from './Routes/JobRoutes.js';
 import path from 'path';
 
-app.use(cors({
-    origin: 'http://localhost:3000',
-    methods:['GET','POST']
-}));
+const app = express();
+
 dotenv.config({
-    path:'./.env'
-})
-const _dirname=path.resolve();
-const { server, io } = setupSocketIO(app);
+  path: './.env'
+});
+
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://placement-cell-iczn.onrender.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// API Routes
+app.use('/api/users', userRoutes);
+app.use('/api', jobRoutes); // Correctly scoped route for jobs
+
+// Serve static files
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'Frontend', 'build')));
+
+// Wildcard route to serve React frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Frontend', 'build', 'index.html'));
+});
 
 connectDB()
-.then(()=>{
-    app.use('/api/users', userRoutes);
-    app.use('/api', jobRoutes); 
-    server.listen(process.env.PORT || 8000,()=>{
-        console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
-    })
-})
-.catch((err) => {
-    console.log("MONGO db connection failed !!! ", err);
-})
-app.use(express.static(path.join(_dirname,"/Frontend/build")));
-app.get("*", (req, res) =>
-    res.sendFile(path.join(_dirname, "Frontend","build", "index.html"))
-  );
-
-
-
-
-
-export { io };
-
+  .then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`⚙️ Server is running at port : ${process.env.PORT || 8000}`);
+    });
+  })
+  .catch((err) => {
+    console.log('MONGO DB connection failed !!!', err);
+  });

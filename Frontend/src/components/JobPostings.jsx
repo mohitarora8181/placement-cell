@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from 'axios'; 
 import JobCard from './JobCard';
 
 const JobPostings = () => {
   const [jobPostings, setJobPostings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
 
   useEffect(() => {
     const fetchJobPostings = async () => {
       try {
-        const response = await axios.get('/api/jobs');
-        setJobPostings(response.data);
+        const response = await axios.get('/api/jobs'); 
+        setJobPostings(response.data); 
       } catch (error) {
         console.error('Error fetching job postings:', error);
         setError('Failed to load job postings. Please try again later.');
@@ -24,7 +24,7 @@ const JobPostings = () => {
   }, []);
 
   return (
-    <div className="max-w-[90%] mx-auto px-4 py-8">
+    <div className="max-w-[80%] mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-4 text-center">Job Postings</h2>
       {loading ? (
         <p>Loading job postings...</p> // Display a loading message while fetching data

@@ -12,11 +12,10 @@ import SearchJobs from './pages/SearchJobs';
 import UserProfile from './pages/UserProfile';
 import JobDetails from './pages/JobDetails';
 import SearchUsers from './components/SearchUsers';
-import EditProfile from './pages/EditProfile';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [role, setRole] = useState(null);
+  const [role, setRole] = useState(null); 
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,7 +26,7 @@ function App() {
         const userId = localStorage.getItem('userId');
 
         if (token && userId) {
-          const response = await axios.get(`/api/users/${userId}`, {
+          const response = await axios.get(`https://placement-cell-iczn.onrender.com/api/users/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
 
@@ -75,13 +74,12 @@ function App() {
   }
 
   return (
-    <div className='bg-[#F5F5DC] h-full'>
     <Routes>
       <Route path="/" element={<SignIn />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/sign-up" element={<SignUp />} />
 
-
+     
       {role === 'user' && (
         <>
           <Route path="/home" element={<Home />} />
@@ -90,7 +88,7 @@ function App() {
         </>
       )}
 
-
+      
       {role === 'admin' && (
         <>
           <Route path="/user-profile/:userId" element={<UserProfile />} />
@@ -101,14 +99,12 @@ function App() {
         </>
       )}
 
-
+     
       <Route path="/search" element={<SearchJobs />} />
-      <Route path="/edit-profile" element={<EditProfile />} />
 
-
+     
       <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
     </Routes>
-    </div>
   );
 }
 

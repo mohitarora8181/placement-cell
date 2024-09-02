@@ -11,7 +11,7 @@ const JobData = ({ job }) => {
       const token = localStorage.getItem('token');
   
       if (token) {
-        const response = await axios.get(`/api/jobs/${job._id}`, {
+        const response = await axios.get(`https://placement-cell-iczn.onrender.com/api/jobs/${job._id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,7 +35,6 @@ const JobData = ({ job }) => {
       }
     }
   };
-  
 
   return (
     <Card

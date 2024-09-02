@@ -22,7 +22,7 @@ const SignIn = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/api/users/sign-in', { email, password });
+      const { data } = await axios.post('https://placement-cell-iczn.onrender.com/api/users/sign-in', { email, password });
       console.log('Sign-In Response:', data); // Log the response to check `isAdmin`
       const { _id, token, isAdmin } = data;
   

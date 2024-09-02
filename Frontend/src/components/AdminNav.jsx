@@ -205,6 +205,7 @@ const AdminNav = () => {
               color='inherit'
               aria-label='open drawer'
               sx={{ mr: 2 }}
+              onClick={() => navigate('/')} // Home link
             >
               <MenuIcon />
             </IconButton>
@@ -237,6 +238,19 @@ const AdminNav = () => {
               >
                 Users
     </ToggleButton>
+              >
+                <ToggleButton
+                  value="jobs"
+                  sx={{ color: 'green' }}
+                >
+                  Jobs
+                </ToggleButton>
+                <ToggleButton
+                  value="users"
+                  sx={{ color: 'green' }}
+                >
+                  Users
+                </ToggleButton>
               </ToggleButtonGroup>
               <Search>
                 <SearchIconWrapper>
@@ -265,6 +279,7 @@ const AdminNav = () => {
                 size='large'
                 aria-label='show 17 new notifications'
                 color='inherit'
+                onClick={() => navigate('/notifications')} // Link to notifications page
               >
                 <Badge badgeContent={0} color='error'>
                   <NotificationsIcon />

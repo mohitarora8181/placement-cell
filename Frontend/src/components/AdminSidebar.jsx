@@ -30,7 +30,7 @@ const AdminSidebar = ({ onData }) => {
     onData(currentVal);
 
     if (currentVal === 'student') {
-      axios.get('/api/users/find')
+      axios.get('https://placement-cell-iczn.onrender.com/api/users/find')
         .then(response => {
           setUsers(response.data);
         })
@@ -39,7 +39,7 @@ const AdminSidebar = ({ onData }) => {
         });
     }
     if (currentVal === 'company') {
-      axios.get('/api/jobs') // Fetch job data
+      axios.get('https://placement-cell-iczn.onrender.com/api/jobs') // Fetch job data
         .then(response => {
           setJobs(response.data);
         })
