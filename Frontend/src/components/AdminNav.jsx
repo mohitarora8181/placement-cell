@@ -197,7 +197,7 @@ const AdminNav = () => {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position='static' sx={{ backgroundColor: '#099934' }}>
+        <AppBar position='static' sx={{ backgroundColor: 'F6E96B' }}>
           <Toolbar>
             <IconButton
               size='large'
@@ -223,17 +223,17 @@ const AdminNav = () => {
                 onChange={handleSearchTypeChange}
                 aria-label="search type"
                 sx={{ mr: 2 }}
-                
+
                         >
-                          <ToggleButton 
-                    value="jobs" 
-                      sx={{ color: 'green' }} 
+                          <ToggleButton
+                    value="jobs"
+                      sx={{ color: 'green' }}
                       >
                 Jobs
               </ToggleButton>
-              <ToggleButton 
-                value="users" 
-                sx={{ color: 'green' }} 
+              <ToggleButton
+                value="users"
+                sx={{ color: 'green' }}
               >
                 Users
     </ToggleButton>
