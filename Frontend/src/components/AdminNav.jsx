@@ -196,7 +196,7 @@ const AdminNav = () => {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, color:'#f3f4f6'}}>
         <AppBar position='static' sx={{ backgroundColor: '#FABC3F' }}>
           <Toolbar>
             <IconButton
@@ -205,7 +205,7 @@ const AdminNav = () => {
               color='inherit'
               aria-label='open drawer'
               sx={{ mr: 2 }}
-              onClick={() => navigate('/')} // Home link
+              onClick={() => navigate('/home')} // Home link
             >
               <MenuIcon />
             </IconButton>
@@ -213,7 +213,7 @@ const AdminNav = () => {
               variant='h6'
               noWrap
               component='div'
-              sx={{ display: { xs: 'none', sm: 'block', fontWeight:'bold', color:'white' } }}
+              sx={{ display: { xs: 'none', sm: 'block', fontWeight:'bold', color:'#f3f4f6' } }}
             >
               MSIT Placement Cell
             </Typography>
