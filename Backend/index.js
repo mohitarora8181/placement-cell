@@ -5,6 +5,8 @@ import express from 'express';
 import cors from 'cors';
 import jobRoutes from './Routes/JobRoutes.js';
 import path from 'path';
+import setupSocketIO from './socket.js';
+
 
 const app = express();
 
@@ -32,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'Frontend', 'build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'Frontend', 'build', 'index.html'));
 });
+const { server, io } = setupSocketIO(app);
 
 connectDB()
   .then(() => {
@@ -42,3 +45,4 @@ connectDB()
   .catch((err) => {
     console.log('MONGO DB connection failed !!!', err);
   });
+export { io };
