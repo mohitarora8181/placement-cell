@@ -19,6 +19,8 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import logo from '../imgage/logo-pc.png';
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
