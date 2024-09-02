@@ -215,7 +215,8 @@ const AdminNav = () => {
               component='div'
               sx={{ display: { xs: 'none', sm: 'block', fontWeight:'bold', color:'#f3f4f6' } }}
             >
-              MSIT Placement Cell
+        <img className='h-24  mx-2' src={logo} alt="msit-logo" />
+              
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
             <Search>
