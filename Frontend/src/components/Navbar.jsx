@@ -259,7 +259,7 @@ const Navbar = () => {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
               <Badge badgeContent={0} color='error'>
-                <MailIcon />
+                {/* <MailIcon /> */}
               </Badge>
             </IconButton>
             <IconButton
