@@ -74,7 +74,7 @@ function App() {
   }
 
   return (
-    <div className='bg-[#FFF8E8]'>
+    <div className='bg-[#FFF8E8] min-h-screen'>
     <Routes>
       <Route path="/" element={<SignIn />} />
       <Route path="/sign-in" element={<SignIn />} />
