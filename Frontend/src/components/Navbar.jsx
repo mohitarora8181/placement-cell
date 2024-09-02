@@ -15,10 +15,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
-import logo from '../imgage/logo-pc.png';
-
-// import io from 'socket.io-client';
-// import axiosInstance from './axiosConfig.js'
+import axios from 'axios';
+import io from 'socket.io-client';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -59,9 +57,11 @@ const Navbar = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [newJobsCount, setNewJobsCount] = useState(0);
+  const [lastChecked, setLastChecked] = useState(new Date().toISOString());
   const [notifications, setNotifications] = useState([]); // Store notifications
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [clickCount, setClickCount] = useState(0);
+  //const [lastNotificationClickTime, setLastNotificationClickTime] = useState(null);
   const [lastNotificationClickTime, setLastNotificationClickTime] = useState(() => {
     const storedTime = localStorage.getItem('lastNotificationClickTime');
     return storedTime ? parseInt(storedTime, 10) : null;
@@ -70,70 +70,65 @@ const Navbar = () => {
   const userId = localStorage.getItem('userId')?.trim();
 
   useEffect(() => {
-    // const fetchStoredNotifications = async () => {
-    //   try {
-    //     const response = await axiosInstance.get(`/notifications/${userId}`);
-    //     console.log('Response data:', response.data); // Log the response data
-
-    //     // Check if response.data is an array before calling .filter
-    //     if (Array.isArray(response.data)) {
-    //       const unreadNotifications = response.data.filter(notification => !notification.isRead);
-    //       setNotifications(response.data);
-    //       setNewJobsCount(unreadNotifications.length);
-    //     } else {
-    //       console.error('Expected an array but got:', response.data);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error fetching notifications:', error);
-    //   }
-    // };
-
-    // fetchStoredNotifications();
-
-    // const socket = io('https://placement-cell-iczn.onrender.com', {
-    //   transports: ['websocket'], // Optional: specify transports
-    // });
-
-    // socket.on('connect', () => {
-    //   console.log('Socket connected:', socket.id);
-    // });
-
-    // socket.on('disconnect', () => {
-    //   console.log('Socket disconnected');
-    // });
-
-    // socket.on('newJob', (job) => {
-    //   console.log('New job received:', job);
-    //   const newNotification = {
-    //     userId,
-    //     jobId: job._id,
-    //     company: job.companyName,
-    //     title: job.jobTitle,
-    //     message: `A new job "${job.jobTitle}" has been posted by ${job.companyName}.`,
-    //     createdAt: new Date(),
-    //   };
-    //   setNotifications((prevNotifications) => [...prevNotifications, newNotification]);
-    //   setNewJobsCount((prevCount) => prevCount + 1);
-    // });
-
-    // return () => {
-    //   socket.disconnect();
-    // };
-  }, [userId]);
-
-  const handleNotificationClick = async () => {
-    if (clickCount === 1) {
+    const fetchStoredNotifications = async () => {
       try {
-        await axiosInstance.delete(`/notifications/${userId}`);
-        setNotifications([]);
-        setNewJobsCount(0);
+        const response = await axios.get(`/api/notifications/${userId}`);
+        const unreadNotifications = response.data.filter(notification => !notification.isRead);
+        setNotifications(response.data);
+        setNewJobsCount(unreadNotifications.length);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    fetchStoredNotifications();
+  
+    const socket = io('http://localhost:8000'); 
+    
+    socket.on('connect', () => {
+      console.log('Socket connected:', socket.id);
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('Socket disconnected');
+    });
+
+    socket.on('newJob', (job) => {
+      console.log('New job received:', job);
+      const newNotification = {
+        userId,
+        jobId: job._id,
+        company: job.companyName,
+        title: job.jobTitle,
+        message: `A new job "${job.jobTitle}" has been posted by ${job.companyName}.`,
+        createdAt: new Date(),
+      };
+      setNotifications((prevNotifications) => [...prevNotifications, { company: job.companyName, title: job.jobTitle }]);
+      setNewJobsCount((prevCount) => prevCount + 1);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  
+  
+  const handleNotificationClick = async () => {
+    if (clickCount === 1) { 
+      try {
+        await axios.delete(`/api/notifications/${userId}`);
+        setNotifications([]); 
+        setNewJobsCount(0); 
       } catch (error) {
         console.error('Error clearing notifications:', error);
       }
     }
-    setClickCount(prevCount => prevCount + 1);
-    setNotificationOpen(!notificationOpen);
+    setClickCount(prevCount => prevCount + 1); 
+    setNotificationOpen(!notificationOpen); 
   };
+
+
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -142,6 +137,7 @@ const Navbar = () => {
   const handleSearchSubmit = (event) => {
     if (event.key === 'Enter') {
       navigate(`/search?query=${searchQuery}`);
+      setLastChecked(new Date().toISOString());
     }
   };
 
@@ -154,10 +150,13 @@ const Navbar = () => {
     setMobileMoreAnchorEl(null);
   };
 
+  
+
   const logOut = () => {
     localStorage.clear();
     navigate('/sign-in');
   };
+  
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -237,12 +236,13 @@ const Navbar = () => {
     </Menu>
   );
 
+ 
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' sx={{ backgroundColor: '#ef4444' }}>
         <Toolbar>
-        <img className='h-24  mx-2' src={logo} alt="msit-logo" />
-
+          <img className='h-24 w-24 mx-2' src='./pc-msit-logo.png' alt="msit-logo" />
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -259,7 +259,7 @@ const Navbar = () => {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
               <Badge badgeContent={0} color='error'>
-                {/* <MailIcon /> */}
+                <MailIcon />
               </Badge>
             </IconButton>
             <IconButton
@@ -300,6 +300,41 @@ const Navbar = () => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {notificationOpen && (
+        <Box
+          sx={{
+            position: 'absolute',
+            right: 20,
+            top: 70,
+            width: 300,
+            bgcolor: 'background.paper',
+            boxShadow: 1,
+            borderRadius: 1,
+            p: 2,
+            zIndex: 1201,
+          }}
+        >
+          <Typography variant='h6' sx={{ mb: 2 }}>
+            Notifications
+          </Typography>
+          {notifications.length > 0 ? (
+            notifications.map((notification, index) => (
+              <Box key={index} sx={{ mb: 2 }}>
+                <Typography variant='body2' color='text.primary'>
+                  {notification.message}
+                </Typography>
+                <Typography variant='caption' color='text.secondary'>
+                  {new Date(notification.createdAt).toLocaleString()}
+                </Typography>
+              </Box>
+            ))
+          ) : (
+            <Typography variant='body2' color='text.secondary'>
+              No notifications.
+            </Typography>
+          )}
+        </Box>
+      )}
     </Box>
   );
 };
