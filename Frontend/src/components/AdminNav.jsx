@@ -139,7 +139,7 @@ const AdminNav = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem>
+      {/* <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem> */}
       <MenuItem onClick={logOut}>Log Out</MenuItem>
     </Menu>
   );
@@ -179,7 +179,7 @@ const AdminNav = () => {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        {/* <p>Profile</p> */}
       </MenuItem>
       <MenuItem onClick={handleAddJobClick}>
         <IconButton
@@ -213,46 +213,12 @@ const AdminNav = () => {
               variant='h6'
               noWrap
               component='div'
-              sx={{ display: { xs: 'none', sm: 'block' } }}
+              sx={{ display: { xs: 'none', sm: 'block', fontWeight:'bold', color:'white' } }}
             >
               MSIT Placement Cell
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 2 }}>
-              <ToggleButtonGroup
-                value={searchType}
-                exclusive
-                onChange={handleSearchTypeChange}
-                aria-label="search type"
-                sx={{ mr: 2 }}
-
-                        >
-                          <ToggleButton
-                    value="jobs"
-                      sx={{ color: 'green' }}
-                      >
-                Jobs
-              </ToggleButton>
-              <ToggleButton
-                value="users"
-                sx={{ color: 'green' }}
-              >
-                Users
-    </ToggleButton>
-
-                <ToggleButton
-                  value="jobs"
-                  sx={{ color: 'green' }}
-                >
-                  Jobs
-                </ToggleButton>
-                <ToggleButton
-                  value="users"
-                  sx={{ color: 'green' }}
-                >
-                  Users
-                </ToggleButton>
-              </ToggleButtonGroup>
-              <Search>
+            <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
+            <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
@@ -264,6 +230,41 @@ const AdminNav = () => {
                   onKeyPress={handleKeyPress}
                 />
               </Search>
+              <ToggleButtonGroup
+                value={searchType}
+                exclusive
+                onChange={handleSearchTypeChange}
+                aria-label="search type"
+                sx={{ mr: 2 }}
+
+                        >
+                          <ToggleButton
+                    value="jobs"
+                      sx={{ color: '#E85C0D', fontWeight: 'bold' }}
+                      >
+                Jobs
+              </ToggleButton>
+              <ToggleButton
+                value="users"
+                sx={{ color: '#E85C0D', fontWeight:'bold' }}
+              >
+                Users
+    </ToggleButton>
+
+                {/* <ToggleButton
+                  value="jobs"
+                  sx={{ color: 'green' }}
+                >
+                  Jobs
+                </ToggleButton>
+                <ToggleButton
+                  value="users"
+                  sx={{ color: 'green' }}
+                >
+                  Users
+                </ToggleButton> */}
+              </ToggleButtonGroup>
+
             </Box>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
