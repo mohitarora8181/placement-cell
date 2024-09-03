@@ -19,7 +19,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import logo from '../imgage/logo-pc.png';
+import logo from '../images/logo-pc.png';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -218,7 +218,7 @@ const AdminNav = () => {
               sx={{ display: { xs: 'none', sm: 'block', fontWeight:'bold', color:'#f3f4f6' } }}
             >
         <img className='h-24  mx-2' src={logo} alt="msit-logo" />
-              
+
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
             <Search>
