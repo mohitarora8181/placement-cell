@@ -17,6 +17,8 @@ import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import io from 'socket.io-client';
+import logo from '../images/logo-pc.png';
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -82,13 +84,13 @@ const Navbar = () => {
     };
 
     fetchStoredNotifications();
-  
-    const socket = io('http://localhost:8000'); 
-    
+
+    const socket = io('http://localhost:8000');
+
     socket.on('connect', () => {
       console.log('Socket connected:', socket.id);
     });
-  
+
     socket.on('disconnect', () => {
       console.log('Socket disconnected');
     });
@@ -112,20 +114,20 @@ const Navbar = () => {
     };
   }, []);
 
-  
-  
+
+
   const handleNotificationClick = async () => {
-    if (clickCount === 1) { 
+    if (clickCount === 1) {
       try {
         await axios.delete(`/api/notifications/${userId}`);
-        setNotifications([]); 
-        setNewJobsCount(0); 
+        setNotifications([]);
+        setNewJobsCount(0);
       } catch (error) {
         console.error('Error clearing notifications:', error);
       }
     }
-    setClickCount(prevCount => prevCount + 1); 
-    setNotificationOpen(!notificationOpen); 
+    setClickCount(prevCount => prevCount + 1);
+    setNotificationOpen(!notificationOpen);
   };
 
 
@@ -150,13 +152,13 @@ const Navbar = () => {
     setMobileMoreAnchorEl(null);
   };
 
-  
+
 
   const logOut = () => {
     localStorage.clear();
     navigate('/sign-in');
   };
-  
+
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -236,13 +238,13 @@ const Navbar = () => {
     </Menu>
   );
 
- 
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' sx={{ backgroundColor: '#ef4444' }}>
         <Toolbar>
-          <img className='h-24 w-24 mx-2' src='./pc-msit-logo.png' alt="msit-logo" />
+          <img className='h-24 mx-2' src={logo} alt="msit-logo" />
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -259,7 +261,7 @@ const Navbar = () => {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
               <Badge badgeContent={0} color='error'>
-                <MailIcon />
+                {/* <MailIcon /> */}
               </Badge>
             </IconButton>
             <IconButton
