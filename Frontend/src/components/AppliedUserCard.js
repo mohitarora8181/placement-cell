@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import { Card, CardContent, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 // Styled components
 const CardContainer = styled(Card)(({ theme }) => ({
@@ -61,8 +62,15 @@ const ViewProfileButton = styled(Button)(({ theme }) => ({
 }));
 
 const AppliedUserCard = ({ user }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/user-profile/${user._id}`);
+  };
+
   return (
     <CardContainer>
+      {/* Uncomment the following if you have the profileImage field */}
       {/* <ProfileImage>
         <img
           src={user.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}
@@ -80,7 +88,7 @@ const AppliedUserCard = ({ user }) => {
           <UserDetail variant="body2"><strong>Degree:</strong> {user.degree}</UserDetail>
           <UserDetail variant="body2"><strong>CGPA:</strong> {user.cgpa || 'N/A'}</UserDetail>
         </UserInfo>
-        <ViewProfileButton>View Profile</ViewProfileButton>
+        <ViewProfileButton onClick={handleClick}>View Profile</ViewProfileButton>
       </CardContent>
     </CardContainer>
   );

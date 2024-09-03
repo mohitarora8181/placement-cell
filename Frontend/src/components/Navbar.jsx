@@ -226,6 +226,18 @@ const Navbar = () => {
         </IconButton>
         <p>Profile</p>
       </MenuItem>
+      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>
+        <IconButton
+          size='large'
+          aria-label='account of current user'
+          aria-controls={menuId}
+          aria-haspopup='true'
+          color='inherit'
+        >
+          <AccountCircle />
+        </IconButton>
+        <p onClick={logOut}>Logout</p>
+      </MenuItem>
     </Menu>
   );
 
