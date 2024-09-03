@@ -93,6 +93,7 @@ function App() {
         <Route path="/admin" element={role === 'admin' ? <AdminPage /> : <Navigate to="/" />} />
         <Route path="/admin/post-job" element={role === 'admin' ? <AddJob /> : <Navigate to="/" />} />
         <Route path="/admin/user-search" element={role === 'admin' ? <SearchUsers /> : <Navigate to="/" />} />
+        
 
         <Route path="/search" element={<SearchJobs />} />
 

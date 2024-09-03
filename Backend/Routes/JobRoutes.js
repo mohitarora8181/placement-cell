@@ -5,11 +5,8 @@ import Job from '../models/Job.model.js'
 import User from "../models/SignupModel.js";
 import {protect} from "../middlewares/authMiddleware.js";
 import Notification from "../models/NotificationModel.js";
-<<<<<<< HEAD
 import { io } from "../index.js";
-=======
- import { io } from "../index.js";
->>>>>>> 0ed4d40bc7aabd3ab392b496210718a9c6d0f179
+
 
 
 router.get('/jobs/:jobId', async (req, res) => {
