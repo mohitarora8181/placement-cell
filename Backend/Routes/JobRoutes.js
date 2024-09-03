@@ -4,8 +4,8 @@ const router = express.Router();
 import Job from '../models/Job.model.js'
 import User from "../models/SignupModel.js";
 import {protect} from "../middlewares/authMiddleware.js";
+import { io } from "../index.js";
 import Notification from "../models/NotificationModel.js";
-// import { io } from "../index.js";
 
 
 router.get('/jobs/:jobId', async (req, res) => {
@@ -35,18 +35,18 @@ router.post('/jobs',async (req, res) => {
     const newJob = new Job(req.body); 
     await newJob.save(); 
     const users = await User.find(); 
-  //   users.forEach(async (user) => {
-  //     await Notification.create({
-  //       userId: user._id,
-  //       jobId: newJob._id,
-  //       message: `A new job "${newJob.jobTitle}" has been posted by ${newJob.companyName}.`,
-  //     });
-  //     if (user.isConnected) {
-  //       io.to(user.socketId).emit('newJob', newJob);
-  //     }
-  //   });
-  //  // io.emit('newJob', newJob);
-  //   console.log('New job emitted:', newJob);
+    users.forEach(async (user) => {
+      await Notification.create({
+        userId: user._id,
+        jobId: newJob._id,
+        message: `A new job "${newJob.jobTitle}" has been posted by ${newJob.companyName}.`,
+      });
+      if (user.isConnected) {
+        io.to(user.socketId).emit('newJob', newJob);
+      }
+    });
+   // io.emit('newJob', newJob);
+    console.log('New job emitted:', newJob);
     res.status(201).json(newJob); 
   } catch (error) {
     console.error('Error adding job:', error);
