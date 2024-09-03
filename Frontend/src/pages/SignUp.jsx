@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import axios from 'axios';
+import logo from '../images/logo-pc.png'
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -80,12 +81,17 @@ const SignUp = () => {
   };
 
   return (
+    <div className='p-10'>
+<div className='bg-white w-[50%] p-4 shadow-lg mx-auto rounded-md '>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+
         <Avatar style={{ margin: '8px', backgroundColor: '#ea580c' }}>
           <LockOutlinedIcon />
         </Avatar>
+      <img src={logo} className='h-24' alt="Pc logo"/>
+
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
@@ -129,6 +135,8 @@ const SignUp = () => {
         </Typography>
       </Box>
     </Container>
+    </div>
+    </div>
   );
 };
 
