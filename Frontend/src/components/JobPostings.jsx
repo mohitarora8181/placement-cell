@@ -17,7 +17,6 @@ const JobPostings = () => {
         setError('Failed to load job postings. Please try again later.');
       } finally {
         setLoading(false); // Stop loading once data is fetched or an error occurs
-        console.log("Job Postings", jobPostings?.[1]?.applicants?.length);
       }
     };
 
