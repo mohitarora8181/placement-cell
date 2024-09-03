@@ -12,6 +12,8 @@ import {
   Container,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import logo from '../images/logo-pc.png'
+
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -25,15 +27,15 @@ const SignIn = () => {
       const { data } = await axios.post('https://placement-cell-iczn.onrender.com/api/users/sign-in', { email, password });
       console.log('Sign-In Response:', data); // Log the response to check `isAdmin`
       const { _id, token, isAdmin } = data;
-  
+
       if (_id) {
         localStorage.setItem('userId', _id);
         localStorage.setItem('token', token);
-        localStorage.setItem('role', isAdmin ? 'admin' : 'user'); 
+        localStorage.setItem('role', isAdmin ? 'admin' : 'user');
       } else {
         console.error('User ID is missing in the response');
       }
-  
+
       if (isAdmin) {
         navigate('/admin');
       } else {
@@ -46,6 +48,10 @@ const SignIn = () => {
   };
 
   return (
+    <div className='p-10'>
+      <div className='bg-white w-[50%] p-4 shadow-lg mx-auto rounded-md '>
+
+
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
       <div
@@ -58,9 +64,14 @@ const SignIn = () => {
         <Avatar style={{ margin: '8px', backgroundColor: '#ea580c' }}>
           <LockOutlinedIcon />
         </Avatar>
+      <img src={logo} className='h-24' alt="Pc logo"/>
+
         <Typography component='h1' variant='h5'>
+
           Sign In
+
         </Typography>
+
         <form style={{ width: '100%', marginTop: '8px' }} onSubmit={handleSignIn}>
           <TextField
             variant='outlined'
@@ -113,6 +124,8 @@ const SignIn = () => {
         </Typography>
       </Box>
     </Container>
+    </div>
+    </div>
   );
 };
 
