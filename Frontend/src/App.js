@@ -13,6 +13,7 @@ import UserProfile from './pages/UserProfile';
 import JobDetails from './pages/JobDetails';
 import SearchUsers from './components/SearchUsers';
 import { Navigate } from 'react-router-dom';
+import EditProfile from './pages/EditProfile';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -85,6 +86,7 @@ function App() {
         <Route path="/home" element={role === 'user' ? <Home /> : <Navigate to="/" />} />
         <Route path="/home/user-profile" element={role === 'user' ? <Profile /> : <Navigate to="/" />} />
         <Route path="/profile" element={role === 'user' ? <Profile /> : <Navigate to="/" />} />
+        <Route path="/edit-profile" element={role === 'user' ? <EditProfile /> : <Navigate to="/" />} />
 
         <Route path="/user-profile/:userId" element={role === 'admin' ? <UserProfile /> : <Navigate to="/" />} />
         <Route path="/job/:jobId" element={role === 'admin' ? <JobDetails /> : <Navigate to="/" />} />
