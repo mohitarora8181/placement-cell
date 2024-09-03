@@ -90,7 +90,7 @@ const Profile = () => {
             <Typography variant="body1" color="textSecondary" paragraph>
               <strong>Degree:</strong> {user.degree || 'Loading...'}
             </Typography>
-          
+
             <div className="flex flex-col items-start mt-3">
               <TextField
                 label="Resume URL"
@@ -105,7 +105,8 @@ const Profile = () => {
               variant="contained"
               color="primary"
               onClick={handleEditProfile}
-              className="mt-5"
+              className="mt-5 w-[200px]"
+
             >
               Edit Profile
             </Button>
