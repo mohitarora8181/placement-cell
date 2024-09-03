@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Typography, Grid, Card, CardContent } from '@mui/material';
+import { Typography, Grid } from '@mui/material';
+import AppliedUserCard from '../components/AppliedUserCard.js'; 
 
 const JobDetails = () => {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
 
   useEffect(() => {
-    
     axios.get(`https://placement-cell-iczn.onrender.com/api/jobs/${jobId}`)
       .then(response => {
-        
         setJob(response.data.job);
       })
       .catch(error => {
@@ -39,27 +38,22 @@ const JobDetails = () => {
       <Typography variant="body1" color="textSecondary" paragraph>
         <strong>CTC:</strong> {job.ctc ? `${job.ctc} lacs` : 'Not Specified'}
       </Typography>
+      <Typography
+        variant="body2"
+        color="textSecondary"
+        style={{ fontWeight: 'bold', color: '#00796b', marginTop: '10px' }}
+      >
+        <strong>Total Applicants:</strong> {job.applicants ? job.applicants.length : 0}
+      </Typography>
 
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" gutterBottom style={{ marginTop: '20px' }}>
         Applied Users
       </Typography>
       <Grid container spacing={2}>
         {job.applicants && job.applicants.length > 0 ? (
           job.applicants.map(user => (
             <Grid item xs={12} md={6} lg={4} key={user._id}>
-              <Card className="p-4 bg-white shadow-md rounded-lg">
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    {user.fullname}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {user.email}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {user.course}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <AppliedUserCard user={user} />
             </Grid>
           ))
         ) : (

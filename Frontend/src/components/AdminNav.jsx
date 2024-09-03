@@ -3,39 +3,27 @@ import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
+import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import AddIcon from '@mui/icons-material/Add';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { useNavigate } from 'react-router-dom';
-import React from 'react';
+import axios from 'axios'; // Ensure axios is imported
 import logo from '../images/logo-pc.png';
-
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  border: `2px solid ${theme.palette.grey[400]}`,
+  backgroundColor: alpha(theme.palette.common.white, 0.25),
   '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: alpha(theme.palette.common.white, 0.35),
   },
   marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
+  marginLeft: theme.spacing(3),
+  width: '50%',
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -49,60 +37,59 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  backgroundColor: 'Transparent', // Updated background color
+  color: theme.palette.text.primary,
+  backgroundColor: 'transparent',
   borderRadius: theme.shape.borderRadius,
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
   },
 }));
 
-const AdminNav = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+const LogoutButton = styled('button')(({ theme }) => ({
+  backgroundColor: '#D32F2F', // Red background
+  color: '#FFF', // White text
+  border: 'none',
+  padding: theme.spacing(1, 3),
+  borderRadius: theme.shape.borderRadius,
+  fontSize: '16px',
+  cursor: 'pointer',
+  '&:hover': {
+    backgroundColor: '#B71C1C', // Darker red on hover
+  },
+}));
+
+const AdminNav = ({ currentVal }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchType, setSearchType] = useState('jobs'); // default to searching for jobs
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [searchType, setSearchType] = useState('jobs');
   const navigate = useNavigate();
 
-  // Retrieve the search type from local storage on component mount
   useEffect(() => {
     const savedSearchType = localStorage.getItem('searchType') || 'jobs';
     setSearchType(savedSearchType);
   }, []);
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const logOut = () => {
-    localStorage.clear();
-    navigate('/sign-in');
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const handleAddJobClick = () => {
-    navigate('/admin/post-job'); // Redirect to post-job page
-  };
+  useEffect(() => {
+    if (currentVal === 'student') {
+      axios.get('https://placement-cell-iczn.onrender.com/api/users/find')
+        .then(response => {
+          // Handle user data
+        })
+        .catch(error => {
+          console.error('Error fetching users:', error);
+        });
+    } else if (currentVal === 'company') {
+      axios.get('https://placement-cell-iczn.onrender.com/api/jobs')
+        .then(response => {
+          // Handle job data
+        })
+        .catch(error => {
+          console.error('Error fetching jobs:', error);
+        });
+    }
+  }, [currentVal]);
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -120,205 +107,74 @@ const AdminNav = () => {
   const handleSearchTypeChange = (event, newSearchType) => {
     if (newSearchType) {
       setSearchType(newSearchType);
-      localStorage.setItem('searchType', newSearchType); // Persist the search type
+      localStorage.setItem('searchType', newSearchType);
     }
   };
 
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      {/* <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>Profile</MenuItem> */}
-      <MenuItem onClick={logOut}>Log Out</MenuItem>
-    </Menu>
-  );
-
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size='large' aria-label='show 17 new notifications' color='inherit'>
-          <Badge badgeContent={0} color='error'>
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMobileMenuClose(); }}>
-        <IconButton
-          size='large'
-          aria-label='account of current user'
-          aria-controls={menuId}
-          aria-haspopup='true'
-          color='inherit'
-        >
-          <AccountCircle />
-        </IconButton>
-        {/* <p>Profile</p> */}
-      </MenuItem>
-      <MenuItem onClick={handleAddJobClick}>
-        <IconButton
-          size='large'
-          aria-label='add new job'
-          color='inherit'
-        >
-          <AddIcon />
-        </IconButton>
-        <p>Add Job</p>
-      </MenuItem>
-    </Menu>
-  );
+  const logOut = () => {
+    localStorage.clear();
+    navigate('/sign-in');
+  };
 
   return (
-    <>
-      <Box sx={{ flexGrow: 1, color:'#f3f4f6'}}>
-        <AppBar position='static' sx={{ backgroundColor: '#FABC3F' }}>
-          <Toolbar>
-            <IconButton
-              size='large'
-              edge='start'
-              color='inherit'
-              aria-label='open drawer'
-              sx={{ mr: 2 }}
-              onClick={() => navigate('/home')} // Home link
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              variant='h6'
-              noWrap
-              component='div'
-              sx={{ display: { xs: 'none', sm: 'block', fontWeight:'bold', color:'#f3f4f6' } }}
-            >
-        <img className='h-24  mx-2' src={logo} alt="msit-logo" />
-
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position='static' sx={{ backgroundColor: '#FFF' }}>
+        <Toolbar>
+          <Typography
+            variant='h6'
+            noWrap
+            component='div'
+            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+          >
+            <img className='h-24 mx-2' src={logo} alt="logo" />
+          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <Search>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder={searchType === 'jobs' ? 'Search Jobs...' : 'Search Users...'}
-                  inputProps={{ 'aria-label': 'search' }}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                />
-              </Search>
-              <ToggleButtonGroup
-                value={searchType}
-                exclusive
-                onChange={handleSearchTypeChange}
-                aria-label="search type"
-                sx={{ mr: 2 }}
-
-                        >
-                          <ToggleButton
-                    value="jobs"
-                      sx={{ color: '#E85C0D', fontWeight: 'bold' }}
-                      >
+              <SearchIconWrapper>
+                <SearchIcon sx={{ color: '#000' }} />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder={searchType === 'jobs' ? 'Search Jobs...' : 'Search Users...'}
+                inputProps={{ 'aria-label': 'search' }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={handleKeyPress}
+              />
+            </Search>
+            <ToggleButtonGroup
+              value={searchType}
+              exclusive
+              onChange={handleSearchTypeChange}
+              sx={{ marginLeft: 2 }}
+            >
+              <ToggleButton
+                value='jobs'
+                sx={{
+                  backgroundColor: searchType === 'jobs' ? '#FFA500' : '#FFF',
+                  color: searchType === 'jobs' ? '#FFF' : '#000',
+                  border: '1px solid #FFA500',
+                }}
+              >
                 Jobs
               </ToggleButton>
               <ToggleButton
-                value="users"
-                sx={{ color: '#E85C0D', fontWeight:'bold' }}
+                value='users'
+                sx={{
+                  backgroundColor: searchType === 'users' ? '#FFA500' : '#FFF',
+                  color: searchType === 'users' ? '#FFF' : '#000',
+                  border: '1px solid #FFA500',
+                }}
               >
                 Users
-    </ToggleButton>
-
-                {/* <ToggleButton
-                  value="jobs"
-                  sx={{ color: 'green' }}
-                >
-                  Jobs
-                </ToggleButton>
-                <ToggleButton
-                  value="users"
-                  sx={{ color: 'green' }}
-                >
-                  Users
-                </ToggleButton> */}
-              </ToggleButtonGroup>
-
-            </Box>
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <IconButton
-                size='large'
-                aria-label='add new job'
-                color='inherit'
-                onClick={handleAddJobClick}
-              >
-                <AddIcon />
-              </IconButton>
-              <IconButton
-                size='large'
-                aria-label='show 17 new notifications'
-                color='inherit'
-                onClick={() => navigate('/notifications')} // Link to notifications page
-              >
-                <Badge badgeContent={0} color='error'>
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size='large'
-                edge='end'
-                aria-label='account of current user'
-                aria-controls={menuId}
-                aria-haspopup='true'
-                onClick={handleProfileMenuOpen}
-                color='inherit'
-              >
-                <AccountCircle />
-              </IconButton>
-            </Box>
-            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size='large'
-                aria-label='show more'
-                aria-controls={mobileMenuId}
-                aria-haspopup='true'
-                onClick={handleMobileMenuOpen}
-                color='inherit'
-              >
-                <MoreIcon />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
-      </Box>
-    </>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <LogoutButton onClick={logOut}>Log Out</LogoutButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 };
 

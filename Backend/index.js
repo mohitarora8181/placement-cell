@@ -21,6 +21,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const { server, io } = setupSocketIO(app);
 
 // API Routes
 app.use('/api/users', userRoutes);
@@ -30,15 +31,13 @@ app.use('/api', jobRoutes); // Correctly scoped route for jobs
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, 'Frontend', 'build')));
 
-// Wildcard route to serve React frontend
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'Frontend', 'build', 'index.html'));
 });
-const { server, io } = setupSocketIO(app);
 
 connectDB()
   .then(() => {
-    app.listen(process.env.PORT || 8000, () => {
+    server.listen(process.env.PORT || 8000, () => {
       console.log(`⚙️ Server is running at port : ${process.env.PORT || 8000}`);
     });
   })

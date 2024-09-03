@@ -12,6 +12,8 @@ import SearchJobs from './pages/SearchJobs';
 import UserProfile from './pages/UserProfile';
 import JobDetails from './pages/JobDetails';
 import SearchUsers from './components/SearchUsers';
+import { Navigate } from 'react-router-dom';
+import EditProfile from './pages/EditProfile';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -32,10 +34,11 @@ function App() {
 
           if (response.status === 200) {
             setIsAuthenticated(true);
-            setRole(response.data.isAdmin ? 'admin' : 'user');
+            const userRole = response.data.isAdmin ? 'admin' : 'user';
+            setRole(userRole);
 
-            // Redirect based on role
-            if (response.data.isAdmin) {
+            // Redirect based on role immediately
+            if (userRole === 'admin') {
               if (['/', '/sign-in', '/sign-up'].includes(location.pathname)) {
                 navigate('/admin');
               }
@@ -74,38 +77,27 @@ function App() {
   }
 
   return (
-    <div className='bg-[#FFF8E8] min-h-screen'>
-    <Routes>
-      <Route path="/" element={<SignIn />} />
-      <Route path="/sign-in" element={<SignIn />} />
-      <Route path="/sign-up" element={<SignUp />} />
+    <div className=' min-h-screen'>
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
 
+        <Route path="/home" element={role === 'user' ? <Home /> : <Navigate to="/" />} />
+        <Route path="/home/user-profile" element={role === 'user' ? <Profile /> : <Navigate to="/" />} />
+        <Route path="/profile" element={role === 'user' ? <Profile /> : <Navigate to="/" />} />
+        <Route path="/edit-profile" element={role === 'user' ? <EditProfile /> : <Navigate to="/" />} />
 
-      {role === 'user' && (
-        <>
-          <Route path="/home" element={<Home />} />
-          <Route path="/home/user-profile" element={<Profile />} />
-          <Route path="/profile" element={<Profile />} />
-        </>
-      )}
+        <Route path="/user-profile/:userId" element={role === 'admin' ? <UserProfile /> : <Navigate to="/" />} />
+        <Route path="/job/:jobId" element={role === 'admin' ? <JobDetails /> : <Navigate to="/" />} />
+        <Route path="/admin" element={role === 'admin' ? <AdminPage /> : <Navigate to="/" />} />
+        <Route path="/admin/post-job" element={role === 'admin' ? <AddJob /> : <Navigate to="/" />} />
+        <Route path="/admin/user-search" element={role === 'admin' ? <SearchUsers /> : <Navigate to="/" />} />
 
+        <Route path="/search" element={<SearchJobs />} />
 
-      {role === 'admin' && (
-        <>
-          <Route path="/user-profile/:userId" element={<UserProfile />} />
-          <Route path="/job/:jobId" element={<JobDetails />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/admin/post-job" element={<AddJob />} />
-          <Route path="/admin/user-search" element={<SearchUsers />} />
-        </>
-      )}
-
-
-      <Route path="/search" element={<SearchJobs />} />
-
-
-      <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
-    </Routes>
+        <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
+      </Routes>
     </div>
   );
 }

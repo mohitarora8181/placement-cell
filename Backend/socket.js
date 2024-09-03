@@ -11,10 +11,10 @@ function setupSocketIO(app) {
     }); // Use 'new' keyword to instantiate the server
 
     io.on('connection', (socket) => {
-        console.log('A user connected:', socket.id);
+        console.log('A user connected');
 
         socket.on('disconnect', () => {
-            console.log('User disconnected:', socket.id);
+            console.log('User disconnected:');
         });
     });
 

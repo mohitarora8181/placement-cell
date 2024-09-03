@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect, useState } from "react";
 import { PiStudentBold } from "react-icons/pi";
 import { CgOrganisation } from "react-icons/cg";
@@ -6,9 +7,41 @@ import axios from "axios";
 import JobData from "./JobData";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { styled } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
+
+
+const Sidebar = styled('nav')(({ theme }) => ({
+  width: '20%',
+  backgroundColor: '#FFFFFF', // White background
+  color: '#000000', // Black text
+  fontWeight: 'bold',
+  fontSize: '1rem',
+  paddingTop: theme.spacing(4),
+  textAlign: 'left',
+  boxShadow: `0px 4px 8px ${alpha('#000000', 0.2)}`, // Shadow effect
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
+}));
+
+const SidebarItem = styled('li')(({ theme, isActive }) => ({
+  cursor: 'pointer',
+  marginBottom: theme.spacing(2),
+  padding: theme.spacing(1, 2),
+  fontWeight: isActive ? 'bold' : 'normal',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: isActive ? alpha('#000000', 0.1) : 'transparent', // Highlight active item
+  '&:hover': {
+    backgroundColor: alpha('#000000', 0.05), // Hover effect
+  },
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  boxShadow: isActive ? `0px 4px 8px ${alpha('#000000', 0.2)}` : 'none', // Shadow on active
+}));
 
 const AdminSidebar = ({ onData }) => {
-
   const [currentVal, setCurrentVal] = useState(() => {
     const savedVal = localStorage.getItem('currentVal');
     return savedVal ? savedVal : 'student';
@@ -27,7 +60,9 @@ const AdminSidebar = ({ onData }) => {
   useEffect(() => {
     // Save the currentVal to local storage whenever it changes
     localStorage.setItem('currentVal', currentVal);
-    onData(currentVal);
+    if (typeof onData === 'function') {
+      onData(currentVal);
+    }
 
     if (currentVal === 'student') {
       axios.get('https://placement-cell-iczn.onrender.com/api/users/find')
@@ -51,39 +86,36 @@ const AdminSidebar = ({ onData }) => {
 
   return (
     <>
-      <nav className="hidden md:flex flex-col  w-[20%] bg-[#FABC3F] text-gray-100 font-semibold pt-4 text-md shadow-lg mr-4">
+      <Sidebar>
         <ul className="flex flex-col p-4">
-          <li
-            className={currentVal === 'student' ? "cursor-pointer mb-2 font-bold" : "cursor-pointer mb-2"}
+          <SidebarItem
+            isActive={currentVal === 'student'}
             onClick={setToStudent}
           >
-            <span className="flex justify-between pb-2 items-center">
-              Students <PiStudentBold className="text-3xl" />
+            <span className="flex justify-between items-center">
+              Students <PiStudentBold className="text-3xl" style={{ color: '#000' }} />
             </span>
             <hr />
-          </li>
-          <li
-            className={currentVal === 'company' ? "cursor-pointer mb-2 font-bold" : "cursor-pointer mb-2"}
+          </SidebarItem>
+          <SidebarItem
+            isActive={currentVal === 'company'}
             onClick={setToCompany}
           >
-            <span className="flex justify-between pb-2 items-center">
-              Companies <CgOrganisation className="text-3xl" />
+            <span className="flex justify-between items-center">
+              Companies <CgOrganisation className="text-3xl" style={{ color: '#000' }} />
             </span>
             <hr />
-          </li>
+          </SidebarItem>
           <Link to='/admin/post-job'>
-            <li
-              className="cursor-pointer mb-2"
-              onClick={setToCompany}
-            >
-              <span className="flex justify-between pb-2 items-center">
-                Post Jobs <FaPlus className="text-3xl" />
+            <SidebarItem>
+              <span className="flex justify-between items-center">
+                Post Jobs <FaPlus className="text-3xl" style={{ color: '#000' }} />
               </span>
               <hr />
-            </li>
+            </SidebarItem>
           </Link>
         </ul>
-      </nav>
+      </Sidebar>
       <div className="flex flex-wrap">
         {currentVal === 'student' && users.map(user => (
           <UserCard key={user._id} user={user} />
@@ -94,6 +126,10 @@ const AdminSidebar = ({ onData }) => {
       </div>
     </>
   );
+};
+
+AdminSidebar.propTypes = {
+  onData: PropTypes.func,
 };
 
 export default AdminSidebar;
