@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -244,7 +245,9 @@ const Navbar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' sx={{ backgroundColor: '#ef4444' }}>
         <Toolbar>
+          <Link to="/home">
           <img className='h-24 mx-2' src={logo} alt="msit-logo" />
+          </Link>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
