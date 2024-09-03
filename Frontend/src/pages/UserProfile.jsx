@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Typography, Grid } from '@mui/material';
+import { Typography, Grid, Card, CardContent, CardMedia, CardActions, Button } from '@mui/material';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -9,7 +9,7 @@ const UserProfile = () => {
   const token = localStorage.getItem('token')?.trim();
 
   useEffect(() => {
-    axios.get(`https://placement-cell-iczn.onrender.com/api/users/${userId}`,{
+    axios.get(`https://placement-cell-iczn.onrender.com/api/users/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(response => {
@@ -51,33 +51,41 @@ const UserProfile = () => {
             {user.appliedJobs.length > 0 ? (
               user.appliedJobs.map(job => (
                 <Grid item xs={12} md={6} lg={4} key={job._id}>
-                  <div className="p-4 bg-white shadow-md rounded-lg h-full">
+                  <Card className="shadow-md">
                     {job.imageURL && (
-                      <img 
-                        src={job.imageURL} 
-                        alt={job.jobTitle} 
-                        className="rounded-lg h-40 w-full object-cover mb-4" 
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={job.imageURL}
+                        alt={job.jobTitle}
                       />
                     )}
-                    <Typography variant="h6" gutterBottom className="font-semibold text-gray-800 mb-2">
-                      {job.jobTitle}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary" className="mb-2">
-                      <strong>Company:</strong> {job.companyName}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary" className="mb-2">
-                      <strong>Location:</strong> {job.location}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary" className="mb-2">
-                      <strong>Type:</strong> {job.type}
-                    </Typography>
-                    <Typography variant="body2" className="mb-4 text-gray-700">
-                      {job.jobDescription}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      <strong>CTC:</strong> {job.ctc ? `${job.ctc} lacs` : 'Not Specified'}
-                    </Typography>
-                  </div>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom className="font-semibold text-gray-800">
+                        {job.jobTitle}
+                      </Typography>
+                      <Typography variant="body1" color="textSecondary" className="mb-1">
+                        <strong>Company:</strong> {job.companyName}
+                      </Typography>
+                      <Typography variant="body1" color="textSecondary" className="mb-1">
+                        <strong>Location:</strong> {job.location}
+                      </Typography>
+                      <Typography variant="body1" color="textSecondary" className="mb-1">
+                        <strong>Type:</strong> {job.type}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" className="mb-2">
+                        {job.jobDescription}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        <strong>CTC:</strong> {job.ctc ? `${job.ctc} lacs` : 'Not Specified'}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Link to = "job.ApplyURL">
+                      <Button size="small" color="primary">View Details</Button>
+                      </Link>
+                    </CardActions>
+                  </Card>
                 </Grid>
               ))
             ) : (

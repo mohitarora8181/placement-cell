@@ -1,32 +1,79 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminNav from '../components/AdminNav';
-import AdminSidebar from '../components/AdminSidebar';
-import AdminStudents from '../components/AdminStudents';
-import AdminCompanies from '../components/AdminCompanies';
-
+import AddJob from '../pages/AddJob';
+import { Tabs, Tab, Box } from '@mui/material';
+import axios from 'axios';
+import UserCard from '../components/UserCard';
+import JobData from '../components/JobData';
 
 const AdminPage = () => {
-  const [display, setDisplay] = useState('student');
+  // Retrieve the last selected tab from local storage, default to 'student'
+  const [tabValue, setTabValue] = useState(localStorage.getItem('adminTab') || 'student');
+  const [users, setUsers] = useState([]);
+  const [jobs, setJobs] = useState([]);
 
-  const getDisplayValue = (data)=>{
-    setDisplay(data);
-  }
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+    // Save the selected tab to local storage
+    localStorage.setItem('adminTab', newValue);
+  };
 
- return(
-  <>
-  <AdminNav/>
-  <div className='flex flex-row  '>
-    <AdminSidebar onData={getDisplayValue}/>
-    { display==='student' ?
-      <AdminStudents />
-      : <AdminCompanies/>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (tabValue === 'student') {
+          const response = await axios.get('/api/users/find');
+          setUsers(response.data);
+        } else if (tabValue === 'company') {
+          const response = await axios.get('/api/jobs');
+          setJobs(response.data);
+        }
+      } catch (error) {
+        console.error(`Error fetching ${tabValue}:`, error);
+      }
+    };
 
-    }
+    fetchData();
+  }, [tabValue]);
 
-
-  </div>
-  </>
- )
+  return (
+    <>
+      <AdminNav />
+      <Box sx={{ width: '100%' }}>
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          aria-label="admin tabs"
+          sx={{ borderBottom: 1, borderColor: 'divider' }}
+        >
+          <Tab label="Students" value="student" />
+          <Tab label="Companies" value="company" />
+          <Tab label="Add Job" value="add-job" />
+        </Tabs>
+        <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
+          {tabValue === 'student' && (
+            <div className="flex flex-wrap">
+              {users.map(user => (
+                <UserCard key={user._id} user={user} />
+              ))}
+            </div>
+          )}
+          {tabValue === 'company' && (
+            <div className="flex flex-wrap">
+              {jobs.map(job => (
+                <JobData key={job._id} job={job} />
+              ))}
+            </div>
+          )}
+          {tabValue === 'add-job' && (
+            <div className="w-full max-w-2xl "> 
+              <AddJob />
+            </div>
+          )}
+        </Box>
+      </Box>
+    </>
+  );
 };
 
 export default AdminPage;

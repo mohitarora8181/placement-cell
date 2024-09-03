@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -14,12 +14,10 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import io from 'socket.io-client';
 import logo from '../images/logo-pc.png';
-
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -28,10 +26,11 @@ const Search = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  width: '60%',
+  width: '40%', 
+  margin: '0 auto', 
+  marginLeft: '10%',
   [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
+    width: '50%', 
   },
 }));
 
@@ -55,16 +54,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [newJobsCount, setNewJobsCount] = useState(0);
-  const [lastChecked, setLastChecked] = useState(new Date().toISOString());
-  const [notifications, setNotifications] = useState([]); // Store notifications
+  const [notifications, setNotifications] = useState([]);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [clickCount, setClickCount] = useState(0);
-  //const [lastNotificationClickTime, setLastNotificationClickTime] = useState(null);
   const [lastNotificationClickTime, setLastNotificationClickTime] = useState(() => {
     const storedTime = localStorage.getItem('lastNotificationClickTime');
     return storedTime ? parseInt(storedTime, 10) : null;
@@ -115,8 +113,6 @@ const Navbar = () => {
     };
   }, []);
 
-
-
   const handleNotificationClick = async () => {
     if (clickCount === 1) {
       try {
@@ -131,8 +127,6 @@ const Navbar = () => {
     setNotificationOpen(!notificationOpen);
   };
 
-
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -140,7 +134,6 @@ const Navbar = () => {
   const handleSearchSubmit = (event) => {
     if (event.key === 'Enter') {
       navigate(`/search?query=${searchQuery}`);
-      setLastChecked(new Date().toISOString());
     }
   };
 
@@ -153,13 +146,10 @@ const Navbar = () => {
     setMobileMoreAnchorEl(null);
   };
 
-
-
   const logOut = () => {
     localStorage.clear();
     navigate('/sign-in');
   };
-
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -239,18 +229,16 @@ const Navbar = () => {
     </Menu>
   );
 
-
-
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position='static' sx={{ backgroundColor: '#ef4444' }}>
+      <AppBar position='static' sx={{ backgroundColor: '#1E2A38' }}>
         <Toolbar>
           <Link to="/home">
-          <img className='h-24 mx-2' src={logo} alt="msit-logo" />
+            <img className='h-24 mx-2' src={logo} alt="msit-logo" />
           </Link>
           <Search>
             <SearchIconWrapper>
-              <SearchIcon />
+              <SearchIcon sx={{ color: '#D1D5DB' }} />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder='Search jobs...'
@@ -258,13 +246,14 @@ const Navbar = () => {
               onChange={handleSearchChange}
               onKeyDown={handleSearchSubmit}
               inputProps={{ 'aria-label': 'search' }}
+              sx={{ color: '#D1D5DB', '& .MuiInputBase-input': { color: '#D1D5DB' } }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
               <Badge badgeContent={0} color='error'>
-                {/* <MailIcon /> */}
+                <MailIcon sx={{ color: '#D1D5DB' }} />
               </Badge>
             </IconButton>
             <IconButton
@@ -274,7 +263,7 @@ const Navbar = () => {
               onClick={handleNotificationClick}
             >
               <Badge badgeContent={newJobsCount} color='error'>
-                <NotificationsIcon />
+                <NotificationsIcon sx={{ color: '#D1D5DB' }} />
               </Badge>
             </IconButton>
             <IconButton
@@ -286,7 +275,7 @@ const Navbar = () => {
               onClick={handleProfileMenuOpen}
               color='inherit'
             >
-              <AccountCircle />
+              <AccountCircle sx={{ color: '#D1D5DB' }} />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -298,7 +287,7 @@ const Navbar = () => {
               onClick={(event) => setMobileMoreAnchorEl(event.currentTarget)}
               color='inherit'
             >
-              <MoreIcon />
+              <MoreIcon sx={{ color: '#D1D5DB' }} />
             </IconButton>
           </Box>
         </Toolbar>
@@ -312,29 +301,29 @@ const Navbar = () => {
             right: 20,
             top: 70,
             width: 300,
-            bgcolor: 'background.paper',
+            bgcolor: '#1E2A38',
             boxShadow: 1,
             borderRadius: 1,
             p: 2,
             zIndex: 1201,
           }}
         >
-          <Typography variant='h6' sx={{ mb: 2 }}>
+          <Typography variant='h6' sx={{ mb: 2, color: '#D1D5DB' }}>
             Notifications
           </Typography>
           {notifications.length > 0 ? (
             notifications.map((notification, index) => (
               <Box key={index} sx={{ mb: 2 }}>
-                <Typography variant='body2' color='text.primary'>
+                <Typography variant='body2' color='#D1D5DB'>
                   {notification.message}
                 </Typography>
-                <Typography variant='caption' color='text.secondary'>
+                <Typography variant='caption' color='#9CA3AF'>
                   {new Date(notification.createdAt).toLocaleString()}
                 </Typography>
               </Box>
             ))
           ) : (
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant='body2' color='#9CA3AF'>
               No notifications.
             </Typography>
           )}

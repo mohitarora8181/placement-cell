@@ -77,7 +77,7 @@ function App() {
   }
 
   return (
-    <div className='bg-[#FFF8E8] min-h-screen'>
+    <div className=' min-h-screen'>
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/sign-in" element={<SignIn />} />
@@ -93,7 +93,6 @@ function App() {
         <Route path="/admin" element={role === 'admin' ? <AdminPage /> : <Navigate to="/" />} />
         <Route path="/admin/post-job" element={role === 'admin' ? <AddJob /> : <Navigate to="/" />} />
         <Route path="/admin/user-search" element={role === 'admin' ? <SearchUsers /> : <Navigate to="/" />} />
-        
 
         <Route path="/search" element={<SearchJobs />} />
 

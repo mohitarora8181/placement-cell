@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Typography, Card, CardContent } from '@mui/material';
+import { Typography, Card, CardContent, Button } from '@mui/material';
 import axios from 'axios';
 
 const JobData = ({ job }) => {
@@ -40,7 +40,7 @@ const JobData = ({ job }) => {
     <Card
       className="cursor-pointer p-4 bg-white shadow-lg rounded-lg transition-transform transform hover:scale-105 hover:shadow-xl"
       onClick={handleClick}
-      style={{ width: '300px', margin: '10px', marginLeft: '0' }} 
+      style={{ width: '350px', margin: '10px', marginLeft: '0' }}
     >
       <CardContent>
         {job.imageURL && (
@@ -50,18 +50,60 @@ const JobData = ({ job }) => {
             className="rounded-lg h-36 w-full object-cover mb-4"
           />
         )}
-        <Typography variant="h6" className="font-semibold text-gray-800 mb-2">
+        <Typography
+          variant="h6"
+          className="font-semibold text-gray-800 mb-2"
+          style={{ fontSize: '1.5rem', fontWeight: '600', color: '#333' }}
+        >
           {job.jobTitle}
         </Typography>
-        <Typography variant="body2" color="textSecondary" className="text-gray-600 mb-2">
-          {job.companyName}
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          className="text-gray-600 mb-1"
+          style={{ fontWeight: '500' }}
+        >
+          <strong>Company:</strong> {job.companyName}
         </Typography>
-        <Typography variant="body2" color="textSecondary" className="mb-2">
-          {job.jobDescription}
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          className="text-gray-600 mb-1"
+          style={{ fontWeight: '500' }}
+        >
+          <strong>Location:</strong> {job.location}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          className="text-gray-600 mb-1"
+          style={{ fontWeight: '500' }}
+        >
+          <strong>Type:</strong> {job.type}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          className="mb-2"
+          style={{ fontSize: '0.875rem', lineHeight: '1.3' }}
+        >
+          {job.jobDescription.length > 100 ? `${job.jobDescription.substring(0, 97)}...` : job.jobDescription}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          style={{ fontWeight: 'bold', color: '#00796b' }}
+        >
           <strong>CTC:</strong> {job.ctc} lacs
         </Typography>
+        <Typography
+        variant="body2"
+        color="textSecondary"
+        style={{ fontWeight: 'bold', color: '#00796b', marginTop: '5px',marginBottom:'-12px' }}
+      >
+        <strong>Total Applicants:</strong> {job.applicants ? job.applicants.length : 0}
+      </Typography>
+        
       </CardContent>
     </Card>
   );
