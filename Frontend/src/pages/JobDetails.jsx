@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Typography, Grid } from '@mui/material';
 import AppliedUserCard from '../components/AppliedUserCard.jsx';
+import AdminNav from '../components/AdminNav.jsx';
 
 const JobDetails = () => {
   const { jobId } = useParams();
@@ -19,6 +20,9 @@ const JobDetails = () => {
   }, [jobId]);
 
   return job ? (
+    <>
+
+  <AdminNav/>
     <div className="p-8 mx-auto ">
 
       <div className='flex justify-between w-[80%] shadow-md mx-auto p-4 rounded-md'>
@@ -81,6 +85,7 @@ const JobDetails = () => {
       </Grid>
       </div>
     </div>
+    </>
 
   ) : (
     <div>Loading...</div>
