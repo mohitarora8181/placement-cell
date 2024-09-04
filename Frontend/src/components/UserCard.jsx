@@ -15,7 +15,7 @@ const CardContainer = styled('div')(({ theme }) => ({
     transform: 'translateY(-5px)',
     boxShadow: '0 12px 24px rgba(0, 0, 0, 0.2)',
   },
-  maxWidth: '320px',
+  width: '320px',
   display: 'flex',
   flexDirection: 'column',
   margin: '12px',
@@ -28,6 +28,7 @@ const ProfileImage = styled('div')({
   width: '150px',
   borderRadius: '50%',
   overflow: 'hidden',
+  margin:'auto',
   marginBottom: '20px',
   backgroundColor: '#e0f7fa',
   display: 'flex',
@@ -51,6 +52,10 @@ const UserDetail = styled('p')({
 });
 
 const InfoContainer = styled('div')({
+  display:'flex',
+  flex:'col',
+  justifyContent:'center',
+  alignItems:'center',
   marginTop: 'auto',
   paddingTop: '10px',
   borderTop: '1px solid #e0e0e0',
@@ -61,7 +66,7 @@ const InfoContainer = styled('div')({
 
 const CGPAButton = styled(Button)(({ theme }) => ({
   position: 'absolute',
-  bottom: '10px',
+  bottom: '18px',
   right: '10px',
   backgroundColor: '#4caf50',
   color: '#ffffff',
@@ -94,10 +99,10 @@ const UserCard = ({ user }) => {
         <h3 className="text-2xl font-semibold text-gray-800 mb-1">{user.fullname}</h3>
         <UserDetail><strong>Email:</strong> {user.email}</UserDetail>
         <UserDetail><strong>Branch:</strong> {user.course}</UserDetail>
-        <UserDetail><strong>year Of Passing:</strong> {user.yearOfPassing}</UserDetail>
-        
+        <UserDetail><strong>Batch:</strong> {user.yearOfPassing}</UserDetail>
+
       </UserInfo>
-      <InfoContainer>
+      <InfoContainer >
         <UserDetail><strong>Degree:</strong> {user.degree}</UserDetail>
         <CGPAButton>
           CGPA: {user.cgpa || 'N/A'}
