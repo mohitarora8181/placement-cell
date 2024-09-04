@@ -57,7 +57,7 @@ const ViewProfileButton = styled(Button)(({ theme }) => ({
   padding: '5px 10px',
   textTransform: 'uppercase',
   fontSize: '0.75rem',
-  position:'absolute',
+  
   bottom:0,
   '&:hover': {
     backgroundColor: '#004d40',
