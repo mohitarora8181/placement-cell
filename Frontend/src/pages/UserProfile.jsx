@@ -85,7 +85,7 @@ const UserProfile = () => {
       </Grid>
     </Grid>
     <div className="mt-8">
-      <Typography variant="h5" gutterBottom style={{ color: '#333333', fontWeight: 'bold' }}>
+      <Typography variant="h5" gutterBottom style={{ color: '#333333', fontWeight: 'bold', padding:'6' }}>
         Applied Jobs
       </Typography>
       <Grid container spacing={2}>
