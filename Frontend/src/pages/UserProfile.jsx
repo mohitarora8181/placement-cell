@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Typography, Grid, Card, CardContent, CardMedia, CardActions, Button, Avatar, Paper, TextField } from '@mui/material';
+import AdminNav from '../components/AdminNav';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -21,6 +22,8 @@ const UserProfile = () => {
   }, [userId]);
 
   return user ? (
+    <>
+    <AdminNav/>
     <div className="container mx-auto p-5 w-[80%] shadow-md mt-5 rounded-md" style={{ backgroundColor: 'fffff', color: '#333333', height:'screen' }}>
     <Grid container spacing={3}>
       <Grid item xs={12} md={4} className="text-center">
@@ -51,36 +54,7 @@ const UserProfile = () => {
             <strong>Degree:</strong> {user.degree || 'Loading...'}
           </Typography>
 
-          <div className="mt-4">
-            {/* <TextField
-              label="Resume URL"
-              fullWidth
-              value={user?.resumeURL}
-              onChange={handleResumeURLChange}
-              variant="outlined"
-              sx={{ marginBottom: 2 }}
-              InputProps={{
-                style: { color: '#333333', backgroundColor: '#f0f0f0' }
-              }}
-            /> */}
-            {/* <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmitURL}
-              sx={{ marginRight: 2 }}
-              style={{ backgroundColor: '#007bff', color: '#ffffff' }}
-            >
-              Update Resume URL
-            </Button> */}
-            {/* <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleEditProfile}
-              style={{ backgroundColor: '#6c757d', color: '#ffffff' }}
-            >
-              Edit Profile
-            </Button> */}
-          </div>
+
         </Paper>
       </Grid>
     </Grid>
@@ -138,6 +112,7 @@ const UserProfile = () => {
                 </div>
               </Paper>
             </Grid>
+
           ))
         ) : (
           <Typography variant="body1" style={{ color: '#555555', textAlign: 'center' }}>
@@ -147,6 +122,8 @@ const UserProfile = () => {
       </Grid>
     </div>
   </div>
+  </>
+
   ) : (
     <div className="p-8 text-center text-gray-600">Loading...</div>
   );
