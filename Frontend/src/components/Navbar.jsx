@@ -26,11 +26,11 @@ const Search = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  width: '40%', 
-  margin: '0 auto', 
+  width: '40%',
+  margin: '0 auto',
   marginLeft: '10%',
   [theme.breakpoints.up('sm')]: {
-    width: '50%', 
+    width: '50%',
   },
 }));
 
@@ -265,7 +265,7 @@ const Navbar = () => {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
               <Badge badgeContent={0} color='error'>
-                <MailIcon sx={{ color: '#D1D5DB' }} />
+                {/* <MailIcon sx={{ color: '#D1D5DB' }} /> */}
               </Badge>
             </IconButton>
             <IconButton
