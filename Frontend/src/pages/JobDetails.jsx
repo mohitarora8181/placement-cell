@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Typography, Grid } from '@mui/material';
-import AppliedUserCard from '../components/AppliedUserCard.js'; 
+import AppliedUserCard from '../components/AppliedUserCard.js';
 
 const JobDetails = () => {
   const { jobId } = useParams();
@@ -19,7 +19,19 @@ const JobDetails = () => {
   }, [jobId]);
 
   return job ? (
-    <div className="p-8">
+    <div className="p-8 mx-auto ">
+
+      <div className='flex justify-between w-[80%] shadow-md mx-auto p-4 rounded-md'>
+      <div>
+      {job.imageURL && (
+          <img
+            src={job.imageURL}
+            alt={job.jobTitle}
+            className="rounded-lg h-64 w-full object-cover mb-4"
+          />
+        )}
+        </div>
+        <div >
       <Typography variant="h4" gutterBottom>
         {job.jobTitle}
       </Typography>
@@ -46,10 +58,15 @@ const JobDetails = () => {
         <strong>Total Applicants:</strong> {job.applicants ? job.applicants.length : 0}
       </Typography>
 
-      <Typography variant="h5" gutterBottom style={{ marginTop: '20px' }}>
-        Applied Users
+
+
+      </div>
+      </div>
+      <div className='mx-auto w-[80%]'>
+      <Typography variant="h5" gutterBottom style={{ marginTop: '20px', fontWeight:'bold' }}>
+        Students who applied:
       </Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={1}>
         {job.applicants && job.applicants.length > 0 ? (
           job.applicants.map(user => (
             <Grid item xs={12} md={6} lg={4} key={user._id}>
@@ -62,7 +79,9 @@ const JobDetails = () => {
           </Typography>
         )}
       </Grid>
+      </div>
     </div>
+
   ) : (
     <div>Loading...</div>
   );
