@@ -50,23 +50,23 @@ const AdminPage = () => {
           <Tab label="Companies" value="company" />
           <Tab label="Add Job" value="add-job" />
         </Tabs>
-        <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ padding: 4, display: 'flex', justifyContent: 'center', alignItems:'center',  }}>
           {tabValue === 'student' && (
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap items-center justify-center w-[95%]">
               {users.map(user => (
                 <UserCard key={user._id} user={user} />
               ))}
             </div>
           )}
           {tabValue === 'company' && (
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap items-center justify-center w-[95%]">
               {jobs.map(job => (
                 <JobData key={job._id} job={job} />
               ))}
             </div>
           )}
           {tabValue === 'add-job' && (
-            <div className="w-full max-w-2xl "> 
+            <div className="w-full max-w-2xl ">
               <AddJob />
             </div>
           )}
