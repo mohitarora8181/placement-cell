@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Ensure axios is imported
 import logo from '../images/logo-pc.png';
 
@@ -126,7 +126,9 @@ const AdminNav = ({ currentVal }) => {
             component='div'
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
+            <Link to='/'>
             <img className='h-24 mx-2' src={logo} alt="logo" />
+            </Link>
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <Search>
