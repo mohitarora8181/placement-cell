@@ -153,9 +153,11 @@ const AdminNav = ({ currentVal }) => {
                   backgroundColor: searchType === 'jobs' ? '#FFA500' : '#FFF',
                   color: searchType === 'jobs' ? '#FFF' : '#000',
                   border: '1px solid #FFA500',
+                  fontWeight:'bold'
+
                 }}
               >
-                Jobs
+                Companies
               </ToggleButton>
               <ToggleButton
                 value='users'
@@ -163,9 +165,10 @@ const AdminNav = ({ currentVal }) => {
                   backgroundColor: searchType === 'users' ? '#FFA500' : '#FFF',
                   color: searchType === 'users' ? '#FFF' : '#000',
                   border: '1px solid #FFA500',
+                  fontWeight:'bold'
                 }}
               >
-                Users
+                Students
               </ToggleButton>
             </ToggleButtonGroup>
           </Box>
