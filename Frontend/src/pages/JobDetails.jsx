@@ -25,8 +25,8 @@ const JobDetails = () => {
   <AdminNav/>
     <div className="p-8 mx-auto ">
 
-      <div className='flex justify-between w-[80%] shadow-md mx-auto p-4 rounded-md'>
-      <div>
+      <div className='flex  w-[80%] shadow-md mx-auto p-4 rounded-md'>
+      <div className='mr-8'>
       {job.imageURL && (
           <img
             src={job.imageURL}
