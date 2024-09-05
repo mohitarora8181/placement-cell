@@ -60,6 +60,19 @@ const LogoutButton = styled('button')(({ theme }) => ({
     backgroundColor: '#B71C1C', // Darker red on hover
   },
 }));
+const NotifyButton = styled('button')(({ theme }) => ({
+  backgroundColor: '#f50057', // Same color as the Log Out button (adjust as needed)
+  color: '#fff',
+  border: 'none',
+  borderRadius: '5px',
+  padding: '10px 20px',
+  cursor: 'pointer',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  '&:hover': {
+    backgroundColor: '#c51162', // Darker shade on hover
+  },
+}));
 
 const AdminNav = ({ currentVal }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -115,7 +128,9 @@ const AdminNav = ({ currentVal }) => {
     localStorage.clear();
     navigate('/sign-in');
   };
-
+  const handleNotifyClick = () => {
+    navigate('/notify');
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' sx={{ backgroundColor: '#FFF' }}>
@@ -174,7 +189,9 @@ const AdminNav = ({ currentVal }) => {
               </ToggleButton>
             </ToggleButtonGroup>
           </Box>
+          
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <NotifyButton onClick={handleNotifyClick}>+</NotifyButton>
             <LogoutButton onClick={logOut}>Log Out</LogoutButton>
           </Box>
         </Toolbar>

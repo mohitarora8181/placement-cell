@@ -93,6 +93,44 @@ router.delete('/notifications/:userId', async (req, res) => {
   }
 });
 
+router.post('/notify', async (req, res) => {
+  const { to, emails, message } = req.body;
+
+  try {
+    let users = [];
+    if (to === 'all') {
+      // Send to all users
+      users = await User.find();
+    } else if (to === 'specific' && emails) {
+      // Send to specific users by email
+      users = await User.find({ email: { $in: emails } });
+    }
+
+    // Create notifications for each user
+    const notifications = users.map(async (user) => {
+      const notification = await Notification.create({
+        userId: user._id,
+        message,
+      });
+
+      // Optionally, emit real-time notifications to connected users
+      if (user.isConnected) {
+        io.to(user.socketId).emit('newNotification', notification);
+      }
+
+      return notification;
+    });
+
+    // Wait for all notifications to be created
+    await Promise.all(notifications);
+
+    res.status(200).json({ message: 'Notifications sent successfully.' });
+  } catch (error) {
+    console.error('Error sending notifications:', error);
+    res.status(500).json({ message: 'Server error. Could not send notifications.' });
+  }
+});
+
 
 
 

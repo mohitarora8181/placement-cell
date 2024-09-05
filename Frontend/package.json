@@ -16,6 +16,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.4",
+    "build": "^0.1.4",
     "firebase": "^10.11.0",
     "framer-motion": "^11.3.31",
     "moment": "^2.30.1",

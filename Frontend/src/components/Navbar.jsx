@@ -107,6 +107,10 @@ const Navbar = () => {
       setNotifications((prevNotifications) => [...prevNotifications, { company: job.companyName, title: job.jobTitle }]);
       setNewJobsCount((prevCount) => prevCount + 1);
     });
+    socket.on('notification', (notification) => {
+      setNotifications(prevNotifications => [...prevNotifications, notification]);
+      setNewJobsCount(prevCount => prevCount + 1);
+    });
 
     return () => {
       socket.disconnect();

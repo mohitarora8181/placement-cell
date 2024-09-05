@@ -14,6 +14,7 @@ import JobDetails from './pages/JobDetails';
 import SearchUsers from './components/SearchUsers';
 import { Navigate } from 'react-router-dom';
 import EditProfile from './pages/EditProfile';
+import NotificationForm from './pages/Notification';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -95,6 +96,7 @@ function App() {
         <Route path="/admin/user-search" element={role === 'admin' ? <SearchUsers /> : <Navigate to="/" />} />
 
         <Route path="/search" element={<SearchJobs />} />
+        <Route path="/notify" element={<NotificationForm />} />
 
         <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
       </Routes>
