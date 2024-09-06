@@ -191,7 +191,7 @@ const AdminNav = ({ currentVal }) => {
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <NotifyButton onClick={handleNotifyClick} sx={{marginRight:4}}>+</NotifyButton>
+          <NotifyButton onClick={handleNotifyClick} sx={{marginRight:4}}>🔔</NotifyButton>
             <LogoutButton onClick={logOut}>Log Out</LogoutButton>
           </Box>
         </Toolbar>
