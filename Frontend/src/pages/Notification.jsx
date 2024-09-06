@@ -64,7 +64,7 @@ const NotificationForm = () => {
           </label>
         )}
 <span className='flex '>
-        <label className='mt-4'>
+        <label className='mt-4 mr-2'>
           Message:
           </label>
           <textarea className='bg-gray-50 border-2 border-black h-32 w-[100%]' value={message} onChange={(e) => setMessage(e.target.value)} />
