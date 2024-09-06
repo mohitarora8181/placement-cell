@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 
 const AddJob = () => {
@@ -10,6 +10,33 @@ const AddJob = () => {
   const [ctc, setCtc] = useState('');
   const [imageURL, setImageURL] = useState('');
   const [applyURL, setApplyURL] = useState('');
+  const [userGmail, setUserGmail] = useState(''); // To store the fetched Gmail
+  const userId = localStorage.getItem('userId')?.trim();
+  const token = localStorage.getItem('token')?.trim();
+
+  // Fetch the user's Gmail when the component mounts
+  useEffect(() => {
+    if (userId && token) {
+    const fetchUserDetails = async () => {
+      try {
+        
+        const response = await axios.get(`/api/users/profile/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        // Assuming the response contains the user's Gmail in response.data.gmail
+        setUserGmail(response.data.email);
+        console.log(response.data.email)
+
+      } catch (error) {
+        console.error('Error fetching user details', error);
+      }
+    };
+
+    fetchUserDetails();
+  }
+  }, []);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +50,7 @@ const AddJob = () => {
       ctc,
       imageURL,
       applyURL,
+      postedBy: userGmail,
     };
 
     try {

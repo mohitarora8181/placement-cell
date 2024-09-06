@@ -31,29 +31,94 @@ router.get('/jobs/:jobId', async (req, res) => {
   }
 });
 
-router.post('/jobs',async (req, res) => {
+//router.post('/jobs',async (req, res) => {
+//  try {
+//    const newJob = new Job(req.body); 
+//    await newJob.save(); 
+//    const users = await User.find(); 
+//    users.forEach(async (user) => {
+//      await Notification.create({
+//        userId: user._id,
+//        jobId: newJob._id,
+//        message: `A new job "${newJob.jobTitle}" has been posted by ${newJob.companyName}.`,
+//      });
+//      if (user.isConnected) {
+//        io.to(user.socketId).emit('newJob', newJob);
+//      }
+//    });
+//   // io.emit('newJob', newJob);
+//    console.log('New job emitted:', newJob);
+//    res.status(201).json(newJob); 
+//  } catch (error) {
+//    console.error('Error adding job:', error);
+//    res.status(500).send('Server error.'); 
+//  }
+//});
+let jobPostingInProgress = false;
+
+router.post('/jobs', async (req, res) => {
+  if (jobPostingInProgress) {
+    return res.status(429).send('Job posting in progress. Try again later.');
+  }
+
+  // Set the lock to prevent concurrent job postings
+  jobPostingInProgress = true;
+
   try {
-    const newJob = new Job(req.body); 
-    await newJob.save(); 
-    const users = await User.find(); 
+    // Create and save the new job
+   // const newJob = new Job(req.body);
+   // await newJob.save();
+   const { jobTitle, companyName, location, type, jobDescription, ctc, imageURL, applyURL, postedBy } = req.body;
+
+    // Create and save the new job with the postedBy field
+    const newJob = new Job({
+      jobTitle,
+      companyName,
+      location,
+      type,
+      jobDescription,
+      ctc,
+      imageURL,
+      applyURL,
+      postedBy, // Ensure this field is included
+    });
+
+    await newJob.save();
+
+    // Find all users
+    const users = await User.find();
+
+    // Notify each user about the new job and send real-time notifications if connected
     users.forEach(async (user) => {
+      // Create a notification for each user
       await Notification.create({
         userId: user._id,
         jobId: newJob._id,
         message: `A new job "${newJob.jobTitle}" has been posted by ${newJob.companyName}.`,
       });
+
+      // Send real-time notification if the user is connected via Socket.IO
       if (user.isConnected) {
         io.to(user.socketId).emit('newJob', newJob);
       }
     });
-   // io.emit('newJob', newJob);
+
+    // Emit the new job event globally (optional)
+    // io.emit('newJob', newJob);
+
     console.log('New job emitted:', newJob);
-    res.status(201).json(newJob); 
+
+    // Send a success response to the client
+    res.status(201).json(newJob);
   } catch (error) {
     console.error('Error adding job:', error);
-    res.status(500).send('Server error.'); 
+    res.status(500).send('Server error.');
+  } finally {
+    // Release the lock to allow future job postings
+    jobPostingInProgress = false;
   }
 });
+
 
 
 
