@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import AdminNav from '../components/AdminNav';
 
 const NotificationForm = () => {
   const [notifyTo, setNotifyTo] = useState('all');
@@ -37,10 +38,14 @@ const NotificationForm = () => {
 
 
   return (
-    <div>
-      <h2>Send Notification</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <>
+    <AdminNav/>
+
+    <div className='mx-auto flex flex-col items-center justify-center p-4  w-[100%] '>
+
+      <h2 className='font-bold text-xl text-center mb-4'>Send Notification 🔔</h2>
+      <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center w-[60%] shadow-md mt-8 p-8'>
+        <label className='mb-8'>
           Notify:
           <select value={notifyTo} onChange={(e) => setNotifyTo(e.target.value)}>
             <option value="all">All</option>
@@ -58,15 +63,22 @@ const NotificationForm = () => {
             />
           </label>
         )}
+<span className='flex w-full'>
+  <label className='mt-4 mr-2'>
+    Message:
+  </label>
+  <textarea
+    className='bg-gray-50 border-2 border-black h-48 w-[100%]' // Increase height here
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+  />
+</span>
 
-        <label>
-          Message:
-          <textarea value={message} onChange={(e) => setMessage(e.target.value)} />
-        </label>
-
-        <button type="submit">Notify</button>
+        <button type="submit" className='bg-green-500 w-[40%] py-1 text-white font-semibold rounded-sm mt-2'>Notify</button>
       </form>
     </div>
+
+    </>
   );
 };
 
