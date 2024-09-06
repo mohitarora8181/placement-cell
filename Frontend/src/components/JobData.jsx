@@ -97,13 +97,21 @@ const JobData = ({ job }) => {
           <strong>CTC:</strong> {job.ctc} lacs
         </Typography>
         <Typography
-        variant="body2"
-        color="textSecondary"
-        style={{ fontWeight: 'bold', color: '#00796b', marginTop: '5px',marginBottom:'-12px' }}
-      >
-        <strong>Total Applicants:</strong> {job.applicants ? job.applicants.length : 0}
-      </Typography>
-        
+          variant="body2"
+          color="textSecondary"
+          style={{ fontWeight: 'bold', color: '#00796b', marginTop: '5px', marginBottom: '-12px' }}
+        >
+          <strong>Total Applicants:</strong> {job.applicants ? job.applicants.length : 0}
+        </Typography>
+
+      
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          style={{ fontWeight: '500', marginTop: '10px' }}
+        >
+          <strong>Posted By: </strong> {job.postedBy ? job.postedBy : 'Unknown'}
+        </Typography>
       </CardContent>
     </Card>
   );

@@ -70,7 +70,7 @@ router.post('/jobs', async (req, res) => {
    // await newJob.save();
    const { jobTitle, companyName, location, type, jobDescription, ctc, imageURL, applyURL, postedBy } = req.body;
 
-    // Create and save the new job with the postedBy field
+    
     const newJob = new Job({
       jobTitle,
       companyName,
@@ -80,7 +80,7 @@ router.post('/jobs', async (req, res) => {
       ctc,
       imageURL,
       applyURL,
-      postedBy, // Ensure this field is included
+      postedBy,
     });
 
     await newJob.save();

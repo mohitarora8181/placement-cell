@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AddJob = () => {
@@ -10,33 +10,29 @@ const AddJob = () => {
   const [ctc, setCtc] = useState('');
   const [imageURL, setImageURL] = useState('');
   const [applyURL, setApplyURL] = useState('');
-  const [userGmail, setUserGmail] = useState(''); // To store the fetched Gmail
+  const [userGmail, setUserGmail] = useState(''); 
   const userId = localStorage.getItem('userId')?.trim();
   const token = localStorage.getItem('token')?.trim();
 
-  // Fetch the user's Gmail when the component mounts
+  
   useEffect(() => {
     if (userId && token) {
-    const fetchUserDetails = async () => {
-      try {
-        
-        const response = await axios.get(`/api/users/profile/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+      const fetchUserDetails = async () => {
+        try {
+          const response = await axios.get(`/api/users/profile/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setUserGmail(response.data.email);
+         
 
-        // Assuming the response contains the user's Gmail in response.data.gmail
-        setUserGmail(response.data.email);
-        console.log(response.data.email)
+        } catch (error) {
+          console.error('Error fetching user details', error);
+        }
+      };
 
-      } catch (error) {
-        console.error('Error fetching user details', error);
-      }
-    };
-
-    fetchUserDetails();
-  }
-  }, []);
-
+      fetchUserDetails();
+    }
+  }, [userId, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,11 +46,11 @@ const AddJob = () => {
       ctc,
       imageURL,
       applyURL,
-      postedBy: userGmail,
+      postedBy: userGmail,  
     };
 
     try {
-      const response = await axios.post('https://placement-cell-iczn.onrender.com/api/jobs', jobData); 
+      const response = await axios.post('https://placement-cell-iczn.onrender.com/api/jobs', jobData);
       if (response.status === 201) {
         alert('Job added successfully!');
         // Clear the form fields
@@ -74,7 +70,7 @@ const AddJob = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-8 bg-gray-100 rounded-lg shadow-lg"> {/* Adjusted width */}
+    <div className="w-full max-w-4xl mx-auto p-8 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6">Add a New Job</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

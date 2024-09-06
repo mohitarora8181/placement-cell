@@ -43,10 +43,10 @@ const jobSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', 
   }],
-  postedBy: { // New field to store the Gmail of the admin posting the job
+  postedBy: {
     type: String,
-    required: true,
-    //trim: true,
+    required: function() { return this.postedBy !== null; }, 
+    default: null,  
   },
 }, {
   timestamps: true, 

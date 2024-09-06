@@ -81,7 +81,7 @@ router.post('/apply', async (req, res) => {
 
 router.get('/find', async (req, res) => {
   try {
-    const users = await User.find().select('username fullname email course'); 
+    const users = await User.find().select('fullname email dob degree course twelfthPercentage diplomaPercentage nationality cgpa address school12th tenthPercentage gapYear yearOfPassing activeBacklogs contactNumber resumeURL');
     res.json(users);
   } catch (error) {
     console.error('Error fetching users:', error);
