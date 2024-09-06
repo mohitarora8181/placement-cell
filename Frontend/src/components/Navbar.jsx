@@ -117,19 +117,43 @@ const Navbar = () => {
     };
   }, []);
 
-  const handleNotificationClick = async () => {
-    if (clickCount === 1) {
-      try {
-        await axios.delete(`/api/notifications/${userId}`);
-        setNotifications([]);
-        setNewJobsCount(0);
-      } catch (error) {
-        console.error('Error clearing notifications:', error);
-      }
+  //const handleNotificationClick = async () => {
+  //if (clickCount === 1) {
+  //  try {
+  //    await axios.delete(`/api/notifications/${userId}`);
+  //    setNotifications([]);
+  //    setNewJobsCount(0);
+  //  } catch (error) {
+  //    console.error('Error clearing notifications:', error);
+  //  }
+  //}
+  //setClickCount(prevCount => prevCount + 1);
+  //setNotificationOpen(!notificationOpen);
+//}
+const handleNotificationClick = () => {
+  // Toggle the notification panel when the icon is clicked
+  setNotificationOpen(!notificationOpen);
+
+  // Reset the click count logic since we're only toggling the panel
+  setClickCount(prevCount => prevCount + 1);
+};
+  
+  const handleMarkAllAsRead = async () => {
+    try {
+      // Call your API to mark all notifications as read
+      //await axios.put(`/api/notifications/mark-all-read/${userId}`);
+  
+      // Call your API to delete all notifications
+      await axios.delete(`/api/notifications/${userId}`);
+  
+      // Update the notification state and count
+      setNotifications([]);
+      setNewJobsCount(0);
+    } catch (error) {
+      console.error('Error marking notifications as read and deleting:', error);
     }
-    setClickCount(prevCount => prevCount + 1);
-    setNotificationOpen(!notificationOpen);
   };
+  
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -311,40 +335,56 @@ const Navbar = () => {
       {renderMobileMenu}
       {renderMenu}
       {notificationOpen && (
-        <Box
-          sx={{
-            position: 'absolute',
-            right: 20,
-            top: 70,
-            width: 300,
-            bgcolor: '#1E2A38',
-            boxShadow: 1,
-            borderRadius: 1,
-            p: 2,
-            zIndex: 1201,
-          }}
-        >
-          <Typography variant='h6' sx={{ mb: 2, color: '#D1D5DB' }}>
-            Notifications
-          </Typography>
-          {notifications.length > 0 ? (
-            notifications.map((notification, index) => (
-              <Box key={index} sx={{ mb: 2 }}>
-                <Typography variant='body2' color='#D1D5DB'>
-                  {notification.message}
-                </Typography>
-                <Typography variant='caption' color='#9CA3AF'>
-                  {new Date(notification.createdAt).toLocaleString()}
-                </Typography>
-              </Box>
-            ))
-          ) : (
-            <Typography variant='body2' color='#9CA3AF'>
-              No notifications.
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '60px',
+      right: '20px',
+      width: '300px',
+      backgroundColor: '#1E2A38',
+      color: '#D1D5DB',
+      borderRadius: '8px',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      zIndex: 1000,  // Ensure it's above other content
+      p: 2,
+    }}
+  >
+    {notifications.length > 0 ? (
+      <>
+        {notifications.map((notification, index) => (
+          <Box key={index} sx={{ mb: 2 }}>
+            <Typography variant='body2' color='#D1D5DB'>
+              {notification.message}
             </Typography>
-          )}
+            <Typography variant='caption' color='#9CA3AF'>
+              {new Date(notification.createdAt).toLocaleString()}
+            </Typography>
+          </Box>
+        ))}
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <button
+            onClick={handleMarkAllAsRead}
+            style={{
+              backgroundColor: '#D1D5DB',
+              color: '#1E2A38',
+              padding: '6px 12px',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            Mark All as Read
+          </button>
         </Box>
-      )}
+      </>
+    ) : (
+      <Typography variant='body2' color='#9CA3AF'>
+        No notifications.
+      </Typography>
+    )}
+  </Box>
+)}
+
     </Box>
   );
 };
