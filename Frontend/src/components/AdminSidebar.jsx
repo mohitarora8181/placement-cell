@@ -116,7 +116,7 @@ const AdminSidebar = ({ onData }) => {
           </Link>
         </ul>
       </Sidebar>
-      <div className="flex flex-wrap">
+      <div className="flex  items-center justify-center w-[90%] ml-52 bg-black">
         {currentVal === 'student' && users.map(user => (
           <UserCard key={user._id} user={user} />
         ))}

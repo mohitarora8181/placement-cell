@@ -137,7 +137,7 @@ const JobCard = ({ job }) => {
   const handleConfirm = async (confirmed) => {
     if (confirmed) {
       try {
-        const response = await axios.post('https://placement-cell-iczn.onrender.com/api/users/apply', { userId, jobId: job._id });
+        const response = await axios.post('http://localhost:8000/api/users/apply', { userId, jobId: job._id });
 
         if (response.status === 200) {
           console.log(response.data.message);
