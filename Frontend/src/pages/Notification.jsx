@@ -43,7 +43,7 @@ const NotificationForm = () => {
 
     <div className='mx-auto flex flex-col items-center justify-center p-4  w-[100%] '>
 
-      <h2 className='font-bold text-xl text-center mb-4'>Send Notification</h2>
+      <h2 className='font-bold text-xl text-center mb-4'>Send Notification 🔔</h2>
       <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center w-[60%] shadow-md mt-8 p-8'>
         <label className='mb-8'>
           Notify:
