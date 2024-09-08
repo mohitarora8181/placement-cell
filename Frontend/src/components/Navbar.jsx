@@ -26,11 +26,11 @@ const Search = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  width: '40%',
+  width: '100%',
   margin: '0 auto',
-  marginLeft: '10%',
   [theme.breakpoints.up('sm')]: {
-    width: '50%',
+    width: '60%',
+    marginLeft: '10%',
   },
 }));
 
@@ -51,9 +51,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
+    color: '#D1D5DB', // Ensure text color is visible
+    [theme.breakpoints.up('sm')]: {
+      width: '100%',
+    },
   },
 }));
-
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -81,19 +84,19 @@ const Navbar = () => {
         console.error('Error fetching notifications:', error);
       }
     };
-
+  
     fetchStoredNotifications();
-
+  
     const socket = io('https://placement-cell-iczn.onrender.com/');
-
+  
     socket.on('connect', () => {
       console.log('Socket connected:', socket.id);
     });
-
+  
     socket.on('disconnect', () => {
       console.log('Socket disconnected');
     });
-
+  
     socket.on('newJob', (job) => {
       console.log('New job received:', job);
       const newNotification = {
@@ -111,49 +114,26 @@ const Navbar = () => {
       setNotifications(prevNotifications => [...prevNotifications, notification]);
       setNewJobsCount(prevCount => prevCount + 1);
     });
-
+  
     return () => {
       socket.disconnect();
     };
   }, []);
 
-  //const handleNotificationClick = async () => {
-  //if (clickCount === 1) {
-  //  try {
-  //    await axios.delete(`/api/notifications/${userId}`);
-  //    setNotifications([]);
-  //    setNewJobsCount(0);
-  //  } catch (error) {
-  //    console.error('Error clearing notifications:', error);
-  //  }
-  //}
-  //setClickCount(prevCount => prevCount + 1);
-  //setNotificationOpen(!notificationOpen);
-//}
-const handleNotificationClick = () => {
-  // Toggle the notification panel when the icon is clicked
-  setNotificationOpen(!notificationOpen);
-
-  // Reset the click count logic since we're only toggling the panel
-  setClickCount(prevCount => prevCount + 1);
-};
+  const handleNotificationClick = () => {
+    setNotificationOpen(!notificationOpen);
+    setClickCount(prevCount => prevCount + 1);
+  };
   
   const handleMarkAllAsRead = async () => {
     try {
-      // Call your API to mark all notifications as read
-      //await axios.put(`/api/notifications/mark-all-read/${userId}`);
-  
-      // Call your API to delete all notifications
       await axios.delete(`/api/notifications/${userId}`);
-  
-      // Update the notification state and count
       setNotifications([]);
       setNewJobsCount(0);
     } catch (error) {
       console.error('Error marking notifications as read and deleting:', error);
     }
   };
-  
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -254,17 +234,18 @@ const handleNotificationClick = () => {
         </IconButton>
         <p>Profile</p>
       </MenuItem>
-      <MenuItem onClick={() => { navigate('/home/user-profile'); handleMenuClose(); }}>
+      {/* Add logout option for small screens */}
+      <MenuItem onClick={logOut}>
         <IconButton
           size='large'
-          aria-label='account of current user'
-          aria-controls={menuId}
+          aria-label='logout'
+          aria-controls={mobileMenuId}
           aria-haspopup='true'
           color='inherit'
         >
           <AccountCircle />
         </IconButton>
-        <p onClick={logOut}>Logout</p>
+        <p>Logout</p>
       </MenuItem>
     </Menu>
   );
@@ -274,7 +255,11 @@ const handleNotificationClick = () => {
       <AppBar position='static' sx={{ backgroundColor: '#1E2A38' }}>
         <Toolbar>
           <Link to="/home">
-            <img className='h-24 mx-2' src={logo} alt="msit-logo" />
+            <img
+              className='h-16 -mx-1' 
+              src={logo}
+              alt="msit-logo"
+            />
           </Link>
           <Search>
             <SearchIconWrapper>
@@ -286,14 +271,14 @@ const handleNotificationClick = () => {
               onChange={handleSearchChange}
               onKeyDown={handleSearchSubmit}
               inputProps={{ 'aria-label': 'search' }}
-              sx={{ color: '#D1D5DB', '& .MuiInputBase-input': { color: '#D1D5DB' } }}
+              sx={{ color: '#D1D5DB' }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
               <Badge badgeContent={0} color='error'>
-                {/* <MailIcon sx={{ color: '#D1D5DB' }} /> */}
+                <MailIcon sx={{ color: '#D1D5DB' }} />
               </Badge>
             </IconButton>
             <IconButton
@@ -335,56 +320,55 @@ const handleNotificationClick = () => {
       {renderMobileMenu}
       {renderMenu}
       {notificationOpen && (
-  <Box
-    sx={{
-      position: 'absolute',
-      top: '60px',
-      right: '20px',
-      width: '300px',
-      backgroundColor: '#1E2A38',
-      color: '#D1D5DB',
-      borderRadius: '8px',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-      zIndex: 1000,  // Ensure it's above other content
-      p: 2,
-    }}
-  >
-    {notifications.length > 0 ? (
-      <>
-        {notifications.map((notification, index) => (
-          <Box key={index} sx={{ mb: 2 }}>
-            <Typography variant='body2' color='#D1D5DB'>
-              {notification.message}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '60px',
+            right: '20px',
+            width: '300px',
+            backgroundColor: '#1E2A38',
+            color: '#D1D5DB',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            zIndex: 1000,
+            p: 2,
+          }}
+        >
+          {notifications.length > 0 ? (
+            <>
+              {notifications.map((notification, index) => (
+                <Box key={index} sx={{ mb: 2 }}>
+                  <Typography variant='body2' color='#D1D5DB'>
+                    {notification.message}
+                  </Typography>
+                  <Typography variant='caption' color='#9CA3AF'>
+                    {new Date(notification.createdAt).toLocaleString()}
+                  </Typography>
+                </Box>
+              ))}
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <button
+                  onClick={handleMarkAllAsRead}
+                  style={{
+                    backgroundColor: '#D1D5DB',
+                    color: '#1E2A38',
+                    padding: '6px 12px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Mark All as Read
+                </button>
+              </Box>
+            </>
+          ) : (
+            <Typography variant='body2' color='#9CA3AF'>
+              No notifications.
             </Typography>
-            <Typography variant='caption' color='#9CA3AF'>
-              {new Date(notification.createdAt).toLocaleString()}
-            </Typography>
-          </Box>
-        ))}
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-          <button
-            onClick={handleMarkAllAsRead}
-            style={{
-              backgroundColor: '#D1D5DB',
-              color: '#1E2A38',
-              padding: '6px 12px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
-            Mark All as Read
-          </button>
+          )}
         </Box>
-      </>
-    ) : (
-      <Typography variant='body2' color='#9CA3AF'>
-        No notifications.
-      </Typography>
-    )}
-  </Box>
-)}
-
+      )}
     </Box>
   );
 };
