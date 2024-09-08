@@ -84,7 +84,7 @@ const Navbar = () => {
 
     fetchStoredNotifications();
 
-    const socket = io('http://localhost:8000');
+    const socket = io('https://placement-cell-iczn.onrender.com/');
 
     socket.on('connect', () => {
       console.log('Socket connected:', socket.id);
