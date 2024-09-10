@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { styled } from '@mui/material/styles';
+
 import { Typography, Button, Dialog,DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material';
 
@@ -23,6 +25,8 @@ const JobDetailsPageUser = () => {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
   const [redirected, setRedirected] = useState(false);
+  const userId = localStorage.getItem('userId')?.trim();
+
 
 
   useEffect(() => {
@@ -109,7 +113,7 @@ const JobDetailsPageUser = () => {
             </Typography>
 
             <ApplyButton
-              
+
               startIcon={<ArrowForward />}
               onClick={handleApplyClick}>
               Apply
