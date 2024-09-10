@@ -173,14 +173,14 @@ const JobCard = ({ job }) => {
           <Applicants>Applicants: {job?.applicants?.length}</Applicants>
         </JobDetails>
        <Link to={`/job/${job._id}`}>
-       <Button >View Job</Button>
+       
        <ApplyButton startIcon={<ArrowForward />} >
           View Job
         </ApplyButton>
        </Link>
       </InfoContainer>
 
-      <Dialog open={redirected} onClose={handleClose}>
+      {/* <Dialog open={redirected} onClose={handleClose}>
         <DialogTitle>Confirm Application</DialogTitle>
         <DialogContent>
           <p>Have you applied for this job?</p>
@@ -193,7 +193,7 @@ const JobCard = ({ job }) => {
             Yes
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </CardContainer>
   );
 };
