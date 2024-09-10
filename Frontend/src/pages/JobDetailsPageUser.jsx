@@ -24,7 +24,15 @@ const JobDetailsPageUser = () => {
 
   const handleApplyClick = () => {
     window.open(job.applyURL, '_blank');
+    setRedirected(true);
+
   };
+
+
+  const handleClose = () => {
+    setRedirected(false);
+  };
+
 
   const handleConfirm = async (confirmed) => {
     if (confirmed) {
@@ -43,9 +51,7 @@ const JobDetailsPageUser = () => {
     handleClose();
   };
 
-  const handleClose = () => {
-    setRedirected(false);
-  };
+
 
   return job ? (
     <>
