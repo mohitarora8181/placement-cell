@@ -4,6 +4,7 @@ import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import { ArrowForward } from '@mui/icons-material';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 // Styled components with a job portal theme
 const CardContainer = styled('div')(({ theme }) => ({
@@ -171,9 +172,12 @@ const JobCard = ({ job }) => {
           <CTC>CTC: {job.ctc} LPA</CTC>
           <Applicants>Applicants: {job?.applicants?.length}</Applicants>
         </JobDetails>
-        <ApplyButton startIcon={<ArrowForward />} onClick={handleApplyClick}>
-          Apply
+       <Link to={`/job/${job._id}`}>
+       <Button >View Job</Button>
+       <ApplyButton startIcon={<ArrowForward />} >
+          View Job
         </ApplyButton>
+       </Link>
       </InfoContainer>
 
       <Dialog open={redirected} onClose={handleClose}>
