@@ -115,11 +115,8 @@ const getUsers = async (req, res) => {
       if (degree) filters.degree = new RegExp(degree, 'i');
       if (course) filters.course = new RegExp(course, 'i');
       if (nationality) filters.nationality = new RegExp(nationality, 'i');
-      if (yearOfPassing) filters.yearOfPassing = new RegExp(yearOfPassing, 'i');
-      if (gapYear) filters.gapYear = new RegExp(gapYear, 'i');
-      if (activeBacklogs) filters.activeBacklogs = new RegExp(activeBacklogs, 'i');
   
-      // Handling range filters for twelfthPercentage and cgpa
+      
       if (twelfthPercentage) {
         const [minTwelfth, maxTwelfth] = twelfthPercentage.split(',').map(Number);
         filters.twelfthPercentage = { $gte: minTwelfth, $lte: maxTwelfth };
@@ -128,6 +125,11 @@ const getUsers = async (req, res) => {
         const [minCgpa, maxCgpa] = cgpa.split(',').map(Number);
         filters.cgpa = { $gte: minCgpa, $lte: maxCgpa };
       }
+  
+      
+      if (yearOfPassing) filters.yearOfPassing = Number(yearOfPassing);
+      if (gapYear) filters.gapYear = Number(gapYear);
+      if (activeBacklogs) filters.activeBacklogs = Number(activeBacklogs);
   
       // Log the filters to verify
       console.log('Applying filters:', filters);
@@ -138,6 +140,7 @@ const getUsers = async (req, res) => {
       res.status(500).json({ message: 'Error fetching users' });
     }
 };
+
 // const getCompanies = async (req, res) => {
 //     const {
 //       jobTitle,
