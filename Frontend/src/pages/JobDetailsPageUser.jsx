@@ -3,14 +3,14 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Typography, Button, Dialog,DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material';
-import AppliedUserCard from '../components/AppliedUserCard.jsx';
-import AdminNav from '../components/AdminNav.jsx';
+
+import Navbar from '../components/Navbar.jsx';
 
 const JobDetailsPageUser = () => {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
   const [redirected, setRedirected] = useState(false);
- 
+
 
   useEffect(() => {
     axios.get(`https://placement-cell-iczn.onrender.com/api/jobs/${jobId}`)
@@ -49,7 +49,7 @@ const JobDetailsPageUser = () => {
 
   return job ? (
     <>
-      <AdminNav />
+      <Navbar/>
       <div className="p-8 mx-auto">
         <div className='flex w-[80%] shadow-md mx-auto p-4 rounded-md'>
           <div className='mr-8'>
