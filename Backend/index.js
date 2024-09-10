@@ -29,7 +29,7 @@ const { server, io } = setupSocketIO(app);
 
 // API Routes
 app.use('/api/users', userRoutes);
-app.use('/api', jobRoutes); // Correctly scoped route for jobs
+app.use('/api', jobRoutes); 
 
 // Serve static files
 const __dirname = path.resolve();

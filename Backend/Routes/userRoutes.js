@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authUser, signup } from '../controller/user.controller.js';
+import { authUser, getUsers, signup } from '../controller/user.controller.js';
 import express from 'express';
 import User from '../models/SignupModel.js';
 import Job from '../models/Job.model.js';
@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post('/sign-up', signup);
 router.post('/sign-in', authUser);
+router.get('/find', getUsers);
 
 router.get('/profile/:userId', protect,async (req, res) => {
   try {
@@ -88,6 +89,40 @@ router.get('/find', async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error });
   }
 });
+// router.get('/api/users/find', protect, async (req, res) => {
+//   const {
+//     degree,
+//     course,
+//     twelfthPercentage,
+//     nationality,
+//     cgpa,
+//     yearOfPassing,
+//     gapYear,
+//     activeBacklogs
+//   } = req.query;
+
+//   try {
+//     const filters = {};
+//     if (degree) filters.degree = degree;
+//     if (course) filters.course = course;
+//     if (twelfthPercentage) filters.twelfthPercentage = twelfthPercentage;
+//     if (nationality) filters.nationality = nationality;
+//     if (cgpa) filters.cgpa = cgpa;
+//     if (yearOfPassing) filters.yearOfPassing = yearOfPassing;
+//     if (gapYear) filters.gapYear = gapYear;
+//     if (activeBacklogs) filters.activeBacklogs = activeBacklogs;
+
+//     // Log the filters to verify
+//     console.log('Applying filters:', filters);
+
+//     const users = await User.find(filters);
+//     res.json(users);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching users' });
+//   }
+// });
+
+
 
 
 router.get('/:userId', protect, async (req, res) => {

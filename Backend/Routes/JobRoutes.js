@@ -195,8 +195,41 @@ router.post('/notify', async (req, res) => {
     res.status(500).json({ message: 'Server error. Could not send notifications.' });
   }
 });
+router.get('/companies', async (req, res) => {
+  const {
+      jobTitle,
+      location,
+      type,
+      ctc
+  } = req.query;
 
+  try {
+      const filters = {};
 
+      if (jobTitle) filters.jobTitle = new RegExp(jobTitle, 'i');
+      if (location) filters.location = new RegExp(location, 'i');
+      if (type) filters.type = new RegExp(type, 'i');
+
+      if (ctc) {
+          const [minCtc, maxCtc] = ctc.split(',').map(Number);
+          if (isNaN(minCtc) || isNaN(maxCtc)) {
+              return res.status(400).json({ message: 'Invalid CTC range' });
+          }
+          
+          filters.ctc = { $gte: Math.max(minCtc, 0), $lte: Math.min(maxCtc, 100) };
+      } else {
+          filters.ctc = { $gte: 0, $lte: 100 }; // Default range if not provided
+      }
+
+      console.log('Applying filters:', filters);
+
+      const companies = await Job.find(filters);
+      res.json(companies);
+  } catch (error) {
+      console.error('Error fetching companies:', error); // Log detailed error
+      res.status(500).json({ message: 'Error fetching companies', error: error.message });
+  }
+});
 
 
 
