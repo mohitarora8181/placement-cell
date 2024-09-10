@@ -64,13 +64,12 @@ const NotificationForm = () => {
           </label>
         )}
 <span className='flex w-full'>
-  <label className='mt-4 mr-2'>
-    Message:
-  </label>
+  
   <textarea
     className='bg-gray-50 border-2 border-black h-48 w-[100%]' // Increase height here
     value={message}
     onChange={(e) => setMessage(e.target.value)}
+    placeholder='What do you want to notify about?'
   />
 </span>
 
