@@ -84,19 +84,19 @@ const Navbar = () => {
         console.error('Error fetching notifications:', error);
       }
     };
-  
+
     fetchStoredNotifications();
-  
+
     const socket = io('https://placement-cell-iczn.onrender.com/');
-  
+
     socket.on('connect', () => {
       console.log('Socket connected:', socket.id);
     });
-  
+
     socket.on('disconnect', () => {
       console.log('Socket disconnected');
     });
-  
+
     socket.on('newJob', (job) => {
       console.log('New job received:', job);
       const newNotification = {
@@ -114,7 +114,7 @@ const Navbar = () => {
       setNotifications(prevNotifications => [...prevNotifications, notification]);
       setNewJobsCount(prevCount => prevCount + 1);
     });
-  
+
     return () => {
       socket.disconnect();
     };
@@ -124,7 +124,7 @@ const Navbar = () => {
     setNotificationOpen(!notificationOpen);
     setClickCount(prevCount => prevCount + 1);
   };
-  
+
   const handleMarkAllAsRead = async () => {
     try {
       await axios.delete(`/api/notifications/${userId}`);
@@ -256,7 +256,7 @@ const Navbar = () => {
         <Toolbar>
           <Link to="/home">
             <img
-              className='h-16 -mx-1' 
+              className='h-20 -mx-1'
               src={logo}
               alt="msit-logo"
             />
@@ -278,7 +278,7 @@ const Navbar = () => {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
               <Badge badgeContent={0} color='error'>
-                <MailIcon sx={{ color: '#D1D5DB' }} />
+                {/* <MailIcon sx={{ color: '#D1D5DB' }} /> */}
               </Badge>
             </IconButton>
             <IconButton
