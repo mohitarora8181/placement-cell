@@ -39,7 +39,7 @@ const NotificationForm = () => {
   return (
     <>
       <AdminNav />
-      {/* Send notification page */}
+      
 
       <div className='mx-auto flex flex-col items-center justify-center p-4  w-[100%] '>
         <h2 className='font-bold text-xl text-center mb-4'>
