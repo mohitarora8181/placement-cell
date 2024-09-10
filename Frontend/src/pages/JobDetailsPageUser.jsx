@@ -6,6 +6,19 @@ import { ArrowForward } from '@mui/icons-material';
 
 import Navbar from '../components/Navbar.jsx';
 
+
+const ApplyButton = styled(Button)(({ theme }) => ({
+  backgroundColor: '#00796b',
+  color: '#ffffff',
+  fontWeight: 'bold',
+  borderRadius: '20px',
+  padding: '10px 20px',
+  textTransform: 'uppercase',
+  '&:hover': {
+    backgroundColor: '#004d40',
+  },
+}));
+
 const JobDetailsPageUser = () => {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
@@ -95,13 +108,12 @@ const JobDetailsPageUser = () => {
               <strong>Total Applicants:</strong> {job.applicants ? job.applicants.length : 0}
             </Typography>
 
-            <Button
-              variant="contained"
-              color="success"
+            <ApplyButton
+              
               startIcon={<ArrowForward />}
               onClick={handleApplyClick}>
               Apply
-            </Button>
+            </ApplyButton>
           </div>
         </div>
       </div>
