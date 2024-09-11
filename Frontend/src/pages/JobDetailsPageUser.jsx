@@ -118,6 +118,36 @@ const JobDetailsPageUser = () => {
               onClick={handleApplyClick}>
               Apply
             </ApplyButton>
+
+            <div className="mt-6">
+  <Typography variant="h6" gutterBottom>
+    Shortlisted Students:
+  </Typography>
+  
+  {job.shortlistLink ? (
+    // If a link is provided, display it
+    <Typography variant="body1" color="primary">
+      <a href={job.shortlistLink} target="_blank" rel="noopener noreferrer">
+        View Shortlisted Students
+      </a>
+    </Typography>
+  ) : job.shortlistedStudents && job.shortlistedStudents.length > 0 ? (
+    // If students are manually entered, display them as a list
+    <ul>
+      {job.shortlistedStudents.map((student, index) => (
+        // Ensure you're accessing specific properties of the student object
+        <li key={index}>{student.name} ({student.email})</li>
+      ))}
+    </ul>
+  ) : (
+    // If nothing is provided, show the "Yet to announce" message
+    <Typography variant="body1" color="textSecondary">
+      Yet to announce
+    </Typography>
+  )}
+</div>
+
+
           </div>
         </div>
       </div>

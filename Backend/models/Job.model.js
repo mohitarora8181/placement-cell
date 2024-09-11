@@ -48,6 +48,10 @@ const jobSchema = new mongoose.Schema({
     required: function() { return this.postedBy !== null; }, 
     default: null,  
   },
+  shortlistedStudents: {
+    type: mongoose.Schema.Types.Mixed, // Can be a URL (String) or a list of students
+    required: false, // Optional field
+  },
 }, {
   timestamps: true, 
 });

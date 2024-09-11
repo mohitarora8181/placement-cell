@@ -16,6 +16,7 @@ import { Navigate } from 'react-router-dom';
 import EditProfile from './pages/EditProfile';
 import NotificationForm from './pages/Notification';
 import JobDetailsPageUser from './pages/JobDetailsPageUser';
+import ShortlistForm from './pages/shortlistForm';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -98,6 +99,7 @@ function App() {
 
         <Route path="/search" element={<SearchJobs />} />
         <Route path="/notify" element={<NotificationForm />} />
+        <Route path="//shortlisted-students" element={<ShortlistForm />} />
 
         <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
       </Routes>

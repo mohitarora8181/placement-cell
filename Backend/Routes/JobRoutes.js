@@ -233,6 +233,33 @@ router.get('/companies', async (req, res) => {
 
 
 
+// Endpoint to save the shortlisted students for a job/company
+router.post('/jobs/shortlist', async (req, res) => {
+  const { companyName, shortlistedStudents } = req.body;
+
+  try {
+    // Find the job by company name, ignoring case
+    const job = await Job.findOne({ companyName: { $regex: new RegExp(companyName, 'i') } });
+    
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
+
+    // Update the job with the shortlisted students
+    job.shortlistedStudents = shortlistedStudents;
+    await job.save();
+
+    res.status(200).json({ message: 'Shortlisted students saved successfully' });
+  } catch (error) {
+    console.error('Error saving shortlist:', error);
+    res.status(500).json({ message: 'Failed to save shortlisted students' });
+  }
+});
+
+
+
+
+
 
 
 

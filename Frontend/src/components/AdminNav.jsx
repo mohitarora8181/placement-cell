@@ -12,6 +12,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Ensure axios is imported
 import logo from '../images/logo-pc.png';
+import ChecklistIcon from '@mui/icons-material/Checklist';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -131,6 +132,9 @@ const AdminNav = ({ currentVal }) => {
   const handleNotifyClick = () => {
     navigate('/notify');
   };
+  const handleShortlistedClick = () => {
+    navigate('/shortlisted-students'); // Route to the page that manages shortlisted students
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' sx={{ backgroundColor: '#FFF' }}>
@@ -191,6 +195,9 @@ const AdminNav = ({ currentVal }) => {
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton color="inherit" onClick={handleShortlistedClick}>
+              <ChecklistIcon sx={{ color: '#000' }} />
+            </IconButton>
           <NotifyButton onClick={handleNotifyClick} sx={{marginRight:4}}>🔔</NotifyButton>
             <LogoutButton onClick={logOut}>Log Out</LogoutButton>
           </Box>
