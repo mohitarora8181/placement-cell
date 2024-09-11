@@ -274,7 +274,7 @@ const AdminPage = () => {
               </div>
             )}
             {tabValue === 'add-job' && (
-              <div className="w-full max-w-2xl">
+              <div className="flex justify-center items-center">
                 <AddJob />
               </div>
             )}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import axios from 'axios';
-
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -12,11 +11,12 @@ import SearchJobs from './pages/SearchJobs';
 import UserProfile from './pages/UserProfile';
 import JobDetails from './pages/JobDetails';
 import SearchUsers from './components/SearchUsers';
-import { Navigate } from 'react-router-dom';
 import EditProfile from './pages/EditProfile';
 import NotificationForm from './pages/Notification';
 import JobDetailsPageUser from './pages/JobDetailsPageUser';
 import ShortlistForm from './pages/shortlistForm';
+import Footer from './components/Footer';
+import MeetTheTeam from './components/MeetTheTeam';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -79,8 +79,16 @@ function App() {
     return <div>Loading...</div>;
   }
 
+  
+  const showFooter = [
+    '/home',
+    '/admin',
+    '/meet-the-team',
+    '/post-job'
+  ].includes(location.pathname);
+
   return (
-    <div className=' min-h-screen'>
+    <div className='min-h-screen'>
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/sign-in" element={<SignIn />} />
@@ -92,17 +100,19 @@ function App() {
         <Route path="/edit-profile" element={role === 'user' ? <EditProfile /> : <Navigate to="/" />} />
 
         <Route path="/user-profile/:userId" element={role === 'admin' ? <UserProfile /> : <Navigate to="/" />} />
-        <Route path="/job/:jobId" element={role === 'admin' ? <JobDetails /> : <JobDetailsPageUser/>} />
+        <Route path="/job/:jobId" element={role === 'admin' ? <JobDetails /> : <JobDetailsPageUser />} />
         <Route path="/admin" element={role === 'admin' ? <AdminPage /> : <Navigate to="/" />} />
         <Route path="/admin/post-job" element={role === 'admin' ? <AddJob /> : <Navigate to="/" />} />
         <Route path="/admin/user-search" element={role === 'admin' ? <SearchUsers /> : <Navigate to="/" />} />
 
         <Route path="/search" element={<SearchJobs />} />
         <Route path="/notify" element={<NotificationForm />} />
-        <Route path="//shortlisted-students" element={<ShortlistForm />} />
+        <Route path="/shortlisted-students" element={<ShortlistForm />} />
+        <Route path="/meet-the-team" element={<MeetTheTeam />} />
 
         <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
       </Routes>
+      {showFooter && <Footer />}
     </div>
   );
 }
