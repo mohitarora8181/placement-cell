@@ -145,7 +145,7 @@ const AdminNav = ({ currentVal }) => {
             component='div'
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            <Link to='/'>
+            <Link to='/admin'>
             <img className='h-24 mx-2' src={logo} alt="logo" />
             </Link>
           </Typography>
