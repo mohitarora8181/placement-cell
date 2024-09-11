@@ -5,20 +5,20 @@ import generateToken from '../config/generateToken.js';
 
 const signup = asyncHandler(async (req, res) => {
     const {
-        username, email, fullname, password, dob, degree, course, twelfthPercentage, diplomaPercentage,
-        nationality, cgpa, address, school12th, tenthPercentage, gapYear, yearOfPassing, activeBacklogs,
-        contactNumber
+         email, fullname, password, dob, degree, course, twelfthPercentage, diplomaPercentage,
+        nationality, cgpa, tenthPercentage, gapYear, yearOfPassing, activeBacklogs, backlogsCleared,
+        contactNumber, linkedIn, leetCode, github, portfolio, state, city,
     } = req.body;
 
     const userExist = await User.findOne({ email });
     if (userExist) {
         res.status(400);
-        throw new Error("Email already exists");
+        throw new Error("An user with this email address already exists.");
     }
 
     try {
         const user = await User.create({
-            username,
+
             email,
             fullname,
             password,
@@ -29,8 +29,14 @@ const signup = asyncHandler(async (req, res) => {
             diplomaPercentage,
             nationality,
             cgpa,
-            address,
-            school12th,
+
+            linkedIn,
+            leetCode,
+            github,
+            portfolio,
+            backlogsCleared,
+            state,
+            city,
             tenthPercentage,
             gapYear,
             yearOfPassing,
@@ -41,7 +47,7 @@ const signup = asyncHandler(async (req, res) => {
 
         res.status(201).json({
             _id: user._id,
-            username: user.username,
+
             email: user.email,
             fullname: user.fullname,
             dob: user.dob,
@@ -51,8 +57,16 @@ const signup = asyncHandler(async (req, res) => {
             diplomaPercentage: user.diplomaPercentage,
             nationality: user.nationality,
             cgpa: user.cgpa,
-            address: user.address,
-            school12th: user.school12th,
+
+            leetCode: user.leetCode,
+            github: user.github,
+            portfolio: user.portfolio,
+            backlogsCleared: user.backlogsCleared,
+            linkedIn: user.linkedIn,
+
+            state: user.state,
+            city: user.city,
+
             tenthPercentage: user.tenthPercentage,
             gapYear: user.gapYear,
             yearOfPassing: user.yearOfPassing,
@@ -80,7 +94,7 @@ const authUser = asyncHandler(async (req, res) => {
             const isMatch = await user.matchPassword(password);
 
             if (isMatch) {
-               
+
                 res.json({
                     _id: user._id,
                     username: user.username,
@@ -109,14 +123,14 @@ const getUsers = async (req, res) => {
       gapYear,
       activeBacklogs
     } = req.query;
-  
+
     try {
       const filters = {};
       if (degree) filters.degree = new RegExp(degree, 'i');
       if (course) filters.course = new RegExp(course, 'i');
       if (nationality) filters.nationality = new RegExp(nationality, 'i');
-  
-      
+
+
       if (twelfthPercentage) {
         const [minTwelfth, maxTwelfth] = twelfthPercentage.split(',').map(Number);
         filters.twelfthPercentage = { $gte: minTwelfth, $lte: maxTwelfth };
@@ -125,15 +139,15 @@ const getUsers = async (req, res) => {
         const [minCgpa, maxCgpa] = cgpa.split(',').map(Number);
         filters.cgpa = { $gte: minCgpa, $lte: maxCgpa };
       }
-  
-      
+
+
       if (yearOfPassing) filters.yearOfPassing = Number(yearOfPassing);
       if (gapYear) filters.gapYear = Number(gapYear);
       if (activeBacklogs) filters.activeBacklogs = Number(activeBacklogs);
-  
+
       // Log the filters to verify
       console.log('Applying filters:', filters);
-  
+
       const users = await User.find(filters);
       res.json(users);
     } catch (error) {
@@ -148,22 +162,22 @@ const getUsers = async (req, res) => {
 //       type,
 //       ctc
 //     } = req.query;
-  
+
 //     try {
 //       const filters = {};
 //       if (jobTitle) filters.jobTitle = new RegExp(jobTitle, 'i');
 //       if (location) filters.location = new RegExp(location, 'i');
 //       if (type) filters.type = new RegExp(type, 'i');
-      
+
 //       // Handling range filter for ctc
 //       if (ctc) {
 //         const [minCtc, maxCtc] = ctc.split(',').map(Number);
 //         filters.ctc = { $gte: minCtc, $lte: maxCtc };
 //       }
-  
+
 //       // Log the filters to verify
 //       console.log('Applying filters:', filters);
-  
+
 //       const companies = await Company.find(filters);
 //       res.json(companies);
 //     } catch (error) {
@@ -171,8 +185,8 @@ const getUsers = async (req, res) => {
 //     }
 // };
 
-  
-  
-  
+
+
+
 
 export { signup, authUser , getUsers};
