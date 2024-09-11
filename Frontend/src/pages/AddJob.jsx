@@ -70,7 +70,7 @@ const AddJob = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-8 bg-gray-100 rounded-lg shadow-lg">
+    <div className="w-full max-w-3xl mx-auto p-8 bg-gray-100 rounded-lg shadow-lg ">
       <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6">Add a New Job</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
