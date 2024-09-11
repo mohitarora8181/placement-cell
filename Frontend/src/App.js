@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -17,6 +16,8 @@ import EditProfile from './pages/EditProfile';
 import NotificationForm from './pages/Notification';
 import JobDetailsPageUser from './pages/JobDetailsPageUser';
 import ShortlistForm from './pages/shortlistForm';
+import Footer from './components/Footer';
+import MeetTheTeam from './components/MeetTheTeam';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -100,9 +101,14 @@ function App() {
         <Route path="/search" element={<SearchJobs />} />
         <Route path="/notify" element={<NotificationForm />} />
         <Route path="//shortlisted-students" element={<ShortlistForm />} />
+        <Route path="/meet-the-team" element={<MeetTheTeam />} />
+
+        
 
         <Route path="*" element={role === 'admin' ? <AdminPage /> : <Home />} />
+
       </Routes>
+      <Footer/>
     </div>
   );
 }
