@@ -45,6 +45,7 @@ const userSchema = new mongoose.Schema({
     },
     diplomaPercentage: {
         type: Number
+        
     },
     nationality: {
         type: String,
