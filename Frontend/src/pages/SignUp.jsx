@@ -29,7 +29,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username:'',
+    username: '',
     fullname: '',
     email: '',
     password: '',
@@ -42,22 +42,19 @@ const SignUp = () => {
     twelfthPercentage: '',
     diplomaPercentage: '',
     tenthPercentage: '',
-    school12th:'',
-    address:'',
-
-
+    school12th: '',
+    address: '',
     gapYear: '',
-
-
     activeBacklogs: '',
-
-
     nationality: '',
+    linkedin: '',
+    github: '',
+    leetCode: ''
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -73,8 +70,7 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(formData);
-    // Password length validation
+
     if (formData.password.length < 8) {
       toast.error('Password must be at least 8 characters long.');
       setLoading(false);
@@ -90,20 +86,18 @@ const SignUp = () => {
 
       const { data } = await axios.post('http://localhost:8000/api/users/sign-up', formData, config);
       const { _id, token, ...rest } = data;
-      console.log(data);
 
       if (_id) {
         localStorage.setItem('userId', _id);
         localStorage.setItem('userInfo', JSON.stringify(data));
-        toast.success('Registration Successful'); // Show success toast
+        toast.success('Registration Successful');
         navigate('/sign-in');
       } else {
-        console.error('User ID is missing in the response');
-        toast.error('Registration failed. Please try again.'); // Show error toast
+        toast.error('Registration failed. Please try again.');
       }
     } catch (error) {
       setError(error.response?.data?.message || 'An error occurred');
-      toast.error(error.response?.data?.message || 'An error occurred'); // Show error toast
+      toast.error(error.response?.data?.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -181,97 +175,101 @@ const SignUp = () => {
               onSubmit={handleSignUp}
             >
               {Object.keys(formData).map((key) => (
-  key === 'course' ? (
-    <FormControl
-      key={key}
-      variant="outlined"
-      margin="normal"
-      required
-      style={{
-        width: '100%',
-        maxWidth: '585px',
-        marginBottom: '16px',
-        backgroundColor: '#444',
-      }}
-    >
-      <InputLabel style={{ color: '#f5f5f5' }}>Course</InputLabel>
-      <Select
-        name="course"
-        value={formData.course}
-        onChange={handleChange}
-        style={{ color: '#f5f5f5' }}
-        label="Course"
-        MenuProps={{
-          PaperProps: {
-            style: {
-              backgroundColor: '#444',
-              color: '#f5f5f5',
-            },
-          },
-        }}
-      >
-        <MenuItem value="Computer Engineering">Computer Engineering</MenuItem>
-        <MenuItem value="Information Technology">Information Technology</MenuItem>
-        <MenuItem value="Electronics & Communication Engineering">Electronics & Communication Engineering</MenuItem>
-        <MenuItem value="Electrical Engineering">Electrical Engineering</MenuItem>
-      </Select>
-    </FormControl>
-  ) : (
-    <TextField
-      key={key}
-      variant='outlined'
-      margin='normal'
-      required
-      style={{
-        width: '100%',
-        maxWidth: '585px', // Fixed width for text fields
-        marginBottom: '16px',
-        backgroundColor: '#444',
-        color: '#f5f5f5',
-        borderColor: '#666',
-      }}
-      label={key.replace(/([A-Z])/g, ' $1').trim()}
-      name={key}
-      type={
-        key === 'password'
-          ? showPassword
-            ? 'text'
-            : 'password'
-          : key === 'dob'
-          ? 'date'
-          : 'text'
-      }
-      value={formData[key]}
-      onChange={handleChange}
-      InputLabelProps={{ style: { color: '#f5f5f5' } }}
-      InputProps={
-        key === 'password'
-          ? {
-              style: { color: '#f5f5f5' },
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleClickShowPassword}
-                    edge="end"
-                    style={{ color: '#f5f5f5', backgroundColor: 'transparent' }}
+                key === 'course' ? (
+                  <FormControl
+                    key={key}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    style={{
+                      width: '100%',
+                      maxWidth: '585px',
+                      marginBottom: '16px',
+                      backgroundColor: '#444',
+                    }}
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }
-          : { style: { color: '#f5f5f5' } }
-      }
-      onFocus={(e) => {
-        e.target.style.backgroundColor = '#555';
-      }}
-      onBlur={(e) => {
-        e.target.style.backgroundColor = '#444';
-      }}
-    />
-  )
-))}
-
+                    <InputLabel style={{ color: '#f5f5f5' }}>Course</InputLabel>
+                    <Select
+                      name="course"
+                      value={formData.course}
+                      onChange={handleChange}
+                      style={{ color: '#f5f5f5' }}
+                      label="Course"
+                      MenuProps={{
+                        PaperProps: {
+                          style: {
+                            backgroundColor: '#444',
+                            color: '#f5f5f5',
+                          },
+                        },
+                      }}
+                    >
+                      <MenuItem value="Computer Engineering">Computer Science Engineering</MenuItem>
+                      <MenuItem value="Information Technology">Information Technology</MenuItem>
+                      <MenuItem value="Electronics & Communication Engineering">Electronics & Communication Engineering</MenuItem>
+                      <MenuItem value="Electrical Engineering">Electrical Engineering</MenuItem>
+                    </Select>
+                  </FormControl>
+                ) : (
+                  <TextField
+                    key={key}
+                    variant='outlined'
+                    margin='normal'
+                    required
+                    style={{
+                      width: '100%',
+                      maxWidth: '585px',
+                      marginBottom: '16px', 
+                      backgroundColor: '#444',
+                      color: '#f5f5f5',
+                      borderColor: '#666',
+                    }}
+                    label={
+                      key === 'linkedIn' ? 'LinkedIn' :
+                      key === 'github' ? 'GitHub' :
+                      key === 'leetcode' ? 'LeetCode' :
+                      key.replace(/([A-Z])/g, ' $1').trim()
+                    }
+                    name={key}
+                    type={
+                      key === 'password'
+                        ? showPassword
+                          ? 'text'
+                          : 'password'
+                        : key === 'dob'
+                        ? 'date'
+                        : 'text'
+                    }
+                    value={formData[key]}
+                    onChange={handleChange}
+                    InputLabelProps={{ style: { color: '#f5f5f5' } }}
+                    InputProps={
+                      key === 'password'
+                        ? {
+                            style: { color: '#f5f5f5' },
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={handleClickShowPassword}
+                                  edge="end"
+                                  style={{ color: '#f5f5f5', backgroundColor: 'transparent' }}
+                                >
+                                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }
+                        : { style: { color: '#f5f5f5' } }
+                    }
+                    onFocus={(e) => {
+                      e.target.style.backgroundColor = '#555';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.backgroundColor = '#444';
+                    }}
+                  />
+                )
+              ))}
               <Button
                 type='submit'
                 fullWidth
@@ -333,7 +331,7 @@ const SignUp = () => {
           </div>
         </Container>
       </div>
-      <ToastContainer /> {/* Ensure ToastContainer is placed here */}
+      <ToastContainer />
     </>
   );
 };

@@ -7,7 +7,7 @@ const signup = asyncHandler(async (req, res) => {
     const {
         username, email, fullname, password, dob, degree, course, twelfthPercentage, diplomaPercentage,
         nationality, cgpa, address, school12th, tenthPercentage, gapYear, yearOfPassing, activeBacklogs,
-        contactNumber
+        contactNumber, linkedin, github, leetCode
     } = req.body;
 
     const userExist = await User.findOne({ email });
@@ -36,6 +36,9 @@ const signup = asyncHandler(async (req, res) => {
             yearOfPassing,
             activeBacklogs,
             contactNumber,
+            linkedin,
+            github,
+            leetCode,
             isAdmin: false
         });
 
@@ -58,6 +61,9 @@ const signup = asyncHandler(async (req, res) => {
             yearOfPassing: user.yearOfPassing,
             activeBacklogs: user.activeBacklogs,
             contactNumber: user.contactNumber,
+            linkedIn: user.linkedin,
+            github: user.github,
+            leetCode: user.leetCode,
             isAdmin: user.isAdmin,
             token: generateToken(user._id)
         });
@@ -98,81 +104,53 @@ const authUser = asyncHandler(async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 const getUsers = async (req, res) => {
     const {
-      degree,
-      course,
-      twelfthPercentage,
-      nationality,
-      cgpa,
-      yearOfPassing,
-      gapYear,
-      activeBacklogs
+        degree,
+        course,
+        twelfthPercentage,
+        nationality,
+        cgpa,
+        yearOfPassing,
+        gapYear,
+        activeBacklogs,
+        linkedin,
+        github,
+        leetCode
     } = req.query;
 
     try {
-      const filters = {};
-      if (degree) filters.degree = new RegExp(degree, 'i');
-      if (course) filters.course = new RegExp(course, 'i');
-      if (nationality) filters.nationality = new RegExp(nationality, 'i');
+        const filters = {};
+        if (degree) filters.degree = new RegExp(degree, 'i');
+        if (course) filters.course = new RegExp(course, 'i');
+        if (nationality) filters.nationality = new RegExp(nationality, 'i');
 
+        if (twelfthPercentage) {
+            const [minTwelfth, maxTwelfth] = twelfthPercentage.split(',').map(Number);
+            filters.twelfthPercentage = { $gte: minTwelfth, $lte: maxTwelfth };
+        }
+        if (cgpa) {
+            const [minCgpa, maxCgpa] = cgpa.split(',').map(Number);
+            filters.cgpa = { $gte: minCgpa, $lte: maxCgpa };
+        }
 
-      if (twelfthPercentage) {
-        const [minTwelfth, maxTwelfth] = twelfthPercentage.split(',').map(Number);
-        filters.twelfthPercentage = { $gte: minTwelfth, $lte: maxTwelfth };
-      }
-      if (cgpa) {
-        const [minCgpa, maxCgpa] = cgpa.split(',').map(Number);
-        filters.cgpa = { $gte: minCgpa, $lte: maxCgpa };
-      }
+        if (yearOfPassing) filters.yearOfPassing = Number(yearOfPassing);
+        if (gapYear) filters.gapYear = Number(gapYear);
+        if (activeBacklogs) filters.activeBacklogs = Number(activeBacklogs);
 
+        if (linkedin) filters.linkedin = new RegExp(linkedin, 'i');
+        if (github) filters.github = new RegExp(github, 'i');
+        if (leetCode) filters.leetCode = new RegExp(leetCode, 'i');
 
-      if (yearOfPassing) filters.yearOfPassing = Number(yearOfPassing);
-      if (gapYear) filters.gapYear = Number(gapYear);
-      if (activeBacklogs) filters.activeBacklogs = Number(activeBacklogs);
+        // Log the filters to verify
+        console.log('Applying filters:', filters);
 
-      // Log the filters to verify
-      console.log('Applying filters:', filters);
-
-      const users = await User.find(filters);
-      res.json(users);
+        const users = await User.find(filters);
+        res.json(users);
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching users' });
+        res.status(500).json({ message: 'Error fetching users' });
     }
 };
 
-// const getCompanies = async (req, res) => {
-//     const {
-//       jobTitle,
-//       location,
-//       type,
-//       ctc
-//     } = req.query;
-
-//     try {
-//       const filters = {};
-//       if (jobTitle) filters.jobTitle = new RegExp(jobTitle, 'i');
-//       if (location) filters.location = new RegExp(location, 'i');
-//       if (type) filters.type = new RegExp(type, 'i');
-
-//       // Handling range filter for ctc
-//       if (ctc) {
-//         const [minCtc, maxCtc] = ctc.split(',').map(Number);
-//         filters.ctc = { $gte: minCtc, $lte: maxCtc };
-//       }
-
-//       // Log the filters to verify
-//       console.log('Applying filters:', filters);
-
-//       const companies = await Company.find(filters);
-//       res.json(companies);
-//     } catch (error) {
-//       res.status(500).json({ message: 'Error fetching companies' });
-//     }
-// };
-
-
-
-
-
-export { signup, authUser , getUsers};
+export { signup, authUser, getUsers };
