@@ -197,6 +197,7 @@ router.post('/notify', async (req, res) => {
 });
 router.get('/companies', async (req, res) => {
   const {
+      companyName,
       jobTitle,
       location,
       type,
@@ -255,12 +256,6 @@ router.post('/jobs/shortlist', async (req, res) => {
     res.status(500).json({ message: 'Failed to save shortlisted students' });
   }
 });
-
-
-
-
-
-
 
 
 
