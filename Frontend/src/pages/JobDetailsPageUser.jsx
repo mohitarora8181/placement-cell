@@ -124,29 +124,33 @@ const JobDetailsPageUser = () => {
     Shortlisted Students:
   </Typography>
   
-  {job.shortlistLink ? (
-    // If a link is provided, display it
+  {/* Check if shortlistedStudents is a string (URL link) */}
+  {typeof job.shortlistedStudents === 'string' ? (
     <Typography variant="body1" color="primary">
-      <a href={job.shortlistLink} target="_blank" rel="noopener noreferrer">
+      <a href={job.shortlistedStudents} target="_blank" rel="noopener noreferrer">
         View Shortlisted Students
       </a>
     </Typography>
-  ) : job.shortlistedStudents && job.shortlistedStudents.length > 0 ? (
-    // If students are manually entered, display them as a list
-    <ul>
-      {job.shortlistedStudents.map((student, index) => (
-        // Ensure you're accessing specific properties of the student object
-        <li key={index}>{student.name} ({student.email})</li>
-      ))}
-    </ul>
   ) : (
-    // If nothing is provided, show the "Yet to announce" message
-    <Typography variant="body1" color="textSecondary">
-      Yet to announce
-    </Typography>
+    // Check if shortlistedStudents is an array
+    Array.isArray(job.shortlistedStudents) && job.shortlistedStudents.length > 0 ? (
+      <ul>
+        {job.shortlistedStudents.map((student, index) => (
+          <li key={index}>
+            {student.name} ({student.email})
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <Typography variant="body1" color="textSecondary">
+        Yet to announce
+      </Typography>
+    )
   )}
 </div>
 
+
+ 
 
           </div>
         </div>
