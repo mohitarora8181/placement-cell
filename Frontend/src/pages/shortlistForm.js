@@ -94,7 +94,7 @@ const ShortlistForm = () => {
 
   return (
     <div className="flex flex-col md:flex-row gap-6 p-6 max-w-7xl mx-auto">
-      <div className="bg-white shadow-lg rounded-lg flex-1 p-6">
+      <div className="bg-gray-100 shadow-lg rounded-lg flex-1 p-6">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Submit Shortlisted Students</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -103,7 +103,7 @@ const ShortlistForm = () => {
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               required
-              className="w-full p-3 border rounded-md shadow-sm bg-gray-100 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
+              className="w-full p-3 border rounded-md shadow-sm bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
             >
               <option value="" disabled>Select a company</option>
               {companyNames.map((name, index) => (
@@ -119,7 +119,7 @@ const ShortlistForm = () => {
             <select
               value={sendAsLink ? 'link' : 'list'}
               onChange={(e) => setSendAsLink(e.target.value === 'link')}
-              className="w-full p-3 border rounded-md shadow-sm bg-gray-100 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
+              className="w-full p-3 border rounded-md shadow-sm bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
             >
               <option value="link">Link</option>
               <option value="list">Manual List</option>
@@ -134,7 +134,7 @@ const ShortlistForm = () => {
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
                 required
-                className="w-full p-3 border rounded-md shadow-sm bg-gray-100 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
+                className="w-full p-3 border rounded-md shadow-sm bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
               />
             </div>
           ) : (
@@ -147,8 +147,7 @@ const ShortlistForm = () => {
                     type="text"
                     value={formStudent.name}
                     onChange={(e) => updateStudentForm('name', e.target.value)}
-                    required
-                    className="w-full p-3 border rounded-md shadow-sm bg-gray-100 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
+                    className="w-full p-3 border rounded-md shadow-sm bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
                   />
                 </div>
                 <div>
@@ -157,22 +156,22 @@ const ShortlistForm = () => {
                     type="email"
                     value={formStudent.email}
                     onChange={(e) => updateStudentForm('email', e.target.value)}
-                    required
-                    className="w-full p-3 border rounded-md shadow-sm bg-gray-100 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
+                    className="w-full p-3 border rounded-md shadow-sm bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
                   />
                 </div>
               </div>
               <button
                 type="button"
                 onClick={addStudent}
-                className="w-full bg-gray-600 text-white py-2 rounded-md hover:bg-gray-700 transition-colors"
+                className={`w-full py-2 rounded-md transition-colors ${formStudent.name && formStudent.email ? 'bg-gray-600 text-white hover:bg-gray-700' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+                disabled={!formStudent.name || !formStudent.email}
               >
                 Add More Students
               </button>
             </>
           )}
 
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center">
             <button
               type="submit"
               className="submit-button"
@@ -183,11 +182,11 @@ const ShortlistForm = () => {
         </form>
       </div>
 
-      <div className="bg-gray-300 shadow-lg rounded-lg flex-1 p-6">
+      <div className="bg-gray-100 shadow-lg rounded-lg flex-1 p-6">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Job Details</h2>
         {jobDetails ? (
           jobDetails.map((job) => (
-            <div key={job._id} className="bg-white p-4 mb-4 shadow-md rounded-md">
+            <div key={job._id} className="bg-gray-200 p-4 mb-4 shadow-md rounded-md">
               <h3 className="text-xl font-semibold mb-2 text-gray-800">{job.jobTitle}</h3>
               <p className="mb-1 text-gray-700"><strong>Company:</strong> {job.companyName}</p>
               <p className="mb-1 text-gray-700"><strong>Location:</strong> {job.location}</p>
@@ -204,7 +203,7 @@ const ShortlistForm = () => {
           <div>
             <h3 className="text-2xl font-semibold mb-4 text-gray-800">Student List</h3>
             {students.map((student, index) => (
-              <div key={index} className="flex justify-between items-center p-4 mb-4 bg-gray-300 shadow-md rounded-md">
+              <div key={index} className="flex justify-between items-center p-4 mb-4 bg-gray-200 shadow-md rounded-md">
                 <div>
                   <p className="text-gray-700"><strong>Name:</strong> {student.name}</p>
                   <p className="text-gray-700"><strong>Email:</strong> {student.email}</p>
