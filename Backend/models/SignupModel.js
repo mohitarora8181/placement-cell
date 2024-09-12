@@ -2,7 +2,13 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
-    
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        index: true
+    },
     email: {
         type: String,
         required: true,
@@ -48,8 +54,13 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-
-
+    address: {
+        type: String,
+        required: true
+    },
+    school12th: {
+        type: String
+    },
     tenthPercentage: {
         type: Number
     },
@@ -77,41 +88,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-
-    linkedIn:{
-      type:String,
-      required:true
-    },
-    leetCode:{
-      type:String,
-      required:true,
-    },
-    github:{
-      type:String,
-      required:true,
-    },
-    portfolio:{
-      type:String,
-      required:true,
-    },
-
-    backlogsCleared:{
-      type: String,
-      required: true,
-    },
-    state:{
-      type: String,
-      required: true
-    },
-    city:{
-      type:String,
-      required: true,
-    },
-
     isAdmin: {
-      type: Boolean,
-      default: false
-  },
+        type: Boolean,
+        default: false
+    },
 
 }, {
     timestamps: true

@@ -29,6 +29,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
+    username:'',
     fullname: '',
     email: '',
     password: '',
@@ -41,21 +42,16 @@ const SignUp = () => {
     twelfthPercentage: '',
     diplomaPercentage: '',
     tenthPercentage: '',
-
-    github:'',
-    linkedIn:'',
-    leetCode:'',
-    portfolio:'',
-
+    school12th:'',
+    address:'',
 
 
     gapYear: '',
 
-    backlogsCleared:'',
+
     activeBacklogs: '',
 
-    state:'',
-    city:'',
+
     nationality: '',
   });
 
@@ -77,7 +73,7 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    console.log(formData);
     // Password length validation
     if (formData.password.length < 8) {
       toast.error('Password must be at least 8 characters long.');
@@ -92,8 +88,9 @@ const SignUp = () => {
         },
       };
 
-      const { data } = await axios.post('https://placement-cell-iczn.onrender.com/api/users/sign-up', formData, config);
+      const { data } = await axios.post('http://localhost:8000/api/users/sign-up', formData, config);
       const { _id, token, ...rest } = data;
+      console.log(data);
 
       if (_id) {
         localStorage.setItem('userId', _id);

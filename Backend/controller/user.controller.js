@@ -5,20 +5,20 @@ import generateToken from '../config/generateToken.js';
 
 const signup = asyncHandler(async (req, res) => {
     const {
-         email, fullname, password, dob, degree, course, twelfthPercentage, diplomaPercentage,
-        nationality, cgpa, tenthPercentage, gapYear, yearOfPassing, activeBacklogs, backlogsCleared,
-        contactNumber, linkedIn, leetCode, github, portfolio, state, city,
+        username, email, fullname, password, dob, degree, course, twelfthPercentage, diplomaPercentage,
+        nationality, cgpa, address, school12th, tenthPercentage, gapYear, yearOfPassing, activeBacklogs,
+        contactNumber
     } = req.body;
 
     const userExist = await User.findOne({ email });
     if (userExist) {
         res.status(400);
-        throw new Error("An user with this email address already exists.");
+        throw new Error("Email already exists");
     }
 
     try {
         const user = await User.create({
-
+            username,
             email,
             fullname,
             password,
@@ -29,14 +29,8 @@ const signup = asyncHandler(async (req, res) => {
             diplomaPercentage,
             nationality,
             cgpa,
-
-            linkedIn,
-            leetCode,
-            github,
-            portfolio,
-            backlogsCleared,
-            state,
-            city,
+            address,
+            school12th,
             tenthPercentage,
             gapYear,
             yearOfPassing,
@@ -47,7 +41,7 @@ const signup = asyncHandler(async (req, res) => {
 
         res.status(201).json({
             _id: user._id,
-
+            username: user.username,
             email: user.email,
             fullname: user.fullname,
             dob: user.dob,
@@ -57,16 +51,8 @@ const signup = asyncHandler(async (req, res) => {
             diplomaPercentage: user.diplomaPercentage,
             nationality: user.nationality,
             cgpa: user.cgpa,
-
-            leetCode: user.leetCode,
-            github: user.github,
-            portfolio: user.portfolio,
-            backlogsCleared: user.backlogsCleared,
-            linkedIn: user.linkedIn,
-
-            state: user.state,
-            city: user.city,
-
+            address: user.address,
+            school12th: user.school12th,
             tenthPercentage: user.tenthPercentage,
             gapYear: user.gapYear,
             yearOfPassing: user.yearOfPassing,
