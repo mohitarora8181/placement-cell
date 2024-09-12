@@ -93,11 +93,22 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-
+    
+    linkedin: {
+        type: String,
+        trim: true
+    },
+    github: {
+        type: String,
+        trim: true
+    },
+    leetCode: {
+        type: String,
+        trim: true
+    }
 }, {
     timestamps: true
 });
-
 
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
@@ -106,12 +117,10 @@ userSchema.pre('save', async function (next) {
     console.log('Hashed password:', this.password);
     next();
 });
-userSchema.methods.matchPassword = async function (enteredPassword) {
 
+userSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
-
-
 
 const User = mongoose.model('User', userSchema);
 
