@@ -80,7 +80,7 @@ const authUser = asyncHandler(async (req, res) => {
             const isMatch = await user.matchPassword(password);
 
             if (isMatch) {
-               
+
                 res.json({
                     _id: user._id,
                     username: user.username,
@@ -109,14 +109,14 @@ const getUsers = async (req, res) => {
       gapYear,
       activeBacklogs
     } = req.query;
-  
+
     try {
       const filters = {};
       if (degree) filters.degree = new RegExp(degree, 'i');
       if (course) filters.course = new RegExp(course, 'i');
       if (nationality) filters.nationality = new RegExp(nationality, 'i');
-  
-      
+
+
       if (twelfthPercentage) {
         const [minTwelfth, maxTwelfth] = twelfthPercentage.split(',').map(Number);
         filters.twelfthPercentage = { $gte: minTwelfth, $lte: maxTwelfth };
@@ -125,15 +125,15 @@ const getUsers = async (req, res) => {
         const [minCgpa, maxCgpa] = cgpa.split(',').map(Number);
         filters.cgpa = { $gte: minCgpa, $lte: maxCgpa };
       }
-  
-      
+
+
       if (yearOfPassing) filters.yearOfPassing = Number(yearOfPassing);
       if (gapYear) filters.gapYear = Number(gapYear);
       if (activeBacklogs) filters.activeBacklogs = Number(activeBacklogs);
-  
+
       // Log the filters to verify
       console.log('Applying filters:', filters);
-  
+
       const users = await User.find(filters);
       res.json(users);
     } catch (error) {
@@ -148,22 +148,22 @@ const getUsers = async (req, res) => {
 //       type,
 //       ctc
 //     } = req.query;
-  
+
 //     try {
 //       const filters = {};
 //       if (jobTitle) filters.jobTitle = new RegExp(jobTitle, 'i');
 //       if (location) filters.location = new RegExp(location, 'i');
 //       if (type) filters.type = new RegExp(type, 'i');
-      
+
 //       // Handling range filter for ctc
 //       if (ctc) {
 //         const [minCtc, maxCtc] = ctc.split(',').map(Number);
 //         filters.ctc = { $gte: minCtc, $lte: maxCtc };
 //       }
-  
+
 //       // Log the filters to verify
 //       console.log('Applying filters:', filters);
-  
+
 //       const companies = await Company.find(filters);
 //       res.json(companies);
 //     } catch (error) {
@@ -171,8 +171,8 @@ const getUsers = async (req, res) => {
 //     }
 // };
 
-  
-  
-  
+
+
+
 
 export { signup, authUser , getUsers};

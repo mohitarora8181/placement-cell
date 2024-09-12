@@ -93,7 +93,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    
+
 }, {
     timestamps: true
 });
@@ -102,12 +102,12 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
     console.log('Hashing password:', this.password);
-    this.password = await bcrypt.hash(this.password, 10);  
+    this.password = await bcrypt.hash(this.password, 10);
     console.log('Hashed password:', this.password);
     next();
 });
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    
+
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
