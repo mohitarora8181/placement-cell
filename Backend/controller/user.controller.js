@@ -109,50 +109,45 @@ const authUser = asyncHandler(async (req, res) => {
 
 const getUsers = async (req, res) => {
     const {
-        degree,
-        course,
-        twelfthPercentage,
-        nationality,
-        cgpa,
-        yearOfPassing,
-        gapYear,
-        activeBacklogs,
-        linkedin,
-        github,
-        leetCode
+      degree,
+      course,
+      twelfthPercentage,
+      classes,  
+      cgpa,
+      yearOfPassing,
+      gapYear,
+      activeBacklogs,
     } = req.query;
-
+  
     try {
-        const filters = {};
-        if (degree) filters.degree = new RegExp(degree, 'i');
-        if (course) filters.course = new RegExp(course, 'i');
-        if (nationality) filters.nationality = new RegExp(nationality, 'i');
-
-        if (twelfthPercentage) {
-            const [minTwelfth, maxTwelfth] = twelfthPercentage.split(',').map(Number);
-            filters.twelfthPercentage = { $gte: minTwelfth, $lte: maxTwelfth };
-        }
-        if (cgpa) {
-            const [minCgpa, maxCgpa] = cgpa.split(',').map(Number);
-            filters.cgpa = { $gte: minCgpa, $lte: maxCgpa };
-        }
-
-        if (yearOfPassing) filters.yearOfPassing = Number(yearOfPassing);
-        if (gapYear) filters.gapYear = Number(gapYear);
-        if (activeBacklogs) filters.activeBacklogs = Number(activeBacklogs);
-
-        if (linkedin) filters.linkedin = new RegExp(linkedin, 'i');
-        if (github) filters.github = new RegExp(github, 'i');
-        if (leetCode) filters.leetCode = new RegExp(leetCode, 'i');
-
-        // Log the filters to verify
-        console.log('Applying filters:', filters);
-
-        const users = await User.find(filters);
-        res.json(users);
+      const filters = {};
+      if (degree) filters.degree = new RegExp(degree, 'i');
+      if (course) filters.course = new RegExp(course, 'i');
+      if (classes) filters.classes = new RegExp(classes, 'i');  
+  
+      if (twelfthPercentage) {
+        const [minTwelfth, maxTwelfth] = twelfthPercentage.split(',').map(Number);
+        filters.twelfthPercentage = { $gte: minTwelfth, $lte: maxTwelfth };
+      }
+  
+      if (cgpa) {
+        const [minCgpa, maxCgpa] = cgpa.split(',').map(Number);
+        filters.cgpa = { $gte: minCgpa, $lte: maxCgpa };
+      }
+  
+      if (yearOfPassing) filters.yearOfPassing = Number(yearOfPassing);
+      if (gapYear) filters.gapYear = Number(gapYear);
+      if (activeBacklogs) filters.activeBacklogs = Number(activeBacklogs);
+  
+      
+      console.log('Applying filters:', filters);
+  
+      const users = await User.find(filters);
+      res.json(users);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching users' });
+      res.status(500).json({ message: 'Error fetching users' });
     }
-};
+  };
+  
 
 export { signup, authUser, getUsers };

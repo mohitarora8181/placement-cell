@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminNav from '../components/AdminNav';
 import AddJob from '../pages/AddJob';
-import { Tabs, Tab, Box, Button, TextField, Slider } from '@mui/material';
+import { Tabs, Tab, Box, Button, TextField, Slider, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
 import UserCard from '../components/UserCard';
 import JobData from '../components/JobData';
@@ -14,7 +14,7 @@ const AdminPage = () => {
     degree: '',
     course: '',
     twelfthPercentage: [0, 100],
-    nationality: '',
+    classes: '', // Changed from nationality to class
     cgpa: [0, 10],
     yearOfPassing: '',
     gapYear: '',
@@ -24,7 +24,7 @@ const AdminPage = () => {
     jobTitle: '',
     location: '',
     type: '',
-    ctc: [0, 100] // Updated range
+    ctc: [0, 100] // Updated range for job filters
   });
 
   const handleTabChange = (event, newValue) => {
@@ -70,7 +70,7 @@ const AdminPage = () => {
         degree: '',
         course: '',
         twelfthPercentage: [0, 100],
-        nationality: '',
+        classes: '',
         cgpa: [0, 10],
         yearOfPassing: '',
         gapYear: '',
@@ -81,7 +81,7 @@ const AdminPage = () => {
         jobTitle: '',
         location: '',
         type: '',
-        ctc: [0, 100] // Updated range
+        ctc: [0, 100] // Reset job filters
       });
     }
     fetchData(); 
@@ -89,32 +89,32 @@ const AdminPage = () => {
 
   const fetchData = async () => {
     try {
-        if (tabValue === 'student') {
-            const query = new URLSearchParams({
-                ...userFilters,
-                twelfthPercentage: userFilters.twelfthPercentage.join(','),
-                cgpa: userFilters.cgpa.join(',')
-            }).toString();
-            const response = await axios.get(`/api/users/find?${query}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                }
-            });
-            setUsers(response.data);
-        } else if (tabValue === 'company') {
-            const query = new URLSearchParams({
-                ...jobFilters,
-                ctc: jobFilters.ctc.join(',')
-            }).toString();
-            const response = await axios.get(`/api/companies?${query}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                }
-            });
-            setJobs(response.data);
-        }
+      if (tabValue === 'student') {
+        const query = new URLSearchParams({
+          ...userFilters,
+          twelfthPercentage: userFilters.twelfthPercentage.join(','),
+          cgpa: userFilters.cgpa.join(',')
+        }).toString();
+        const response = await axios.get(`/api/users/find?${query}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          }
+        });
+        setUsers(response.data);
+      } else if (tabValue === 'company') {
+        const query = new URLSearchParams({
+          ...jobFilters,
+          ctc: jobFilters.ctc.join(',')
+        }).toString();
+        const response = await axios.get(`/api/companies?${query}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          }
+        });
+        setJobs(response.data);
+      }
     } catch (error) {
-        console.error(`Error fetching ${tabValue}:`, error.response ? error.response.data : error.message);
+      console.error(`Error fetching ${tabValue}:`, error.response ? error.response.data : error.message);
     }
   };
 
@@ -177,14 +177,28 @@ const AdminPage = () => {
                   step={0.1}
                 />
               </Box>
-              <TextField
-                name="nationality"
-                label="Nationality"
-                value={userFilters.nationality}
+              <Select
+                name="classes"
+                value={userFilters.classes}
                 onChange={handleUserFilterChange}
                 fullWidth
                 margin="normal"
-              />
+                displayEmpty
+              >
+                <MenuItem value="" disabled>Select Class</MenuItem>
+                <MenuItem value="CSE-1">CSE-1</MenuItem>
+                <MenuItem value="CSE-2">CSE-2</MenuItem>
+                <MenuItem value="CSE-3">CSE-3</MenuItem>
+                <MenuItem value="IT-1">IT-1</MenuItem>
+                <MenuItem value="IT-2">IT-2</MenuItem>
+                <MenuItem value="IT-3">IT-3</MenuItem>
+                <MenuItem value="ECE-1">ECE-1</MenuItem>
+                <MenuItem value="ECE-2">ECE-2</MenuItem>
+                <MenuItem value="ECE-3">ECE-3</MenuItem>
+                <MenuItem value="EEE-1">EEE-1</MenuItem>
+                <MenuItem value="EEE-2">EEE-2</MenuItem>
+                <MenuItem value="EEE-3">EEE-3</MenuItem>
+              </Select>
               <TextField
                 name="yearOfPassing"
                 label="Year of Passing"
@@ -251,23 +265,25 @@ const AdminPage = () => {
                   max={100} // Updated range
                   step={1}
                 />
-              </Box>
+                            </Box>
               <Box sx={{ marginTop: 2, display: 'flex', justifyContent: 'space-between' }}>
                 <Button variant="contained" onClick={applyFilters}>Apply Filters</Button>
                 <Button variant="outlined" onClick={resetFilters}>Reset Filters</Button>
               </Box>
             </Box>
           )}
+
+          {/* Content area for displaying user or job data */}
           <Box sx={{ width: tabValue === 'student' ? '75%' : '100%' }}>
             {tabValue === 'student' && (
-              <div className='flex flex-wrap justify-start'>
+              <div className="flex flex-wrap justify-start">
                 {users.map(user => (
                   <UserCard key={user._id} user={user} />
                 ))}
               </div>
             )}
             {tabValue === 'company' && (
-              <div className='flex flex-wrap justify-start'>
+              <div className="flex flex-wrap justify-start">
                 {jobs.map(job => (
                   <JobData key={job._id} job={job} />
                 ))}
@@ -286,3 +302,4 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
+
