@@ -51,13 +51,15 @@ const ShortlistForm = () => {
       shortlistedStudents: sendAsLink ? link : students,
     };
 
+    
+
     try {
       const response = await axios.post('/api/jobs/shortlist', payload);
       if (response.status === 200) {
         alert('Shortlist saved successfully!');
         setCompanyName('');
         setLink('');
-        setStudents([]);
+       // setStudents([]);
         setSendAsLink(true);
       } else {
         alert('Failed to save shortlist');
@@ -70,8 +72,10 @@ const ShortlistForm = () => {
 
   const addStudent = () => {
     if (formStudent.name && formStudent.email) {
-      setStudents([...students, formStudent]);
+      setStudents(prevStudents => [...prevStudents, formStudent]); //
+     //setStudents([...students, formStudent]);
       setFormStudent({ name: '', email: '' });
+     
     } else {
       alert('Please fill out the form before adding.');
     }
@@ -79,17 +83,13 @@ const ShortlistForm = () => {
 
   const updateStudentForm = (field, value) => {
     setFormStudent(prev => ({ ...prev, [field]: value }));
-  };
-
-  const updateStudent = (index, field, value) => {
-    const updatedStudents = [...students];
-    updatedStudents[index][field] = value;
-    setStudents(updatedStudents);
+    
   };
 
   const deleteStudent = (index) => {
     const updatedStudents = students.filter((_, i) => i !== index);
     setStudents(updatedStudents);
+    
   };
 
   return (
@@ -166,7 +166,7 @@ const ShortlistForm = () => {
                 className={`w-full py-2 rounded-md transition-colors ${formStudent.name && formStudent.email ? 'bg-gray-600 text-white hover:bg-gray-700' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
                 disabled={!formStudent.name || !formStudent.email}
               >
-                Add More Students
+                Add Student
               </button>
             </>
           )}
@@ -196,9 +196,8 @@ const ShortlistForm = () => {
             </div>
           ))
         ) : (
-          <p className="text-gray-700">No job details available for the selected company.</p>
+          <p className="text-center text-gray-600">Select a company to view job details.</p>
         )}
-
         {!sendAsLink && students.length > 0 && (
           <div>
             <h3 className="text-2xl font-semibold mb-4 text-gray-800">Student List</h3>

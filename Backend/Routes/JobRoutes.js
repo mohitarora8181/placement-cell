@@ -237,6 +237,7 @@ router.get('/companies', async (req, res) => {
 // Endpoint to save the shortlisted students for a job/company
 router.post('/jobs/shortlist', async (req, res) => {
   const { companyName, shortlistedStudents } = req.body;
+  console.log("Request Body:", req.body)
 
   try {
     // Find the job by company name, ignoring case
@@ -256,6 +257,9 @@ router.post('/jobs/shortlist', async (req, res) => {
     res.status(500).json({ message: 'Failed to save shortlisted students' });
   }
 });
+
+
+
 
 
 
