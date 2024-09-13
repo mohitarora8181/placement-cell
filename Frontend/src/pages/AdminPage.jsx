@@ -277,7 +277,8 @@ const AdminPage = () => {
           <Box sx={{ width: tabValue === 'student' ? '75%' : '100%' }}>
             {tabValue === 'student' && (
               <div className="flex flex-wrap justify-start">
-                {users.map(user => (
+                {users
+                  .filter(user => !user.isAdmin).map(user => (
                   <UserCard key={user._id} user={user} />
                 ))}
               </div>
