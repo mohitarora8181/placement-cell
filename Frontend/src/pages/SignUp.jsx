@@ -84,7 +84,7 @@ const SignUp = () => {
         },
       };
 
-      const { data } = await axios.post('http://localhost:8000/api/users/sign-up', formData, config);
+      const { data } = await axios.post('/api/users/sign-up', formData, config);
       const { _id, token, ...rest } = data;
 
       if (_id) {
