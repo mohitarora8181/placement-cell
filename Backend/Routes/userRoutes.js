@@ -129,10 +129,10 @@ router.get('/:userId', protect, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
       .populate('appliedJobs', 'jobTitle companyName location type imageURL ctc jobDescription')
-      .select('fullname email dob course degree appliedJobs isAdmin ');
+      .select('fullname email dob course degree appliedJobs isAdmin');
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'User not found' }); 
     }
     res.json(user);
   } catch (error) {

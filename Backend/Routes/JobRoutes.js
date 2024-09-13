@@ -15,7 +15,7 @@ router.get('/jobs/:jobId', async (req, res) => {
     const job = await Job.findById(req.params.jobId)
       .populate({
         path: 'applicants', 
-        select: 'fullname email course degree'
+        select: 'fullname email course degree '
       });
 
     if (!job) {
