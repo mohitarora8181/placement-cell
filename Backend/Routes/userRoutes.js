@@ -7,6 +7,10 @@ import { protect, adminOnly } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
+router.get('/', (req, res)=>{
+  res.send("Hola Amigo!!");
+});
+
 router.post('/sign-up', signup);
 router.post('/sign-in', authUser);
 router.get('/find', getUsers);
@@ -132,7 +136,7 @@ router.get('/:userId', protect, async (req, res) => {
       .select('fullname email dob course degree appliedJobs isAdmin');
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' }); 
+      return res.status(404).json({ message: 'User not found' });
     }
     res.json(user);
   } catch (error) {
