@@ -16,7 +16,7 @@ const EditProfile = () => {
           const response = await axios.get(`/api/users/profile/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
-
+          console.log(response)
           setUserData({
             fullname: response.data.fullname || '',
             email: response.data.email || '',
