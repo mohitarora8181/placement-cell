@@ -196,7 +196,7 @@ const AdminNav = ({ currentVal }) => {
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconButton color="inherit" onClick={handleShortlistedClick}>
-              <ChecklistIcon sx={{ color: '#000' }} />
+              <ChecklistIcon sx={{ color: '#000', marginRight:4 }} />
             </IconButton>
           <NotifyButton onClick={handleNotifyClick} sx={{marginRight:4}}>🔔</NotifyButton>
             <LogoutButton onClick={logOut}>Log Out</LogoutButton>
