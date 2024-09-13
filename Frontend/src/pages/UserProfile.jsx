@@ -12,7 +12,7 @@ const UserProfile = () => {
   const token = localStorage.getItem('token')?.trim();
 
   useEffect(() => {
-    axios.get(`https://placement-cell-iczn.onrender.com/api/users/${userId}`, {
+    axios.get(`/api/users/profile/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(response => {
