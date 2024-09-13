@@ -34,6 +34,9 @@ const EditProfile = () => {
             yearOfPassing: response.data.yearOfPassing || '',
             activeBacklogs: response.data.activeBacklogs || '',
             contactNumber: response.data.contactNumber || '',
+            linkedin: response.data.linkedin || '',
+            github: response.data.github || '',
+            leetCode: response.data.leetCode || ''
           });
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -204,6 +207,30 @@ const EditProfile = () => {
               fullWidth
               name="contactNumber"
               value={userData.contactNumber || ''}
+              onChange={handleInputChange}
+              style={{ marginBottom: '16px' }}
+            />
+            <TextField
+              label="LinkedIn"
+              fullWidth
+              name="linkedin"
+              value={userData.linkedin || ''}
+              onChange={handleInputChange}
+              style={{ marginBottom: '16px' }}
+            />
+            <TextField
+              label="GitHub"
+              fullWidth
+              name="github"
+              value={userData.github || ''}
+              onChange={handleInputChange}
+              style={{ marginBottom: '16px' }}
+            />
+            <TextField
+              label="LeetCode"
+              fullWidth
+              name="leetCode"
+              value={userData.leetCode || ''}
               onChange={handleInputChange}
               style={{ marginBottom: '16px' }}
             />
