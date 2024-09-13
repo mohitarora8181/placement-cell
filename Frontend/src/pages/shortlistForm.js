@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'; 
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Import the toast styles
 import './Button.css'; // Import custom styles
 
 const ShortlistForm = () => {
@@ -46,54 +48,61 @@ const ShortlistForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!companyName) {
+      toast.info('Please select a company.');
+      return;
+    }
+
     const payload = {
       companyName,
       shortlistedStudents: sendAsLink ? link : students,
     };
 
-    
-
     try {
       const response = await axios.post('/api/jobs/shortlist', payload);
       if (response.status === 200) {
-        alert('Shortlist saved successfully!');
+        toast.success('Shortlist saved successfully!');
         setCompanyName('');
         setLink('');
-       // setStudents([]);
+        setStudents([]);
         setSendAsLink(true);
       } else {
-        alert('Failed to save shortlist');
+        toast.error('Failed to save shortlist');
       }
     } catch (error) {
       console.error('Error saving shortlist:', error);
-      alert('Error saving shortlist');
+      toast.error('Error saving shortlist');
     }
   };
 
   const addStudent = () => {
     if (formStudent.name && formStudent.email) {
-      setStudents(prevStudents => [...prevStudents, formStudent]); //
-     //setStudents([...students, formStudent]);
+      setStudents(prevStudents => [...prevStudents, formStudent]);
       setFormStudent({ name: '', email: '' });
-     
     } else {
-      alert('Please fill out the form before adding.');
+      toast.warn('Please fill out the form before adding.');
     }
   };
 
   const updateStudentForm = (field, value) => {
     setFormStudent(prev => ({ ...prev, [field]: value }));
-    
   };
 
   const deleteStudent = (index) => {
     const updatedStudents = students.filter((_, i) => i !== index);
     setStudents(updatedStudents);
-    
+  };
+
+  const handleToggleManualList = (value) => {
+    setSendAsLink(value === 'link');
+    if (value === 'list') {
+      toast.info('Please enter name and email correctly!');
+    }
   };
 
   return (
     <div className="flex flex-col md:flex-row gap-6 p-6 max-w-7xl mx-auto">
+      <ToastContainer /> {/* Add ToastContainer to your component */}
       <div className="bg-gray-100 shadow-lg rounded-lg flex-1 p-6">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Submit Shortlisted Students</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -118,7 +127,7 @@ const ShortlistForm = () => {
             <label className="block font-semibold mb-2 text-gray-800">Submit as:</label>
             <select
               value={sendAsLink ? 'link' : 'list'}
-              onChange={(e) => setSendAsLink(e.target.value === 'link')}
+              onChange={(e) => handleToggleManualList(e.target.value)}
               className="w-full p-3 border rounded-md shadow-sm bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
             >
               <option value="link">Link</option>
