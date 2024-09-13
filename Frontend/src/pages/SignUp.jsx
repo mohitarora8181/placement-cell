@@ -85,7 +85,7 @@ const SignUp = () => {
         },
       };
 
-      const { data } = await axios.post('http://localhost:3000/api/users/sign-up', formData, config);
+      const { data } = await axios.post('https://placement-cell-iczn.onrender.com/api/users/sign-up', formData, config);
       const { _id, token, ...rest } = data;
 
       if (_id) {
