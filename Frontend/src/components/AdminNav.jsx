@@ -149,6 +149,7 @@ const AdminNav = ({ currentVal }) => {
             <img className='h-24 mx-2' src={logo} alt="logo" />
             </Link>
           </Typography>
+          <div className='sm:hidden'>
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <Search>
               <SearchIconWrapper>
@@ -193,6 +194,7 @@ const AdminNav = ({ currentVal }) => {
               </ToggleButton>
             </ToggleButtonGroup>
           </Box>
+          </div>
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconButton color="inherit" onClick={handleShortlistedClick}>
