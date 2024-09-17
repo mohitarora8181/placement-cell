@@ -143,13 +143,13 @@ const AdminNav = ({ currentVal }) => {
             variant='h6'
             noWrap
             component='div'
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            sx={{ flexGrow: 1, display: {  } }}
           >
             <Link to='/admin'>
             <img className='h-24 mx-2' src={logo} alt="logo" />
             </Link>
           </Typography>
-          <div className='sm:hidden'>
+          <div className='hidden md:block'>
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <Search>
               <SearchIconWrapper>
@@ -198,7 +198,7 @@ const AdminNav = ({ currentVal }) => {
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconButton color="inherit" onClick={handleShortlistedClick}>
-              <ChecklistIcon sx={{ color: '#000', marginRight:4 }} />
+              <ChecklistIcon sx={{ color: '#000', marginRight:4, display:{xs:'none', sm:'none', md:'block'} }} />
             </IconButton>
           <NotifyButton onClick={handleNotifyClick} sx={{marginRight:4}}>🔔</NotifyButton>
             <LogoutButton onClick={logOut}>Log Out</LogoutButton>
