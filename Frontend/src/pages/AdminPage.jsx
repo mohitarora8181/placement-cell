@@ -14,7 +14,7 @@ const AdminPage = () => {
     degree: '',
     course: '',
     twelfthPercentage: [0, 100],
-    classes: '', // Changed from nationality to class
+    classes: '',
     cgpa: [0, 10],
     yearOfPassing: '',
     gapYear: '',
@@ -24,7 +24,7 @@ const AdminPage = () => {
     jobTitle: '',
     location: '',
     type: '',
-    ctc: [0, 100] // Updated range for job filters
+    ctc: [0, 100]
   });
 
   const handleTabChange = (event, newValue) => {
@@ -81,10 +81,10 @@ const AdminPage = () => {
         jobTitle: '',
         location: '',
         type: '',
-        ctc: [0, 100] // Reset job filters
+        ctc: [0, 100]
       });
     }
-    fetchData(); 
+    fetchData();
   };
 
   const fetchData = async () => {
@@ -136,26 +136,65 @@ const AdminPage = () => {
           <Tab label="Companies" value="company" />
           <Tab label="Add Job" value="add-job" />
         </Tabs>
-        <Box sx={{ display: 'flex', padding: 4 }}>
+
+        {/* Filters Section */}
+        <Box sx={{ display: 'flex', gap:'4px', justifyContent: 'center', alignItems:'center', padding: 2 }}>
           {tabValue === 'student' && (
-            <Box sx={{ width: '25%', paddingRight: 2 }}>
+            <>
               <TextField
                 name="degree"
                 label="Degree"
+                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+
                 value={userFilters.degree}
                 onChange={handleUserFilterChange}
-                fullWidth
                 margin="normal"
               />
               <TextField
                 name="course"
                 label="Course"
+                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+
                 value={userFilters.course}
                 onChange={handleUserFilterChange}
-                fullWidth
                 margin="normal"
               />
-              <Box sx={{ marginTop: 2 }}>
+              <TextField
+                name="classes"
+                label="Class"
+                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+
+                value={userFilters.classes}
+                onChange={handleUserFilterChange}
+                margin="normal"
+              />
+              <TextField
+                name="yearOfPassing"
+                label="Year of Passing"
+                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+
+                value={userFilters.yearOfPassing}
+                onChange={handleUserFilterChange}
+                margin="normal"
+              />
+              <TextField
+                name="gapYear"
+                label="Gap Year"
+                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+
+                value={userFilters.gapYear}
+                onChange={handleUserFilterChange}
+                margin="normal"
+              />
+              <TextField
+                name="activeBacklogs"
+                label="Active Backlogs"
+                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+                value={userFilters.activeBacklogs}
+                onChange={handleUserFilterChange}
+                margin="normal"
+              />
+              <Box sx={{ margin: 0 }}>
                 <div>Twelfth Percentage: {userFilters.twelfthPercentage[0]}% - {userFilters.twelfthPercentage[1]}%</div>
                 <Slider
                   value={userFilters.twelfthPercentage}
@@ -164,9 +203,11 @@ const AdminPage = () => {
                   min={0}
                   max={100}
                   step={1}
+                  sx={{width:'20ch'}}
+
                 />
               </Box>
-              <Box sx={{ marginTop: 2 }}>
+              <Box sx={{ marginX: 2 }}>
                 <div>CGPA: {userFilters.cgpa[0]} - {userFilters.cgpa[1]}</div>
                 <Slider
                   value={userFilters.cgpa}
@@ -175,68 +216,20 @@ const AdminPage = () => {
                   min={0}
                   max={10}
                   step={0.1}
+                  sx={{width:'14ch'}}
                 />
               </Box>
-              <Select
-                name="classes"
-                value={userFilters.classes}
-                onChange={handleUserFilterChange}
-                fullWidth
-                margin="normal"
-                displayEmpty
-              >
-                <MenuItem value="" disabled>Select Class</MenuItem>
-                <MenuItem value="CSE-1">CSE-1</MenuItem>
-                <MenuItem value="CSE-2">CSE-2</MenuItem>
-                <MenuItem value="CSE-3">CSE-3</MenuItem>
-                <MenuItem value="IT-1">IT-1</MenuItem>
-                <MenuItem value="IT-2">IT-2</MenuItem>
-                <MenuItem value="IT-3">IT-3</MenuItem>
-                <MenuItem value="ECE-1">ECE-1</MenuItem>
-                <MenuItem value="ECE-2">ECE-2</MenuItem>
-                <MenuItem value="ECE-3">ECE-3</MenuItem>
-                <MenuItem value="EEE-1">EEE-1</MenuItem>
-                <MenuItem value="EEE-2">EEE-2</MenuItem>
-                <MenuItem value="EEE-3">EEE-3</MenuItem>
-              </Select>
-              <TextField
-                name="yearOfPassing"
-                label="Year of Passing"
-                value={userFilters.yearOfPassing}
-                onChange={handleUserFilterChange}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                name="gapYear"
-                label="Gap Year"
-                value={userFilters.gapYear}
-                onChange={handleUserFilterChange}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                name="activeBacklogs"
-                label="Active Backlogs"
-                value={userFilters.activeBacklogs}
-                onChange={handleUserFilterChange}
-                fullWidth
-                margin="normal"
-              />
-              <Box sx={{ marginTop: 2, display: 'flex', justifyContent: 'space-between' }}>
-                <Button variant="contained" onClick={applyFilters}>Apply Filters</Button>
-                <Button variant="outlined" onClick={resetFilters}>Reset Filters</Button>
-              </Box>
-            </Box>
+              <Button sx={{width:'130px', height:'60px', marginX:'2px'}} variant="contained" onClick={applyFilters}>Apply Filters</Button>
+              <Button sx={{width:'130px', height:'60px', marginX:'2px'}} variant="outlined" onClick={resetFilters}>Reset Filters</Button>
+            </>
           )}
           {tabValue === 'company' && (
-            <Box sx={{ width: '25%', paddingRight: 2 }}>
+            <>
               <TextField
                 name="jobTitle"
                 label="Job Title"
                 value={jobFilters.jobTitle}
                 onChange={handleJobFilterChange}
-                fullWidth
                 margin="normal"
               />
               <TextField
@@ -244,7 +237,6 @@ const AdminPage = () => {
                 label="Location"
                 value={jobFilters.location}
                 onChange={handleJobFilterChange}
-                fullWidth
                 margin="normal"
               />
               <TextField
@@ -252,7 +244,6 @@ const AdminPage = () => {
                 label="Type"
                 value={jobFilters.type}
                 onChange={handleJobFilterChange}
-                fullWidth
                 margin="normal"
               />
               <Box sx={{ marginTop: 2 }}>
@@ -262,40 +253,38 @@ const AdminPage = () => {
                   onChange={handleJobSliderChange('ctc')}
                   valueLabelDisplay="auto"
                   min={0}
-                  max={100} // Updated range
+                  max={100}
                   step={1}
                 />
-                            </Box>
-              <Box sx={{ marginTop: 2, display: 'flex', justifyContent: 'space-between' }}>
-                <Button variant="contained" onClick={applyFilters}>Apply Filters</Button>
-                <Button variant="outlined" onClick={resetFilters}>Reset Filters</Button>
               </Box>
-            </Box>
+              <Button variant="contained" onClick={applyFilters}>Apply Filters</Button>
+              <Button variant="outlined" onClick={resetFilters}>Reset Filters</Button>
+            </>
           )}
+        </Box>
 
-          {/* Content area for displaying user or job data */}
-          <Box sx={{ width: tabValue === 'student' ? '75%' : '100%' }}>
-            {tabValue === 'student' && (
-              <div className="flex flex-wrap justify-start">
-                {users
-                  .filter(user => !user.isAdmin).map(user => (
-                  <UserCard key={user._id} user={user} />
-                ))}
-              </div>
-            )}
-            {tabValue === 'company' && (
-              <div className="flex flex-wrap justify-start">
-                {jobs.map(job => (
-                  <JobData key={job._id} job={job} />
-                ))}
-              </div>
-            )}
-            {tabValue === 'add-job' && (
-              <div className="flex justify-center items-center">
-                <AddJob />
-              </div>
-            )}
-          </Box>
+        {/* Content Section */}
+        <Box sx={{ padding: 2 }}>
+          {tabValue === 'student' && (
+            <div className="flex flex-wrap justify-start">
+              {users
+                .filter(user => !user.isAdmin).map(user => (
+                <UserCard key={user._id} user={user} />
+              ))}
+            </div>
+          )}
+          {tabValue === 'company' && (
+            <div className="flex flex-wrap justify-start">
+              {jobs.map(job => (
+                <JobData key={job._id} job={job} />
+              ))}
+            </div>
+          )}
+          {tabValue === 'add-job' && (
+            <div className="flex justify-center items-center">
+              <AddJob />
+            </div>
+          )}
         </Box>
       </Box>
     </>
@@ -303,4 +292,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-
