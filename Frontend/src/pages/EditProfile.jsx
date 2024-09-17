@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Grid, Paper, Typography } from '@mui/material';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 
 const EditProfile = () => {
   const [userData, setUserData] = useState({});
@@ -67,6 +68,8 @@ const EditProfile = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <Paper elevation={3} style={{ padding: '20px', borderRadius: '8px', width: '100%', maxWidth: '800px' }}>
         <Typography variant="h4" gutterBottom align="center" style={{ fontWeight: 'bold', marginBottom: '20px' }}>
@@ -256,6 +259,7 @@ const EditProfile = () => {
         </Grid>
       </Paper>
     </div>
+    </>
   );
 };
 
