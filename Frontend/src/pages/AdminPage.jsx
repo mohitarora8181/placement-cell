@@ -194,7 +194,7 @@ const AdminPage = () => {
                 onChange={handleUserFilterChange}
                 margin="normal"
               />
-              <Box sx={{ margin: 0 }}>
+              <Box sx={{ marginX: 1 }}>
                 <div>Twelfth Percentage: {userFilters.twelfthPercentage[0]}% - {userFilters.twelfthPercentage[1]}%</div>
                 <Slider
                   value={userFilters.twelfthPercentage}
