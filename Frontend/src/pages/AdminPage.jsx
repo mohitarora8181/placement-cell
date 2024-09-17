@@ -273,7 +273,7 @@ const AdminPage = () => {
         {/* Content Section */}
         <Box sx={{ padding: 2 }}>
           {tabValue === 'student' && (
-            <div className="flex flex-wrap justify-start">
+            <div className="flex flex-wrap justify-center">
               {users
                 .filter(user => !user.isAdmin).map(user => (
                 <UserCard key={user._id} user={user} />
@@ -281,7 +281,7 @@ const AdminPage = () => {
             </div>
           )}
           {tabValue === 'company' && (
-            <div className="flex flex-wrap justify-start">
+            <div className="flex flex-wrap justify-center">
               {jobs.map(job => (
                 <JobData key={job._id} job={job} />
               ))}
