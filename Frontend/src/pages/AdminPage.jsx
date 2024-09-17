@@ -138,7 +138,7 @@ const AdminPage = () => {
         </Tabs>
 
         {/* Filters Section */}
-        <Box sx={{ display: 'flex', gap:'4px', justifyContent: 'center', alignItems:'center', padding: 2 }}>
+        <Box sx={{ display: {sm:'none', xs:'none', md:'flex'}, gap:'4px', justifyContent: 'center', alignItems:'center', padding: 2 }}>
           {tabValue === 'student' && (
             <>
               <TextField
