@@ -231,6 +231,8 @@ const AdminPage = () => {
                 value={jobFilters.jobTitle}
                 onChange={handleJobFilterChange}
                 margin="normal"
+                sx={{width:'190px', height:'60px', marginRight:'2px'}}
+
               />
               <TextField
                 name="location"
@@ -238,6 +240,8 @@ const AdminPage = () => {
                 value={jobFilters.location}
                 onChange={handleJobFilterChange}
                 margin="normal"
+                sx={{width:'190px', height:'60px', marginRight:'2px'}}
+
               />
               <TextField
                 name="type"
@@ -245,8 +249,10 @@ const AdminPage = () => {
                 value={jobFilters.type}
                 onChange={handleJobFilterChange}
                 margin="normal"
+                sx={{width:'190px', height:'60px', marginRight:'2px'}}
+
               />
-              <Box sx={{ marginTop: 2 }}>
+              <Box sx={{ marginX: 2 }}>
                 <div>CTC: {jobFilters.ctc[0]} - {jobFilters.ctc[1]}</div>
                 <Slider
                   value={jobFilters.ctc}
@@ -255,10 +261,11 @@ const AdminPage = () => {
                   min={0}
                   max={100}
                   step={1}
+                  sx={{width:'24ch'}}
                 />
               </Box>
-              <Button variant="contained" onClick={applyFilters}>Apply Filters</Button>
-              <Button variant="outlined" onClick={resetFilters}>Reset Filters</Button>
+              <Button sx={{width:'130px', height:'60px', marginX:'2px'}} variant="contained" onClick={applyFilters}>Apply Filters</Button>
+              <Button sx={{width:'130px', height:'60px', marginX:'2px'}} variant="outlined" onClick={resetFilters}>Reset Filters</Button>
             </>
           )}
         </Box>
