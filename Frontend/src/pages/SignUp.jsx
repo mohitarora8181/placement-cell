@@ -37,7 +37,7 @@ const SignUp = () => {
     contactNumber: '',
     degree: 'Bachelor of Technology',
     course: '',
-    classes: '', 
+    classes: '',
     yearOfPassing: '',
     cgpa: '',
     twelfthPercentage: '',
@@ -115,6 +115,7 @@ const SignUp = () => {
         margin: 0,
         padding: 0,
         overflow: 'hidden',
+        width:{sm:'90%', xs:'90%'}
       }}>
         <div style={{
           position: 'absolute',
@@ -138,7 +139,7 @@ const SignUp = () => {
           backgroundColor: 'rgba(0, 0, 0, 0.2)',
           zIndex: -1,
         }} />
-        <Container component='main' maxWidth='md' style={{ width: '70%' }}>
+        <Container component='main' maxWidth='md' style={{ width: '100%', margin:'4px' }}>
           <CssBaseline />
           <div
             style={{
