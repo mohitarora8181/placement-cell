@@ -10,8 +10,12 @@ import {
   Box,
   Typography,
   Container,
+  IconButton,
+  InputAdornment,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import logo from '../images/logo-pc.png';
 import image1 from '../images/image1.jpg';
 import { ToastContainer, toast } from 'react-toastify';
@@ -21,6 +25,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // State to handle password visibility
   const [error, setError] = useState('');
 
   const handleSignIn = async (e) => {
@@ -33,7 +38,7 @@ const SignIn = () => {
         localStorage.setItem('userId', _id);
         localStorage.setItem('token', token);
         localStorage.setItem('role', isAdmin ? 'admin' : 'user');
-        toast.success('Sign In Successful'); 
+        toast.success('Sign In Successful');
         if (isAdmin) {
           navigate('/admin');
         } else {
@@ -41,13 +46,16 @@ const SignIn = () => {
         }
       } else {
         console.error('User ID is missing in the response');
-        toast.error('Sign In failed. Please try again.'); 
+        toast.error('Sign In failed. Please try again.');
       }
     } catch (error) {
       setError(error.response?.data?.message || 'An error occurred');
       toast.error(error.response?.data?.message || 'An error occurred'); // Show error toast
     }
   };
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword); // Toggle password visibility
+  const handleMouseDownPassword = (e) => e.preventDefault(); // Prevent default action for mouse down
 
   return (
     <div style={{
@@ -132,14 +140,28 @@ const SignIn = () => {
               fullWidth
               name='password'
               label='Password'
-              type='password'
+              type={showPassword ? 'text' : 'password'} // Toggle between 'text' and 'password'
               id='password'
               autoComplete='current-password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{ marginBottom: '16px', backgroundColor: '#444', color: '#f5f5f5' }}
               InputLabelProps={{ style: { color: '#f5f5f5' } }}
-              InputProps={{ style: { color: '#f5f5f5' } }}
+              InputProps={{
+                style: { color: '#f5f5f5' },
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                      style={{ color: '#f5f5f5' }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               onFocus={(e) => e.target.style.backgroundColor = '#555'}
               onBlur={(e) => e.target.style.backgroundColor = '#444'}
             />
@@ -164,7 +186,7 @@ const SignIn = () => {
           <Box mt={2}>
             <Typography variant='body2' color='textSecondary' align='center'>
               <div color='inherit' href='/sign-up' style={{ color: '#BB86FC', textDecoration: 'none' }}> {/* Purple color */}
-                Don't have an account? 
+                Don't have an account?
               </div>
             </Typography>
             <Typography variant='body2' align='center' style={{ marginTop: '16px' }}>
@@ -184,14 +206,14 @@ const SignIn = () => {
                 onMouseOver={(e) => {
                   e.currentTarget.style.transform = 'scale(1.05)';
                   e.currentTarget.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
-                  e.currentTarget.style.color = 'white'; 
-                  e.currentTarget.style.background = '#9F62D8'; 
+                  e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.background = '#9F62D8';
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
                   e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
-                  e.currentTarget.style.color = 'white'; 
-                  e.currentTarget.style.background = 'grey'; 
+                  e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.background = 'grey';
                 }}
               >
                 Sign Up
