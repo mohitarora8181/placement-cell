@@ -3,32 +3,40 @@ import Navbar from './Navbar';
 import ceoImage from '../images/image2.jpg'; // Example image paths
 import pokerFaceImage from '../images/image3.jpg';
 import monkImage from '../images/image4.jpg';
+import { FaGithub, FaLinkedinIn } from "react-icons/fa";
+import { IoIosMail } from "react-icons/io";
 
 const MeetTheTeam = () => {
   const teamMembers = [
     {
-      name: 'Aditya ',
+      name: 'Aditya Ray',
       title: 'Bug Exorcist',
       description:
         " tea-loving bug-slayer, fixing code issues one sip at a time.somehow fixes tricky bugs and smooths out glitches, all while savoring favorite brew.",
       email: 'adityaray947@gmail.com',
-      photo: ceoImage
+      photo: ceoImage,
+      linkedIn: 'https://www.linkedin.com/in/aditya-ray-672b1a22b/',
+      github:'https://github.com/adityaray947'
     },
     {
-      name: 'Aman',
+      name: 'Aman Jha',
       title: 'Database Whisperer',
       description:
         "idea dynamo who kicks off every day with a new, game-changing concept—usually inspired by his latest football match.",
       email: 'ajha70227@gmail.com',
-      photo: pokerFaceImage
+      photo: pokerFaceImage,
+       linkedIn: '',
+      github:'https://github.com/Aman83490'
     },
     {
-      name: 'Yuvraj',
+      name: 'Yuvraj Singh',
       title: 'Unicorn Wrangler & CSS Sorcerer',
       description:
         "Crafting beautiful designs with maximum ease and minimal effort, all while enjoying a cozy spot on the couch",
       email: 'devyuvraj883@gmail.com',
-      photo: monkImage
+      photo: monkImage,
+       linkedIn: 'https://www.linkedin.com/in/yuvraj-singh-2942781a3/',
+      github:'https://github.com/Yuvraj883'
     }
   ];
 
@@ -41,13 +49,29 @@ const MeetTheTeam = () => {
           {teamMembers.map((member, index) => (
             <div key={index} style={styles.card}>
               <img src={member.photo} alt={member.name} style={styles.photo} />
-             
-              <h3 style={styles.cardTitle}>{member.title}</h3>
-              <p style={styles.cardDescription}>{member.description}</p>
-              <p style={styles.email}>
+
+              <h3 className='mb-2 text-white' style={styles.cardTitle}>{member.name}</h3>
+              <p className='mt-0 mb-2 text-gray-500'>MSIT'25</p>
+
+              {/* <p style={styles.cardDescription}>{member.description}</p> */}
+              {/* <div style={styles.email}>
                 <a href={`mailto:${member.email}`} style={styles.emailLink}>{member.email}</a>
                 <p style={styles.cardName}>{member.name}</p>
-              </p>
+              </div> */}
+              <div className='flex gap-2 justify-start items-center'>
+
+
+                <a href={`${member.linkedIn}`} target='_blank'>
+                <FaLinkedinIn className='text-xl hover:scale-110'/>
+                </a>
+                <a href={`${member.github}`} target='_blank'>
+                <FaGithub className='text-xl hover:scale-110'/>
+                </a>
+
+                <a href={`mailto:${member.email}`} target='_blank'>
+                  <IoIosMail className='text-xl hover:scale-110'/>
+                </a>
+              </div>
             </div>
           ))}
         </div>
@@ -80,7 +104,7 @@ const styles = {
     border: '1px solid #444',
     borderRadius: '10px',
     padding: '20px',
-    width: '360px', 
+    width: '360px',
     backgroundColor: '#222',
     boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
     transition: 'transform 0.3s ease',
