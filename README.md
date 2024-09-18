@@ -16,20 +16,16 @@ This project aims to digitize the workflow of a college placement cell, streamli
 - **Consolidated Data:** View and analyze student application data in real-time for efficient tracking and reporting.
 
 ### **Technologies Used**
-- **Frontend:** HTML, CSS, JavaScript, React.js, Next.js, Vue.js (for interactive UI)
+- **Frontend:** HTML, CSS, JavaScript, React.js, TailwindCSS, MUI
 - **Backend:** Node.js, Express.js (for managing server-side logic)
 - **Database:** MongoDB (for storing user profiles, job postings, and application data)
-- **APIs:** Custom-built and third-party web scraping API to fetch the latest job opportunities.
-- **AI Features:** Integrated AI models using OpenAI and Langchain to analyze resumes and profiles, and simulate AI-based interviews.
+- **APIs:** Custom-built APIs to fetch the latest job opportunities.
 
-### **AI Features**
-1. **Resume and Profile Analysis:**
-   - The platform analyzes resumes, GitHub, LinkedIn, and coding profiles of candidates using AI and ML models.
-   - Provides recommendations for profile enhancement and matches candidates to the most relevant job postings.
 
-2. **AI Interviews:**
-   - Allows HR personnel to assign AI-driven mock interviews to shortlisted candidates.
-   - Simulates interview questions based on the candidate's profile and provides feedback in real-time.
+### **Test User**
+- **Email:** test@gmail.com
+- **Password:** test1234
+
 
 ### **Screenshots**
 
@@ -46,4 +42,4 @@ This project aims to digitize the workflow of a college placement cell, streamli
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/placement-cell-portal.git
+   git clone https://github.com/Yuvraj883/placement-cell
