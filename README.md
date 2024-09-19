@@ -30,13 +30,13 @@ This project aims to digitize the workflow of a college placement cell, streamli
 ### **Screenshots**
 
 #### Student Dashboard:
-![Student Dashboard](path/to/your/student-dashboard-image.png)
+![Student Dashboard](./Assets/Student%20Dashboard.jpeg)
 
-#### Job Posting Page:
-![Job Posting Page](path/to/your/job-posting-page-image.png)
+#### Student Profile:
+![Job Posting Page](./Assets/Student%20Profile.jpeg)
 
-#### Admin Dashboard:
-![Admin Dashboard](path/to/your/admin-dashboard-image.png)
+#### Edit Profile:
+![Admin Dashboard](./Assets/Edit%20Page.jpeg)
 
 ### **Setup Instructions**
 
