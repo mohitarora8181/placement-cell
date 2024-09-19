@@ -146,7 +146,7 @@ const AdminPage = () => {
                 label="Degree"
                 sx={{width:'130px', height:'60px', marginRight:'2px'}}
 
-                value={userFilters.degree}
+                value={userFilters?.degree}
                 onChange={handleUserFilterChange}
                 margin="normal"
               />
@@ -155,7 +155,7 @@ const AdminPage = () => {
                 label="Course"
                 sx={{width:'130px', height:'60px', marginRight:'2px'}}
 
-                value={userFilters.course}
+                value={userFilters?.course}
                 onChange={handleUserFilterChange}
                 margin="normal"
               />
@@ -164,7 +164,7 @@ const AdminPage = () => {
                 label="Class"
                 sx={{width:'130px', height:'60px', marginRight:'2px'}}
 
-                value={userFilters.classes}
+                value={userFilters?.classes}
                 onChange={handleUserFilterChange}
                 margin="normal"
               />
@@ -173,7 +173,7 @@ const AdminPage = () => {
                 label="Year of Passing"
                 sx={{width:'130px', height:'60px', marginRight:'2px'}}
 
-                value={userFilters.yearOfPassing}
+                value={userFilters?.yearOfPassing}
                 onChange={handleUserFilterChange}
                 margin="normal"
               />
@@ -182,7 +182,7 @@ const AdminPage = () => {
                 label="Gap Year"
                 sx={{width:'130px', height:'60px', marginRight:'2px'}}
 
-                value={userFilters.gapYear}
+                value={userFilters?.gapYear}
                 onChange={handleUserFilterChange}
                 margin="normal"
               />
@@ -195,7 +195,7 @@ const AdminPage = () => {
                 margin="normal"
               />
               <Box sx={{ marginX: 1 }}>
-                <div>Twelfth Percentage: {userFilters.twelfthPercentage[0]}% - {userFilters.twelfthPercentage[1]}%</div>
+                <div>Twelfth Percentage: {userFilters?.twelfthPercentage[0]}% - {userFilters?.twelfthPercentage[1]}%</div>
                 <Slider
                   value={userFilters.twelfthPercentage}
                   onChange={handleUserSliderChange('twelfthPercentage')}
@@ -208,9 +208,9 @@ const AdminPage = () => {
                 />
               </Box>
               <Box sx={{ marginX: 2 }}>
-                <div>CGPA: {userFilters.cgpa[0]} - {userFilters.cgpa[1]}</div>
+                <div>CGPA: {userFilters?.cgpa[0]} - {userFilters?.cgpa[1]}</div>
                 <Slider
-                  value={userFilters.cgpa}
+                  value={userFilters?.cgpa}
                   onChange={handleUserSliderChange('cgpa')}
                   valueLabelDisplay="auto"
                   min={0}

@@ -173,7 +173,7 @@ const JobCard = ({ job }) => {
           <Applicants>Applicants: {job?.applicants?.length}</Applicants>
         </JobDetails>
        <Link to={`/job/${job._id}`}>
-       
+
        <ApplyButton startIcon={<ArrowForward />} >
           View Job
         </ApplyButton>
