@@ -70,7 +70,7 @@ const EditProfile = () => {
   return (
     <>
     <Navbar/>
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 py-6">
       <Paper elevation={3} style={{ padding: '20px', borderRadius: '8px', width: '100%', maxWidth: '800px' }}>
         <Typography variant="h4" gutterBottom align="center" style={{ fontWeight: 'bold', marginBottom: '20px' }}>
           Edit Profile
