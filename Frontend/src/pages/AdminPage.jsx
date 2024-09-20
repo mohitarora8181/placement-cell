@@ -104,7 +104,7 @@ const AdminPage = () => {
       } else if (tabValue === 'company') {
         const query = new URLSearchParams({
           ...jobFilters,
-          ctc: jobFilters.ctc.join(',')
+          ctc: jobFilters?.ctc.join(',')
         }).toString();
         const response = await axios.get(`/api/companies?${query}`, {
           headers: {
@@ -190,14 +190,14 @@ const AdminPage = () => {
                 name="activeBacklogs"
                 label="Active Backlogs"
                 sx={{width:'130px', height:'60px', marginRight:'2px'}}
-                value={userFilters.activeBacklogs}
+                value={userFilters?.activeBacklogs}
                 onChange={handleUserFilterChange}
                 margin="normal"
               />
               <Box sx={{ marginX: 1 }}>
                 <div>Twelfth Percentage: {userFilters?.twelfthPercentage[0]}% - {userFilters?.twelfthPercentage[1]}%</div>
                 <Slider
-                  value={userFilters.twelfthPercentage}
+                  value={userFilters?.twelfthPercentage}
                   onChange={handleUserSliderChange('twelfthPercentage')}
                   valueLabelDisplay="auto"
                   min={0}
@@ -228,7 +228,7 @@ const AdminPage = () => {
               <TextField
                 name="jobTitle"
                 label="Job Title"
-                value={jobFilters.jobTitle}
+                value={jobFilters?.jobTitle}
                 onChange={handleJobFilterChange}
                 margin="normal"
                 sx={{width:'190px', height:'60px', marginRight:'2px'}}
@@ -237,7 +237,7 @@ const AdminPage = () => {
               <TextField
                 name="location"
                 label="Location"
-                value={jobFilters.location}
+                value={jobFilters?.location}
                 onChange={handleJobFilterChange}
                 margin="normal"
                 sx={{width:'190px', height:'60px', marginRight:'2px'}}
@@ -246,16 +246,16 @@ const AdminPage = () => {
               <TextField
                 name="type"
                 label="Type"
-                value={jobFilters.type}
+                value={jobFilters?.type}
                 onChange={handleJobFilterChange}
                 margin="normal"
                 sx={{width:'190px', height:'60px', marginRight:'2px'}}
 
               />
               <Box sx={{ marginX: 2 }}>
-                <div>CTC: {jobFilters.ctc[0]} - {jobFilters.ctc[1]}</div>
+                <div>CTC: {jobFilters?.ctc[0]} - {jobFilters?.ctc[1]}</div>
                 <Slider
-                  value={jobFilters.ctc}
+                  value={jobFilters?.ctc}
                   onChange={handleJobSliderChange('ctc')}
                   valueLabelDisplay="auto"
                   min={0}
@@ -275,14 +275,14 @@ const AdminPage = () => {
           {tabValue === 'student' && (
             <div className="flex flex-wrap justify-center">
               {users
-                .filter(user => !user.isAdmin).map(user => (
+                ?.filter(user => !user.isAdmin).map(user => (
                 <UserCard key={user._id} user={user} />
               ))}
             </div>
           )}
           {tabValue === 'company' && (
             <div className="flex flex-wrap justify-center">
-              {jobs.map(job => (
+              {jobs?.map(job => (
                 <JobData key={job._id} job={job} />
               ))}
             </div>
