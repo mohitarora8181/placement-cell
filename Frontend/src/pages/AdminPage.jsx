@@ -283,7 +283,9 @@ const AdminPage = () => {
           {tabValue === 'company' && (
             <div className="flex flex-wrap justify-center">
               {jobs?.map(job => (
-                <JobData key={job?._id} job={job} />
+                <JobData key={job?._id} job={job} >
+                </JobData>
+                
               ))}
             </div>
           )}
