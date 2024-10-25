@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'Frontend', 'build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'Frontend', 'build', 'index.html'));
 });
-api.get('/', (req, res)=>{
+app.get('/', (req, res)=>{
   res.send("This is the API endpoint of PC MSIT");
 })
 connectDB()
