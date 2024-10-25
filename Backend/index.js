@@ -15,12 +15,12 @@ dotenv.config({
 });
 
 app.use(cors({
-  origin: 'http://localhost:3000', 
+  origin: 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
-app.options('*', cors()); 
+app.options('*', cors());
 
 
 app.use(express.json());
@@ -29,7 +29,7 @@ const { server, io } = setupSocketIO(app);
 
 // API Routes
 app.use('/api/users', userRoutes);
-app.use('/api', jobRoutes); 
+app.use('/api', jobRoutes);
 
 // Serve static files
 const __dirname = path.resolve();
@@ -38,7 +38,9 @@ app.use(express.static(path.join(__dirname, 'Frontend', 'build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'Frontend', 'build', 'index.html'));
 });
-
+api.get('/', (req, res)=>{
+  res.send("This is the API endpoint of PC MSIT");
+})
 connectDB()
   .then(() => {
     server.listen(process.env.PORT || 8000, () => {
