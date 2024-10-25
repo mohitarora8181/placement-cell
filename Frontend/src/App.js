@@ -22,6 +22,7 @@ import NotificationForm from './pages/Notification'
 import JobDetailsPageUser from './pages/JobDetailsPageUser'
 import ShortlistForm from './pages/shortlistForm'
 import Footer from './components/Footer'
+import EditJob from './pages/EditJob'
 import MeetTheTeam from './components/MeetTheTeam'
 
 function App() {
@@ -126,6 +127,10 @@ function App() {
         <Route
           path='/job/:jobId'
           element={role === 'admin' ? <JobDetails /> : <JobDetailsPageUser />}
+        />
+        <Route
+          path="/jobs/edit/:jobId"
+          element={<EditJob/>}
         />
         <Route
           path='/admin'

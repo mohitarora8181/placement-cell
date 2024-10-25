@@ -121,7 +121,35 @@ router.post('/jobs', async (req, res) => {
 
 
 
+router.put('/jobs/:id', async (req, res) => {
+  try {
+    const { jobTitle, companyName, location, type, jobDescription, ctc, imageURL, applyURL } = req.body;
 
+    const updatedJob = await Job.findByIdAndUpdate(
+      req.params.id,
+      {
+        jobTitle,
+        companyName,
+        location,
+        type,
+        jobDescription,
+        ctc,
+        imageURL,
+        applyURL,
+      },
+      { new: true } // Return the updated job
+    );
+
+    if (!updatedJob) {
+      return res.status(404).send('Job not found.');
+    }
+
+    res.status(200).json(updatedJob);
+  } catch (error) {
+    console.error('Error updating job:', error);
+    res.status(500).send('Server error.');
+  }
+});
 
 router.get('/jobs', async (req, res) => {
   try {
