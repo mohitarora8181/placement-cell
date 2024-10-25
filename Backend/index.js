@@ -51,4 +51,3 @@ connectDB()
     console.log('MONGO DB connection failed !!!', err);
   });
 export { io };
-module.exports = app; 
