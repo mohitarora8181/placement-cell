@@ -39,7 +39,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'Frontend', 'build', 'index.html'));
 });
 app.get('/', (req, res)=>{
-  res.send("This is the API endpoint of PC MSIT");
+  return res.send("This is the API endpoint of PC MSIT");
 })
 connectDB()
   .then(() => {
@@ -51,3 +51,4 @@ connectDB()
     console.log('MONGO DB connection failed !!!', err);
   });
 export { io };
+module.exports = app; 
