@@ -76,41 +76,45 @@ const JobDetailsPageUser = () => {
   return job ? (
     <>
       <Navbar />
-      <div className='p-8 mx-auto'>
-        <div className='flex w-[80%] shadow-md mx-auto p-4 rounded-md'>
-          <div className='mr-8 w-[40%]'>
+      <div className="p-8 mx-auto">
+        <div className="flex md:flex-row flex-col md:w-[80%] w-[95%] shadow-md mx-auto p-4 rounded-md justify-between items-center">
+
+          {/* Image Section */}
+          <div className="md:w-[30%]"> {/* Reduced width for the image section */}
             {job.imageURL ? (
               <img
                 src={job.imageURL}
                 alt={job.jobTitle}
-                className='rounded-lg h-64 w-full object-cover mb-4'
+                className="rounded-lg w-full h-[300px] object-cover mb-4" // Adjusted image size
               />
             ) : (
               <div>No Image Available</div>
             )}
           </div>
-          <div>
-            <Typography variant='h4' gutterBottom>
+
+          {/* Job Details Section */}
+          <div className="md:w-[65%]"> {/* Increased width for job details */}
+            <Typography variant="h4" gutterBottom>
               {job.jobTitle}
             </Typography>
-            <Typography variant='body1' color='textSecondary' paragraph>
+            <Typography variant="body1" color="textSecondary" paragraph>
               <strong>Company:</strong> {job.companyName}
             </Typography>
-            <Typography variant='body1' color='textSecondary' paragraph>
+            <Typography variant="body1" color="textSecondary" paragraph>
               <strong>Location:</strong> {job.location}
             </Typography>
-            <Typography variant='body1' color='textSecondary' paragraph>
+            <Typography variant="body1" color="textSecondary" paragraph>
               <strong>Type:</strong> {job.type}
             </Typography>
-            <Typography variant='body1' color='textSecondary' paragraph>
+            <Typography variant="body1" color="textSecondary" paragraph>
               <strong>Description:</strong> {job.jobDescription}
             </Typography>
-            <Typography variant='body1' color='textSecondary' paragraph>
+            <Typography variant="body1" color="textSecondary" paragraph>
               <strong>CTC:</strong>{' '}
               {job.ctc ? `${job.ctc} lacs` : 'Not Specified'}
             </Typography>
             <Typography
-              variant='body2'
+              variant="body2"
               style={{
                 fontWeight: 'bold',
                 color: '#00796b',
@@ -128,18 +132,18 @@ const JobDetailsPageUser = () => {
               Apply
             </ApplyButton>
 
-            <div className='mt-6'>
-              <Typography variant='h6' gutterBottom>
+            <div className="mt-6">
+              <Typography variant="h6" gutterBottom>
                 Shortlisted Students:
               </Typography>
 
               {/* Check if shortlistedStudents is a string (URL link) */}
               {typeof job.shortlistedStudents === 'string' ? (
-                <Typography variant='body1' color='primary'>
+                <Typography variant="body1" color="primary">
                   <a
                     href={job.shortlistedStudents}
-                    target='_blank'
-                    rel='noopener noreferrer'
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     View Shortlisted Students
                   </a>
@@ -155,12 +159,13 @@ const JobDetailsPageUser = () => {
                   ))}
                 </ul>
               ) : (
-                <Typography variant='body1' color='textSecondary'>
+                <Typography variant="body1" color="textSecondary">
                   Yet to announce
                 </Typography>
               )}
             </div>
           </div>
+
         </div>
       </div>
 
@@ -170,10 +175,10 @@ const JobDetailsPageUser = () => {
           <p>Have you applied for this job?</p>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleConfirm(false)} color='primary'>
+          <Button onClick={() => handleConfirm(false)} color="primary">
             No
           </Button>
-          <Button onClick={() => handleConfirm(true)} color='primary'>
+          <Button onClick={() => handleConfirm(true)} color="primary">
             Yes
           </Button>
         </DialogActions>
