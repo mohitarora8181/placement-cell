@@ -78,7 +78,7 @@ const JobDetailsPageUser = () => {
       <Navbar />
       <div className='p-8 mx-auto'>
         <div className='flex w-[80%] shadow-md mx-auto p-4 rounded-md'>
-          <div className='mr-8'>
+          <div className='mr-8 w-[40%]'>
             {job.imageURL ? (
               <img
                 src={job.imageURL}
