@@ -10,9 +10,9 @@ const Footer = () => {
         <div className="logo-social">
           <img src={logo} alt="MSIT Logo" className="logo" />
           <div className="social-links">
-            <a href="https://facebook.com/msit">Facebook</a>
-            <a href="https://twitter.com/msit">Twitter</a>
-            <a href="https://linkedin.com/company/msit">LinkedIn</a>
+            <a href="https://www.facebook.com/msitnewdelhi">Facebook</a>
+            <a href="https://x.com/msitnewdelhi">Twitter</a>
+            <a href="https://www.linkedin.com/in/maharaja-surajmal-institute-of-technology-938408202/">LinkedIn</a>
           </div>
         </div>
 
