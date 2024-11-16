@@ -1,8 +1,8 @@
 import React from 'react';
 import Navbar from './Navbar';
-import ceoImage from '../images/image2.jpg'; // Example image paths
+import ceoImage from '../images/image2.jpg';
 import pokerFaceImage from '../images/image3.jpg';
-import monkImage from '../images/image4.jpg';
+import monkImage from '../images/vegeta.png';
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 
