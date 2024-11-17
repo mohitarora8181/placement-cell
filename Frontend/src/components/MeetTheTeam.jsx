@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import ceoImage from '../images/image2.jpg';
 import pokerFaceImage from '../images/image3.jpg';
 import monkImage from '../images/vegeta.png';
+import robot from "../images/robot.png";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 
@@ -16,7 +17,8 @@ const MeetTheTeam = () => {
       email: 'adityaray947@gmail.com',
       photo: ceoImage,
       linkedIn: 'https://www.linkedin.com/in/aditya-ray-672b1a22b/',
-      github:'https://github.com/adityaray947'
+      github:'https://github.com/adityaray947',
+      passingYear:"MSIT'25"
     },
     {
       name: 'Aman Jha',
@@ -26,7 +28,8 @@ const MeetTheTeam = () => {
       email: 'ajha70227@gmail.com',
       photo: pokerFaceImage,
        linkedIn: '',
-      github:'https://github.com/Aman83490'
+      github:'https://github.com/Aman83490',
+      passingYear:"MSIT'25"
     },
     {
       name: 'Yuvraj Singh',
@@ -36,7 +39,19 @@ const MeetTheTeam = () => {
       email: 'devyuvraj883@gmail.com',
       photo: monkImage,
        linkedIn: 'https://www.linkedin.com/in/yuvraj-singh-2942781a3/',
-      github:'https://github.com/Yuvraj883'
+      github:'https://github.com/Yuvraj883',
+      passingYear:"MSIT'25"
+    },
+    {
+      name: 'Mohit Arora',
+      title: 'Learner ++',
+      description:
+        "Robo_the",
+      email: 'mohitarora00777@gmail.com',
+      photo: robot,
+       linkedIn: 'https://www.linkedin.com/in/mohit8181/',
+      github:'https://github.com/mohitarora8181',
+      passingYear:"MSIT'26"
     }
   ];
 
@@ -51,7 +66,7 @@ const MeetTheTeam = () => {
               <img src={member.photo} alt={member.name} style={styles.photo} />
 
               <h3 className='mb-2 text-white' style={styles.cardTitle}>{member.name}</h3>
-              <p className='mt-0 mb-2 text-gray-500'>MSIT'25</p>
+              <p className='mt-0 mb-2 text-gray-500'>{member.passingYear}</p>
 
               {/* <p style={styles.cardDescription}>{member.description}</p> */}
               {/* <div style={styles.email}>

@@ -6,13 +6,21 @@ import axios from 'axios'
 import { Typography, Grid, Button } from '@mui/material'
 import AppliedUserCard from '../components/AppliedUserCard.jsx'
 import AdminNav from '../components/AdminNav.jsx'
+import TableListCompany from '../components/TableList-CompanyPage.jsx'
 
 const JobDetails = () => {
   const { jobId } = useParams()
   const [job, setJob] = useState(null)
   const [view, setView] = useState('applied') // Switch between 'applied' and 'shortlisted'
   const [shortlistedStudents, setShortlistedStudents] = useState([])
-  const navigate = useNavigate()
+  const [toggleView, setToggleView] = useState(false);
+
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setToggleView(localStorage.getItem('setView') == 'list');
+  }, [])
 
   useEffect(() => {
     axios
@@ -36,19 +44,20 @@ const JobDetails = () => {
   }, [jobId])
 
   const renderStudentCards = (students) => (
-    <Grid container spacing={3}>
-      {students.length > 0 ? (
-        students.map((user) => (
-          <Grid item xs={12} md={6} lg={4} key={user._id}>
-            <AppliedUserCard user={user} />
-          </Grid>
-        ))
-      ) : (
-        <Typography variant='body1' color='textSecondary' align='center'>
-          No users have applied yet.
-        </Typography>
-      )}
-    </Grid>
+    students.length > 0 && toggleView ? <TableListCompany items={students} />
+      : <Grid container spacing={3}>
+        {students.length > 0 ? (
+          students.map((user) => (
+            <Grid item xs={12} md={6} lg={4} key={user._id}>
+              <AppliedUserCard user={user} />
+            </Grid>
+          ))
+        ) : (
+          <Typography className='w-full pt-14' variant='body1' color='textSecondary' align='center'>
+            No users have applied yet.
+          </Typography>
+        )}
+      </Grid>
   )
 
   // New function to render shortlisted students
@@ -70,15 +79,13 @@ const JobDetails = () => {
 
     // If it's an array, render each student as Name (Email)
     if (Array.isArray(shortlistedStudents) && shortlistedStudents.length > 0) {
-      return (
-        <ul>
-          {shortlistedStudents.map((student, index) => (
-            <li key={index}>
-              {student.name} ({student.email})
-            </li>
-          ))}
-        </ul>
-      )
+      return toggleView ? <TableListCompany items={shortlistedStudents} /> : <ul>
+        {shortlistedStudents.map((student, index) => (
+          <li key={index}>
+            {student.name} ({student.email})
+          </li>
+        ))}
+      </ul>
     }
 
     // If no students or no URL, show a placeholder
@@ -94,16 +101,16 @@ const JobDetails = () => {
       <AdminNav />
       <div className='p-8 mx-auto'>
         <div className='flex w-[80%] shadow-md mx-auto p-4 rounded-md'>
-          <div className='mr-8'>
+          <div className='mr-8 w-[20%]'>
             {job.imageURL && (
               <img
                 src={job.imageURL}
                 alt={job.jobTitle}
-                className='rounded-lg h-64 w-full object-cover mb-4'
+                className='rounded-lg h-64 w-full object-contain mb-4'
               />
             )}
           </div>
-          <div>
+          <div className='w-[80%]'>
             <Typography variant='h4' gutterBottom>
               {job.jobTitle}
             </Typography>
@@ -177,9 +184,23 @@ const JobDetails = () => {
               <Button
                 variant='outlined'
                 color='primary'
+                style={{ marginRight: '10px' }}
                 onClick={() => setView('shortlisted')}
               >
                 View Shortlisted Students
+              </Button>
+              <Button variant="outlined" onClick={() => {
+                setToggleView(!toggleView);
+                localStorage.setItem('setView', toggleView ? 'grid' : 'list');
+              }}>
+                {
+                  toggleView ? <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5zm6 0H5v4h4V5zm4 0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V5zm6 0h-4v4h4V5zM3 15a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4zm6 0H5v4h4v-4zm4 0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4zm6 0h-4v4h4v-4z" fill="#0D0D0D" />
+                  </svg> :
+                    <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none">
+                      <path d="M4 7a1 1 0 0 1 1-1h1a1 1 0 0 1 0 2H5a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h9a1 1 0 1 1 0 2h-9a1 1 0 0 1-1-1zm-5 5a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h9a1 1 0 1 1 0 2h-9a1 1 0 0 1-1-1zm-5 5a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h9a1 1 0 1 1 0 2h-9a1 1 0 0 1-1-1z" fill="#0D0D0D" />
+                    </svg>
+                }
               </Button>
             </div>
           </div>

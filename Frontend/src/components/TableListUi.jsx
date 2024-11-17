@@ -34,10 +34,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     [`& td`]: {
         borderRight: '0.5px solid lightgray'
     },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-        border: 0,
-    },
 }));
 
 
@@ -93,27 +89,27 @@ export default function TableListUi({ items }) {
                 </TableHead>
                 <TableBody>
                     {items.map((row) => (
-                        <StyledTableRow onClick={() => handleClick(row._id)} key={row._id}>
-                            <StyledTableCell align="left">{row.username}</StyledTableCell>
-                            <StyledTableCell align="left">{row.fullname}</StyledTableCell>
-                            <StyledTableCell align="left">{row.email}</StyledTableCell>
-                            <StyledTableCell align="left">{row.contactNumber}</StyledTableCell>
-                            <StyledTableCell align="left">{new Date(row.dob).toLocaleDateString()}</StyledTableCell>
-                            <StyledTableCell align="left">{row.degree}</StyledTableCell>
-                            <StyledTableCell align="left">{row.course}</StyledTableCell>
-                            <StyledTableCell align="left">{row.twelfthPercentage}</StyledTableCell>
-                            <StyledTableCell align="left">{row.diplomaPercentage}</StyledTableCell>
-                            <StyledTableCell align="left">{row.nationality}</StyledTableCell>
-                            <StyledTableCell align="left">{row.cgpa}</StyledTableCell>
-                            <StyledTableCell align="left">{row.address}</StyledTableCell>
-                            <StyledTableCell align="left">{row.school12th}</StyledTableCell>
-                            <StyledTableCell align="left">{row.tenthPercentage}</StyledTableCell>
-                            <StyledTableCell align="left">{row.gapYear}</StyledTableCell>
-                            <StyledTableCell align="left">{row.yearOfPassing}</StyledTableCell>
-                            <StyledTableCell align="left">{companies && row.appliedJobs.map((id) => {
+                        <StyledTableRow onClick={() => handleClick(row?._id)} key={row?._id}>
+                            <StyledTableCell align="left">{row?.username}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.fullname}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.email}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.contactNumber}</StyledTableCell>
+                            <StyledTableCell align="left">{new Date(row?.dob).toLocaleDateString()}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.degree}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.course}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.twelfthPercentage}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.diplomaPercentage}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.nationality}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.cgpa}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.address}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.school12th}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.tenthPercentage}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.gapYear}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.yearOfPassing}</StyledTableCell>
+                            <StyledTableCell align="left">{companies && row?.appliedJobs.map((id) => {
                                 return <p key={`job-${id}`}>{companies[id] + ','}</p>
                             })}</StyledTableCell>
-                            <StyledTableCell align="left">{row.activeBacklogs}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.activeBacklogs}</StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>
