@@ -21,6 +21,7 @@ const CardContainer = styled('div')(({ theme }) => ({
   margin: '12px',
   overflow: 'hidden', // Ensure no horizontal scrollbar
   position: 'relative',
+  cursor:'pointer'
 }));
 
 const ProfileImage = styled('div')({

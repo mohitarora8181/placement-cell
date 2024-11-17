@@ -5,11 +5,14 @@ import { Tabs, Tab, Box, Button, TextField, Slider, Select, MenuItem } from '@mu
 import axios from 'axios';
 import UserCard from '../components/UserCard';
 import JobData from '../components/JobData';
+import TableListUi from '../components/TableListUi';
+import * as XLSX from 'xlsx'
 
 const AdminPage = () => {
   const [tabValue, setTabValue] = useState(localStorage.getItem('adminTab') || 'student');
   const [users, setUsers] = useState([]);
   const [jobs, setJobs] = useState([]);
+  const [toggleView, setToggleView] = useState(false);
   const [userFilters, setUserFilters] = useState({
     degree: '',
     course: '',
@@ -122,6 +125,20 @@ const AdminPage = () => {
     fetchData(); // Fetch data whenever the tab or filters change
   }, [tabValue, userFilters, jobFilters]);
 
+  useEffect(() => {
+    setToggleView(localStorage.getItem('setView') == 'list');
+  }, [])
+
+
+  const downloadExcel = () => {
+    if (users.length > 0) {
+      const worksheet = XLSX.utils.table_to_sheet(document.querySelector('table'));
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, "StudentList.xlsx");
+    }
+  }
+
   return (
     <>
       <AdminNav />
@@ -138,13 +155,27 @@ const AdminPage = () => {
         </Tabs>
 
         {/* Filters Section */}
-        <Box sx={{ display: {sm:'none', xs:'none', md:'flex'}, gap:'4px', justifyContent: 'center', alignItems:'center', padding: 2 }}>
+        <Box sx={{ display: { sm: 'none', xs: 'none', md: 'flex' }, gap: '4px', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
           {tabValue === 'student' && (
             <>
+              <Button sx={{ height: '55px' }} variant="outlined" onClick={() => {
+                setToggleView(!toggleView);
+                localStorage.setItem('setView', toggleView ? 'grid' : 'list');
+              }}>
+                {
+                  toggleView ? <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5zm6 0H5v4h4V5zm4 0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V5zm6 0h-4v4h4V5zM3 15a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4zm6 0H5v4h4v-4zm4 0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4zm6 0h-4v4h4v-4z" fill="#0D0D0D" />
+                  </svg> :
+                    <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none">
+                      <path d="M4 7a1 1 0 0 1 1-1h1a1 1 0 0 1 0 2H5a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h9a1 1 0 1 1 0 2h-9a1 1 0 0 1-1-1zm-5 5a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h9a1 1 0 1 1 0 2h-9a1 1 0 0 1-1-1zm-5 5a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h9a1 1 0 1 1 0 2h-9a1 1 0 0 1-1-1z" fill="#0D0D0D" />
+                    </svg>
+                }
+              </Button>
+
               <TextField
                 name="degree"
                 label="Degree"
-                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
 
                 value={userFilters?.degree}
                 onChange={handleUserFilterChange}
@@ -153,7 +184,7 @@ const AdminPage = () => {
               <TextField
                 name="course"
                 label="Course"
-                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
 
                 value={userFilters?.course}
                 onChange={handleUserFilterChange}
@@ -162,7 +193,7 @@ const AdminPage = () => {
               <TextField
                 name="classes"
                 label="Class"
-                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
 
                 value={userFilters?.classes}
                 onChange={handleUserFilterChange}
@@ -171,7 +202,7 @@ const AdminPage = () => {
               <TextField
                 name="yearOfPassing"
                 label="Year of Passing"
-                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
 
                 value={userFilters?.yearOfPassing}
                 onChange={handleUserFilterChange}
@@ -180,7 +211,7 @@ const AdminPage = () => {
               <TextField
                 name="gapYear"
                 label="Gap Year"
-                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
 
                 value={userFilters?.gapYear}
                 onChange={handleUserFilterChange}
@@ -189,7 +220,7 @@ const AdminPage = () => {
               <TextField
                 name="activeBacklogs"
                 label="Active Backlogs"
-                sx={{width:'130px', height:'60px', marginRight:'2px'}}
+                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
                 value={userFilters?.activeBacklogs}
                 onChange={handleUserFilterChange}
                 margin="normal"
@@ -203,7 +234,7 @@ const AdminPage = () => {
                   min={0}
                   max={100}
                   step={1}
-                  sx={{width:'20ch'}}
+                  sx={{ width: '20ch' }}
 
                 />
               </Box>
@@ -216,11 +247,11 @@ const AdminPage = () => {
                   min={0}
                   max={10}
                   step={0.1}
-                  sx={{width:'14ch'}}
+                  sx={{ width: '14ch' }}
                 />
               </Box>
-              <Button sx={{width:'130px', height:'60px', marginX:'2px'}} variant="contained" onClick={applyFilters}>Apply Filters</Button>
-              <Button sx={{width:'130px', height:'60px', marginX:'2px'}} variant="outlined" onClick={resetFilters}>Reset Filters</Button>
+              <Button sx={{ width: '130px', height: '60px', marginX: '2px' }} variant="contained" onClick={applyFilters}>Apply Filters</Button>
+              <Button sx={{ width: '130px', height: '60px', marginX: '2px' }} variant="outlined" onClick={resetFilters}>Reset Filters</Button>
             </>
           )}
           {tabValue === 'company' && (
@@ -231,7 +262,7 @@ const AdminPage = () => {
                 value={jobFilters?.jobTitle}
                 onChange={handleJobFilterChange}
                 margin="normal"
-                sx={{width:'190px', height:'60px', marginRight:'2px'}}
+                sx={{ width: '190px', height: '60px', marginRight: '2px' }}
 
               />
               <TextField
@@ -240,7 +271,7 @@ const AdminPage = () => {
                 value={jobFilters?.location}
                 onChange={handleJobFilterChange}
                 margin="normal"
-                sx={{width:'190px', height:'60px', marginRight:'2px'}}
+                sx={{ width: '190px', height: '60px', marginRight: '2px' }}
 
               />
               <TextField
@@ -249,7 +280,7 @@ const AdminPage = () => {
                 value={jobFilters?.type}
                 onChange={handleJobFilterChange}
                 margin="normal"
-                sx={{width:'190px', height:'60px', marginRight:'2px'}}
+                sx={{ width: '190px', height: '60px', marginRight: '2px' }}
 
               />
               <Box sx={{ marginX: 2 }}>
@@ -261,11 +292,11 @@ const AdminPage = () => {
                   min={0}
                   max={100}
                   step={1}
-                  sx={{width:'24ch'}}
+                  sx={{ width: '24ch' }}
                 />
               </Box>
-              <Button sx={{width:'130px', height:'60px', marginX:'2px'}} variant="contained" onClick={applyFilters}>Apply Filters</Button>
-              <Button sx={{width:'130px', height:'60px', marginX:'2px'}} variant="outlined" onClick={resetFilters}>Reset Filters</Button>
+              <Button sx={{ width: '130px', height: '60px', marginX: '2px' }} variant="contained" onClick={applyFilters}>Apply Filters</Button>
+              <Button sx={{ width: '130px', height: '60px', marginX: '2px' }} variant="outlined" onClick={resetFilters}>Reset Filters</Button>
             </>
           )}
         </Box>
@@ -273,19 +304,24 @@ const AdminPage = () => {
         {/* Content Section */}
         <Box sx={{ padding: 2 }}>
           {tabValue === 'student' && (
-            <div className="flex flex-wrap justify-center">
-              {users
-                ?.filter(user => !user?.isAdmin).map(user => (
-                <UserCard key={user?._id} user={user} />
-              ))}
-            </div>
+            <>
+              <div className="flex flex-wrap justify-center h-100">
+                {toggleView ?
+                  <TableListUi items={users?.filter(user => !user?.isAdmim)} />
+                  : users
+                    ?.filter(user => !user?.isAdmin).map(user => (
+                      <UserCard key={user?._id} user={user} />
+                    ))}
+              </div>
+              {toggleView && <p className='text-sm p-5 cursor-pointer hover:underline-offset-2 underline' onClick={downloadExcel}>Download Excel file for this data</p>}
+            </>
           )}
           {tabValue === 'company' && (
             <div className="flex flex-wrap justify-center">
               {jobs?.map(job => (
                 <JobData key={job?._id} job={job} >
                 </JobData>
-                
+
               ))}
             </div>
           )}
