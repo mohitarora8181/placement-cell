@@ -5,10 +5,12 @@ import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TableRow, { tableRowClasses } from '@mui/material/TableRow';
+import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx'
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -40,6 +42,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function TableListCompany({ items }) {
     const navigate = useNavigate();
 
+    const [headers, setheaders] = useState([]);
+
+    useEffect(() => {
+        items.forEach(obj => {
+            delete obj._id;
+        });
+        const keys = Object.keys(items[0]);
+        setheaders(keys);
+    }, []);
+
     const downloadExcel = () => {
         const worksheet = XLSX.utils.table_to_sheet(document.querySelector('table'));
         const workbook = XLSX.utils.book_new();
@@ -57,19 +69,19 @@ export default function TableListCompany({ items }) {
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell align="left">Email</StyledTableCell>
-                            <StyledTableCell align="left">Full Name</StyledTableCell>
-                            <StyledTableCell align="left">Degree</StyledTableCell>
-                            <StyledTableCell align="left">Course</StyledTableCell>
+                            {headers.map((header, index) => {
+                                return <StyledTableCell key={header + '-key-' + index} align="left">{header.toUpperCase()}</StyledTableCell>
+                            })}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {items.map((row) => (
-                            <StyledTableRow onClick={() => handleClick(row._id)} key={row._id}>
-                                <StyledTableCell align="left">{row?.email}</StyledTableCell>
-                                <StyledTableCell align="left">{row?.fullname || row?.name}</StyledTableCell>
-                                <StyledTableCell align="left">{row?.degree}</StyledTableCell>
-                                <StyledTableCell align="left">{row?.course}</StyledTableCell>
+                        {items.map((row, index) => (
+                            <StyledTableRow key={row._id + '--' + index} onClick={() => row._id && handleClick(row._id)}>
+                                {
+                                    headers.map(key => {
+                                        return <StyledTableCell key={key + '-value-' + index} align="left">{row[key]}</StyledTableCell>
+                                    })
+                                }
                             </StyledTableRow>
                         ))}
                     </TableBody>

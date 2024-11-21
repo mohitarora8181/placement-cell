@@ -36,6 +36,12 @@ const ShortlistForm = () => {
           const jobs = response.data;
           const filteredJobs = jobs.filter(job => job.companyName === companyName);
           setJobDetails(filteredJobs);
+          if(Array.isArray(filteredJobs[0].shortlistedStudents)){
+            setSendAsLink(false)
+            setStudents(filteredJobs[0].shortlistedStudents)
+          }else{
+            setSendAsLink(true)
+          }
         } catch (error) {
           console.error('Error fetching job details:', error);
         }
@@ -207,10 +213,10 @@ const ShortlistForm = () => {
         ) : (
           <p className="text-center text-gray-600">Select a company to view job details.</p>
         )}
-        {!sendAsLink && students.length > 0 && (
+        {!sendAsLink && students?.length > 0 && (
           <div>
             <h3 className="text-2xl font-semibold mb-4 text-gray-800">Student List</h3>
-            {students.map((student, index) => (
+            {students?.map((student, index) => (
               <div key={index} className="flex justify-between items-center p-4 mb-4 bg-gray-200 shadow-md rounded-md">
                 <div>
                   <p className="text-gray-700"><strong>Name:</strong> {student.name}</p>

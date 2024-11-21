@@ -174,7 +174,7 @@ const JobDetails = () => {
             </Typography>
             <div>
               <Button
-                variant='outlined'
+                variant={view == 'applied' ? 'contained' : 'outlined'}
                 color='primary'
                 onClick={() => setView('applied')}
                 style={{ marginRight: '10px' }}
@@ -182,7 +182,7 @@ const JobDetails = () => {
                 View Applied Students
               </Button>
               <Button
-                variant='outlined'
+                variant={view == 'shortlisted' ? 'contained' : 'outlined'}
                 color='primary'
                 style={{ marginRight: '10px' }}
                 onClick={() => setView('shortlisted')}
