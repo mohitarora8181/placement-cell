@@ -203,12 +203,11 @@ const AdminNav = ({ currentVal }) => {
             </Box>
           </div>
 
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton color='inherit' onClick={handleShortlistedClick}>
+          <Box sx={{ display: 'flex', alignItems: 'center'}}>
+            <IconButton sx={{marginInline:'5px' , border:'gray 1px solid'}} color='inherit' onClick={handleShortlistedClick}>
               <ChecklistIcon
                 sx={{
                   color: '#000',
-                  marginRight: 4,
                   display: { xs: 'none', sm: 'none', md: 'block' },
                 }}
               />

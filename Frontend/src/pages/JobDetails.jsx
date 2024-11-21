@@ -7,6 +7,7 @@ import { Typography, Grid, Button } from '@mui/material'
 import AppliedUserCard from '../components/AppliedUserCard.jsx'
 import AdminNav from '../components/AdminNav.jsx'
 import TableListCompany from '../components/TableList-CompanyPage.jsx'
+import Loader from '../components/Loader.jsx'
 
 const JobDetails = () => {
   const { jobId } = useParams()
@@ -213,7 +214,7 @@ const JobDetails = () => {
       </div>
     </>
   ) : (
-    <div>Loading...</div>
+    <Loader/>
   )
 }
 

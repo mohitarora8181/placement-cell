@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios'
 import UserCard from '../components/UserCard'
+import Loader from './Loader'
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search)
@@ -52,7 +53,7 @@ const SearchUsers = () => {
         User Search Results
       </h2>
       {loading ? (
-        <p>Loading...</p>
+        <Loader/>
       ) : error ? (
         <p>{error}</p>
       ) : users.length === 0 ? (

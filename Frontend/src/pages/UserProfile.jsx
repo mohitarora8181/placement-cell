@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Typography, Grid, Avatar, Paper, Button } from '@mui/material';
 import AdminNav from '../components/AdminNav';
-
+import Loader from '../components/Loader'
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -98,7 +98,7 @@ const UserProfile = () => {
                   <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
                     <strong>Active Backlogs:</strong> {user.activeBacklogs || 'None'}
                   </Typography>
-                  
+
                   <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
                     <strong>Resume URL:</strong> <a href={user.resumeURL} target="_blank" rel="noopener noreferrer">{user.resumeURL || 'Not provided'}</a>
                   </Typography>
@@ -168,7 +168,7 @@ const UserProfile = () => {
                         <strong>Company:</strong> {job.companyName}
                       </Typography>
                       <Typography variant="body1" style={{ color: '#555555' }}>
-                      <strong>Location:</strong> {job.location}
+                        <strong>Location:</strong> {job.location}
                       </Typography>
                       <Typography variant="body1" style={{ color: '#555555' }}>
                         <strong>Type:</strong> {job.type}
@@ -193,7 +193,7 @@ const UserProfile = () => {
       </div>
     </>
   ) : (
-    <div className="p-8 text-center text-gray-600">Loading...</div>
+    <Loader />
   );
 };
 

@@ -4,6 +4,7 @@ import { Button, TextField, Typography, Grid, Paper } from '@mui/material';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../components/Loader';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -52,7 +53,7 @@ const Profile = () => {
   };
 
   if (!user) {
-    return <Typography variant="h6" align="center" mt={5}>Loading...</Typography>;
+    return <Loader/>;
   }
 
   const handleEditProfile = () => {

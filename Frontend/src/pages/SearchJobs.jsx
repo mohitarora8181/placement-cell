@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios'
 import JobCard from '../components/JobCard'
+import Loader from '../components/Loader'
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search)
@@ -39,7 +40,7 @@ const SearchJobs = () => {
     <div className='max-w-[80%] mx-auto px-4 py-8'>
       <h2 className='text-2xl font-bold mb-4 text-center'>Search Results</h2>
       {loading ? (
-        <p>Loading...</p>
+        <Loader/>
       ) : error ? (
         <p>{error}</p>
       ) : jobPostings.length === 0 ? (

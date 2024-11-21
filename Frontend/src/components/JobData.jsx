@@ -41,18 +41,20 @@ const JobData = ({ job }) => {
 
   return (
     <Card
-      className='cursor-pointer p-4 bg-white shadow-lg rounded-lg transition-transform transform hover:scale-105 hover:shadow-xl'
+      className='cursor-pointer p-4 bg-white shadow-lg rounded-lgt transition-all ease-in-out delay-150 hover:scale-105 hover:shadow-xl'
       onClick={handleClick}
       style={{ width: '350px', margin: '10px', marginLeft: '0' }}
     >
       <CardContent>
-        {job.imageURL && (
-          <img
-            src={job.imageURL}
-            alt={job.jobTitle}
-            className='rounded-lg h-36 w-full object-cover mb-4'
-          />
-        )}
+        <div className='w-full flex justify-center'>
+          {job.imageURL && (
+            <img
+              src={job.imageURL}
+              alt={job.jobTitle}
+              className='rounded-xl self-center h-36 w-fit object-contain mb-4'
+            />
+          )}
+        </div>
         <Typography
           variant='h6'
           className='font-semibold text-gray-800 mb-2'

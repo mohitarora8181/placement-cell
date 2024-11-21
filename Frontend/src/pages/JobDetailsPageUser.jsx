@@ -14,6 +14,7 @@ import {
 import { ArrowForward } from '@mui/icons-material'
 
 import Navbar from '../components/Navbar.jsx'
+import Loader from '../components/Loader.jsx'
 
 const ApplyButton = styled(Button)(({ theme }) => ({
   backgroundColor: '#00796b',
@@ -185,7 +186,7 @@ const JobDetailsPageUser = () => {
       </Dialog>
     </>
   ) : (
-    <div>Loading...</div>
+    <Loader/>
   )
 }
 

@@ -24,6 +24,7 @@ import ShortlistForm from './pages/shortlistForm'
 import Footer from './components/Footer'
 import EditJob from './pages/EditJob'
 import MeetTheTeam from './components/MeetTheTeam'
+import Loader from './components/Loader'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null)
@@ -86,7 +87,7 @@ function App() {
   }, [navigate, location.pathname])
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>
+    return <Loader/>
   }
 
   const showFooter = [
