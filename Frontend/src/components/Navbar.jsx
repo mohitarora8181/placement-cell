@@ -78,11 +78,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchStoredNotifications = async () => {
       try {
-<<<<<<< HEAD
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/notifications/${userId}`)
-=======
-        const response = await axios.get(`/api/notifications/${userId}`)
->>>>>>> a9a7cffeff7c7fe114349fcae9d50908669ca9b2
         const unreadNotifications = response.data.filter(
           (notification) => !notification.isRead
         )
@@ -141,11 +137,7 @@ const Navbar = () => {
 
   const handleMarkAllAsRead = async () => {
     try {
-<<<<<<< HEAD
       await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/notifications/${userId}`)
-=======
-      await axios.delete(`/api/notifications/${userId}`)
->>>>>>> a9a7cffeff7c7fe114349fcae9d50908669ca9b2
       setNotifications([])
       setNewJobsCount(0)
     } catch (error) {
