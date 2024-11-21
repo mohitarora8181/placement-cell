@@ -48,7 +48,11 @@ const AddJob = () => {
 
     try {
       const response = await axios.post(
+<<<<<<< HEAD
         `${process.env.REACT_APP_BACKEND_URL}api/jobs`,
+=======
+        'https://placement-cell-iczn.onrender.com/api/jobs',
+>>>>>>> a9a7cffeff7c7fe114349fcae9d50908669ca9b2
         jobData
       )
       if (response.status === 201) {

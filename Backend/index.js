@@ -24,6 +24,7 @@ dotenv.config({
 
 app.use(cors());
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const { server, io } = setupSocketIO(app);
@@ -33,12 +34,6 @@ app.use('/api/users', userRoutes);
 app.use('/api', jobRoutes);
 
 // Serve static files
-// const __dirname = path.resolve();
-// app.use(express.static(path.join(__dirname, 'Frontend', 'build')));
-
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'Frontend', 'build', 'index.html'));
-// });
 app.get('/', (req, res) => {
   return res.send("This is the API endpoint of PC MSIT");
 })
