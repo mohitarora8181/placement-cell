@@ -19,13 +19,14 @@ const CardContainer = styled('div')(({ theme }) => ({
   },
   maxWidth: '320px',
   display: 'flex',
+  cursor:'pointer',
   flexDirection: 'column',
   margin: '12px',
   overflow: 'hidden', // Ensure no horizontal scrollbar
 }));
 
 const JobImage = styled('div')({
-  backgroundColor: '#e0f7fa',
+  backgroundColor: '#ffffff',
   borderRadius: '8px',
   height: '180px',
   width: '100%',
@@ -43,7 +44,7 @@ const JobImage = styled('div')({
     height: '100%',
     width: '100%',
     borderRadius: '8px',
-    objectFit: 'cover',
+    objectFit: 'contain',
     position: 'absolute',
   },
 });

@@ -25,6 +25,7 @@ const AdminPage = () => {
   });
   const [jobFilters, setJobFilters] = useState({
     jobTitle: '',
+    companyName: '',
     location: '',
     type: '',
     ctc: [0, 100]
@@ -131,11 +132,29 @@ const AdminPage = () => {
 
 
   const downloadExcel = () => {
-    if (users.length > 0) {
-      const worksheet = XLSX.utils.table_to_sheet(document.querySelector('table'));
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-      XLSX.writeFile(workbook, "StudentList.xlsx");
+    if (tabValue == 'student') {
+      if (users.length > 0) {
+        const worksheet = XLSX.utils.table_to_sheet(document.querySelector('table'));
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        XLSX.writeFile(workbook, "StudentList.xlsx");
+      }
+    } else if (tabValue == 'company') {
+      if (jobs.length > 0) {
+        const output = JSON.parse(JSON.stringify(jobs));
+        output.forEach(acc => {
+          delete acc._id;
+          delete acc.createdAt;
+          delete acc.updatedAt;
+          delete acc.__v;
+          delete acc.shortlistedStudents;
+          delete acc.applicants;
+        });
+        const worksheet = XLSX.utils.json_to_sheet(output);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        XLSX.writeFile(workbook, "CompaniesList.xlsx");
+      }
     }
   }
 
@@ -257,6 +276,14 @@ const AdminPage = () => {
           {tabValue === 'company' && (
             <>
               <TextField
+                name="companyName"
+                label="Company Name"
+                value={jobFilters?.companyName}
+                onChange={handleJobFilterChange}
+                margin="normal"
+                sx={{ width: '190px', height: '60px', marginRight: '2px' }}
+              />
+              <TextField
                 name="jobTitle"
                 label="Job Title"
                 value={jobFilters?.jobTitle}
@@ -313,17 +340,20 @@ const AdminPage = () => {
                       <UserCard key={user?._id} user={user} />
                     ))}
               </div>
-              {toggleView && <p className='text-sm p-5 cursor-pointer hover:underline-offset-2 underline' onClick={downloadExcel}>Download Excel file for this data</p>}
+              {toggleView && users.length > 0 && <p className='text-sm p-5 cursor-pointer hover:underline-offset-2 underline' onClick={downloadExcel}>Download Excel file for this data</p>}
             </>
           )}
           {tabValue === 'company' && (
-            <div className="flex flex-wrap justify-center">
-              {jobs?.map(job => (
-                <JobData key={job?._id} job={job} >
-                </JobData>
+            <>
+              <div className="flex flex-wrap justify-center">
+                {jobs?.map(job => (
+                  <JobData key={job?._id} job={job} >
+                  </JobData>
 
-              ))}
-            </div>
+                ))}
+              </div>
+              {jobs.length > 0 && <p className='text-sm p-5 cursor-pointer hover:underline-offset-2 underline' onClick={downloadExcel}>Download Excel file for this data</p>}
+            </>
           )}
           {tabValue === 'add-job' && (
             <div className="flex justify-center items-center">

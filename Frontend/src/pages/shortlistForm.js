@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import the toast styles
 import './Button.css'; // Import custom styles
 
 const ShortlistForm = () => {
-  const [companyName, setCompanyName] = useState('');
+  const [companyID, setCompanyID] = useState('');
   const [link, setLink] = useState('');
   const [students, setStudents] = useState([]);
   const [formStudent, setFormStudent] = useState({ name: '', email: '' });
@@ -18,8 +18,7 @@ const ShortlistForm = () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/companies`);
         const companies = response.data;
-        const names = companies.map(company => company.companyName); 
-        setCompanyNames(names);
+        setCompanyNames(companies);
       } catch (error) {
         console.error('Error fetching companies:', error);
       }
@@ -30,16 +29,16 @@ const ShortlistForm = () => {
 
   useEffect(() => {
     const fetchJobDetails = async () => {
-      if (companyName) {
+      if (companyID) {
         try {
           const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/jobs`);
           const jobs = response.data;
-          const filteredJobs = jobs.filter(job => job.companyName === companyName);
+          const filteredJobs = jobs.filter(job => job._id === companyID);
           setJobDetails(filteredJobs);
-          if(Array.isArray(filteredJobs[0].shortlistedStudents)){
+          if (Array.isArray(filteredJobs[0].shortlistedStudents)) {
             setSendAsLink(false)
             setStudents(filteredJobs[0].shortlistedStudents)
-          }else{
+          } else {
             setSendAsLink(true)
           }
         } catch (error) {
@@ -49,18 +48,18 @@ const ShortlistForm = () => {
     };
 
     fetchJobDetails();
-  }, [companyName]);
+  }, [companyID]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!companyName) {
+    if (!companyID) {
       toast.info('Please select a company.');
       return;
     }
 
     const payload = {
-      companyName,
+      companyID,
       shortlistedStudents: sendAsLink ? link : students,
     };
 
@@ -68,7 +67,7 @@ const ShortlistForm = () => {
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/jobs/shortlist`, payload);
       if (response.status === 200) {
         toast.success('Shortlist saved successfully!');
-        setCompanyName('');
+        setCompanyID('');
         setLink('');
         setStudents([]);
         setSendAsLink(true);
@@ -108,22 +107,22 @@ const ShortlistForm = () => {
 
   return (
     <div className="flex flex-col md:flex-row gap-6 p-6 max-w-7xl mx-auto">
-      <ToastContainer /> {/* Add ToastContainer to your component */}
+      <ToastContainer />
       <div className="bg-gray-100 shadow-lg rounded-lg flex-1 p-6">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Submit Shortlisted Students</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block font-semibold mb-2 text-gray-800">Company Name:</label>
             <select
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
+              value={companyID}
+              onChange={(e) => setCompanyID(e.target.value)}
               required
               className="w-full p-3 border rounded-md shadow-sm bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
             >
               <option value="" disabled>Select a company</option>
-              {companyNames.map((name, index) => (
-                <option key={index} value={name}>
-                  {name}
+              {companyNames.map(({companyName, _id,jobTitle}) => (
+                <option key={_id} value={_id}>
+                  {companyName} - {jobTitle}
                 </option>
               ))}
             </select>

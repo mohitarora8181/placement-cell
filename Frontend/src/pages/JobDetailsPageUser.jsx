@@ -81,12 +81,12 @@ const JobDetailsPageUser = () => {
         <div className="flex md:flex-row flex-col md:w-[80%] w-[95%] shadow-md mx-auto p-4 rounded-md justify-between items-center">
 
           {/* Image Section */}
-          <div className="md:w-[30%]"> {/* Reduced width for the image section */}
+          <div className="md:w-[30%] self-start pt-20 max-sm:pt-0"> {/* Reduced width for the image section */}
             {job.imageURL ? (
               <img
                 src={job.imageURL}
                 alt={job.jobTitle}
-                className="rounded-lg w-full h-[300px] object-cover mb-4" // Adjusted image size
+                className="rounded-lg w-full h-[300px] object-contain mb-4" // Adjusted image size
               />
             ) : (
               <div>No Image Available</div>
@@ -107,7 +107,7 @@ const JobDetailsPageUser = () => {
             <Typography variant="body1" color="textSecondary" paragraph>
               <strong>Type:</strong> {job.type}
             </Typography>
-            <Typography variant="body1" color="textSecondary" paragraph>
+            <Typography variant="body1" style={{whiteSpace:'pre-line'}} color="textSecondary" paragraph>
               <strong>Description:</strong> {job.jobDescription}
             </Typography>
             <Typography variant="body1" color="textSecondary" paragraph>
@@ -129,6 +129,7 @@ const JobDetailsPageUser = () => {
             <ApplyButton
               startIcon={<ArrowForward />}
               onClick={handleApplyClick}
+              style={{marginTop:10}}
             >
               Apply
             </ApplyButton>
@@ -152,13 +153,13 @@ const JobDetailsPageUser = () => {
               ) : // Check if shortlistedStudents is an array
               Array.isArray(job.shortlistedStudents) &&
                 job.shortlistedStudents.length > 0 ? (
-                <ul>
+                <ol style={{listStyle:'inside',listStyleType:'decimal'}}>
                   {job.shortlistedStudents.map((student, index) => (
                     <li key={index}>
                       {student.name} ({student.email})
                     </li>
                   ))}
-                </ul>
+                </ol>
               ) : (
                 <Typography variant="body1" color="textSecondary">
                   Yet to announce

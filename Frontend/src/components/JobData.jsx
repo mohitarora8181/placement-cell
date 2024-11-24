@@ -41,7 +41,7 @@ const JobData = ({ job }) => {
 
   return (
     <Card
-      className='cursor-pointer p-4 bg-white shadow-lg rounded-lgt transition-all ease-in-out delay-150 hover:scale-105 hover:shadow-xl'
+      className='cursor-pointer p-4 bg-white shadow-lg rounded-lgt transition-all ease-in-out delay-300 hover:-translate-y-3 hover:shadow-xl'
       onClick={handleClick}
       style={{ width: '350px', margin: '10px', marginLeft: '0' }}
     >

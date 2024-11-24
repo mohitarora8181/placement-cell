@@ -3,7 +3,7 @@ import express from "express"
 const router = express.Router();
 import Job from '../models/Job.model.js'
 import User from "../models/SignupModel.js";
-import {protect} from "../middlewares/authMiddleware.js";
+import { protect } from "../middlewares/authMiddleware.js";
 import Notification from "../models/NotificationModel.js";
 import { io } from "../index.js";
 
@@ -14,7 +14,7 @@ router.get('/jobs/:jobId', async (req, res) => {
 
     const job = await Job.findById(req.params.jobId)
       .populate({
-        path: 'applicants', 
+        path: 'applicants',
         select: 'fullname email course degree '
       });
 
@@ -66,11 +66,11 @@ router.post('/jobs', async (req, res) => {
 
   try {
     // Create and save the new job
-   // const newJob = new Job(req.body);
-   // await newJob.save();
-   const { jobTitle, companyName, location, type, jobDescription, ctc, imageURL, applyURL, postedBy } = req.body;
+    // const newJob = new Job(req.body);
+    // await newJob.save();
+    const { jobTitle, companyName, location, type, jobDescription, ctc, imageURL, applyURL, postedBy } = req.body;
 
-    
+
     const newJob = new Job({
       jobTitle,
       companyName,
@@ -225,38 +225,39 @@ router.post('/notify', async (req, res) => {
 });
 router.get('/companies', async (req, res) => {
   const {
-      companyName,
-      jobTitle,
-      location,
-      type,
-      ctc
+    companyName,
+    jobTitle,
+    location,
+    type,
+    ctc
   } = req.query;
 
   try {
-      const filters = {};
+    const filters = {};
 
-      if (jobTitle) filters.jobTitle = new RegExp(jobTitle, 'i');
-      if (location) filters.location = new RegExp(location, 'i');
-      if (type) filters.type = new RegExp(type, 'i');
+    if (companyName) filters.companyName = new RegExp(companyName, 'i');
+    if (jobTitle) filters.jobTitle = new RegExp(jobTitle, 'i');
+    if (location) filters.location = new RegExp(location, 'i');
+    if (type) filters.type = new RegExp(type, 'i');
 
-      if (ctc) {
-          const [minCtc, maxCtc] = ctc.split(',').map(Number);
-          if (isNaN(minCtc) || isNaN(maxCtc)) {
-              return res.status(400).json({ message: 'Invalid CTC range' });
-          }
-          
-          filters.ctc = { $gte: Math.max(minCtc, 0), $lte: Math.min(maxCtc, 100) };
-      } else {
-          filters.ctc = { $gte: 0, $lte: 100 }; // Default range if not provided
+    if (ctc) {
+      const [minCtc, maxCtc] = ctc.split(',').map(Number);
+      if (isNaN(minCtc) || isNaN(maxCtc)) {
+        return res.status(400).json({ message: 'Invalid CTC range' });
       }
 
-      console.log('Applying filters:', filters);
+      filters.ctc = { $gte: Math.max(minCtc, 0), $lte: Math.min(maxCtc, 100) };
+    } else {
+      filters.ctc = { $gte: 0, $lte: 100 }; // Default range if not provided
+    }
 
-      const companies = await Job.find(filters);
-      res.json(companies);
+    console.log('Applying filters:', filters);
+
+    const companies = await Job.find(filters);
+    res.json(companies);
   } catch (error) {
-      console.error('Error fetching companies:', error); // Log detailed error
-      res.status(500).json({ message: 'Error fetching companies', error: error.message });
+    console.error('Error fetching companies:', error); // Log detailed error
+    res.status(500).json({ message: 'Error fetching companies', error: error.message });
   }
 });
 
@@ -264,13 +265,13 @@ router.get('/companies', async (req, res) => {
 
 // Endpoint to save the shortlisted students for a job/company
 router.post('/jobs/shortlist', async (req, res) => {
-  const { companyName, shortlistedStudents } = req.body;
+  const { companyID, shortlistedStudents } = req.body;
   console.log("Request Body:", req.body)
 
   try {
     // Find the job by company name, ignoring case
-    const job = await Job.findOne({ companyName: { $regex: new RegExp(companyName, 'i') } });
-    
+    const job = await Job.findOne({ _id: companyID });
+
     if (!job) {
       return res.status(404).json({ message: 'Job not found' });
     }
