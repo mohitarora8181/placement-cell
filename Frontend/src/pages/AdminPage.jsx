@@ -334,7 +334,7 @@ const AdminPage = () => {
             <>
               <div className="flex flex-wrap justify-center h-100">
                 {toggleView ?
-                  <TableListUi items={users?.filter(user => !user?.isAdmim)} />
+                  <TableListUi items={users?.filter(user => !user?.isAdmin)} />
                   : users
                     ?.filter(user => !user?.isAdmin).map(user => (
                       <UserCard key={user?._id} user={user} />

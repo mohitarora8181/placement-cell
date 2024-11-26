@@ -29,10 +29,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:hover': {
         backgroundColor: '#f1f1f1',
-        cursor: 'pointer'
+        cursor: 'pointer',
     },
     [`& td`]: {
-        borderRight: '0.5px solid lightgray'
+        borderRight: '0.5px solid lightgray',
     },
 }));
 
@@ -107,7 +107,7 @@ export default function TableListUi({ items }) {
                             <StyledTableCell align="left">{row?.gapYear}</StyledTableCell>
                             <StyledTableCell align="left">{row?.yearOfPassing}</StyledTableCell>
                             <StyledTableCell align="left">{companies && row?.appliedJobs.map((id) => {
-                                return <p key={`job-${id}`}>{companies[id] + ','}</p>
+                                return <>{companies[id] + ' , '}</>
                             })}</StyledTableCell>
                             <StyledTableCell align="left">{row?.activeBacklogs}</StyledTableCell>
                         </StyledTableRow>
