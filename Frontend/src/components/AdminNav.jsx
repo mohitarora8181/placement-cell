@@ -131,8 +131,11 @@ const AdminNav = ({ currentVal }) => {
   }
 
   const logOut = () => {
-    localStorage.clear()
-    navigate('/sign-in')
+    const resp = confirm('Do you want to logout ?');
+    if (resp) {
+      localStorage.clear()
+      navigate('/sign-in')
+    }
   }
   const handleNotifyClick = () => {
     navigate('/notify')
@@ -203,8 +206,8 @@ const AdminNav = ({ currentVal }) => {
             </Box>
           </div>
 
-          <Box sx={{ display: 'flex', alignItems: 'center'}}>
-            <IconButton sx={{marginInline:'5px' , border:'gray 1px solid'}} color='inherit' onClick={handleShortlistedClick}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton sx={{ marginInline: '5px', border: 'gray 1px solid' }} color='inherit' onClick={handleShortlistedClick}>
               <ChecklistIcon
                 sx={{
                   color: '#000',

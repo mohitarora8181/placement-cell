@@ -261,6 +261,29 @@ router.get('/companies', async (req, res) => {
   }
 });
 
+//Endpoint for fetching fields for filtering companies data
+router.get('/filterFields', async (req, res) => {
+  try {
+    const companyName = await Job.distinct('companyName');
+    const jobTitle = await Job.distinct('jobTitle');
+    const type = await Job.distinct('type');
+    const location = await Job.distinct('location');
+
+    const degree = await User.distinct('degree');
+    const course = await User.distinct('course');
+    const yearOfPassing = await User.distinct('yearOfPassing');
+    const gapYear = await User.distinct('gapYear');
+    const activeBacklogs = await User.distinct('activeBacklogs');
+
+
+    res.json({ companies: { companyName, jobTitle, type, location }, students: { degree, course, yearOfPassing, gapYear, activeBacklogs } });
+
+  } catch (error) {
+    console.error('Error fetching companies filter fields:', error); // Log detailed error
+    res.status(500).json({ message: 'Error fetching companies filter fields', error: error.message });
+  }
+});
+
 
 
 // Endpoint to save the shortlisted students for a job/company

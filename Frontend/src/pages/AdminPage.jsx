@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminNav from '../components/AdminNav';
 import AddJob from '../pages/AddJob';
-import { Tabs, Tab, Box, Button, TextField, Slider, Select, MenuItem } from '@mui/material';
+import { Tabs, Tab, Box, Button, Slider, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import axios from 'axios';
 import UserCard from '../components/UserCard';
 import JobData from '../components/JobData';
@@ -30,6 +30,8 @@ const AdminPage = () => {
     type: '',
     ctc: [0, 100]
   });
+
+  const [filterFields, setFilterFields] = useState();
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -128,6 +130,13 @@ const AdminPage = () => {
 
   useEffect(() => {
     setToggleView(localStorage.getItem('setView') == 'list');
+    const fetchFilterFields = async () => {
+      await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/filterFields`).then(({ data }) => {
+        setFilterFields(data);
+        console.log(filterFields)
+      })
+    }
+    fetchFilterFields();
   }, [])
 
 
@@ -176,7 +185,7 @@ const AdminPage = () => {
         {/* Filters Section */}
         <Box sx={{ display: { sm: 'none', xs: 'none', md: 'flex' }, gap: '4px', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
           {tabValue === 'student' && (
-            <>
+            <div className='w-[99%] flex gap-3'>
               <Button sx={{ height: '55px' }} variant="outlined" onClick={() => {
                 setToggleView(!toggleView);
                 localStorage.setItem('setView', toggleView ? 'grid' : 'list');
@@ -191,61 +200,58 @@ const AdminPage = () => {
                 }
               </Button>
 
-              <TextField
-                name="degree"
-                label="Degree"
-                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
-
-                value={userFilters?.degree}
-                onChange={handleUserFilterChange}
-                margin="normal"
-              />
-              <TextField
-                name="course"
-                label="Course"
-                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
-
-                value={userFilters?.course}
-                onChange={handleUserFilterChange}
-                margin="normal"
-              />
-              <TextField
-                name="classes"
-                label="Class"
-                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
-
-                value={userFilters?.classes}
-                onChange={handleUserFilterChange}
-                margin="normal"
-              />
-              <TextField
-                name="yearOfPassing"
-                label="Year of Passing"
-                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
-
-                value={userFilters?.yearOfPassing}
-                onChange={handleUserFilterChange}
-                margin="normal"
-              />
-              <TextField
-                name="gapYear"
-                label="Gap Year"
-                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
-
-                value={userFilters?.gapYear}
-                onChange={handleUserFilterChange}
-                margin="normal"
-              />
-              <TextField
-                name="activeBacklogs"
-                label="Active Backlogs"
-                sx={{ width: '130px', height: '60px', marginRight: '2px' }}
-                value={userFilters?.activeBacklogs}
-                onChange={handleUserFilterChange}
-                margin="normal"
-              />
-              <Box sx={{ marginX: 1 }}>
-                <div>Twelfth Percentage: {userFilters?.twelfthPercentage[0]}% - {userFilters?.twelfthPercentage[1]}%</div>
+              <FormControl fullWidth>
+                <InputLabel id="degree">Degree</InputLabel>
+                <Select labelId='degree' name='degree' label='Degree' value={userFilters?.degree} onChange={handleUserFilterChange}>
+                  {
+                    filterFields && filterFields?.students?.degree.map((e) => {
+                      return <MenuItem value={e}>{e}</MenuItem>
+                    })
+                  }
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="course">Course</InputLabel>
+                <Select labelId='course' name='course' label='Course' value={userFilters?.course} onChange={handleUserFilterChange}>
+                  {
+                    filterFields && filterFields?.students?.course.map((e) => {
+                      return <MenuItem value={e}>{e}</MenuItem>
+                    })
+                  }
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="yearOfPassing">Year of Passing</InputLabel>
+                <Select labelId='yearOfPassing' name='yearOfPassing' label='Year of Passing' value={userFilters?.yearOfPassing} onChange={handleUserFilterChange}>
+                  {
+                    filterFields && filterFields?.students?.yearOfPassing.map((e) => {
+                      return <MenuItem value={e}>{e}</MenuItem>
+                    })
+                  }
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="gapYear">Gap Year</InputLabel>
+                <Select labelId='gapYear' name='gapYear' label='Gap Year' value={userFilters?.gapYear} onChange={handleUserFilterChange}>
+                  {
+                    filterFields && filterFields?.students?.gapYear.map((e) => {
+                      return <MenuItem value={e}>{e}</MenuItem>
+                    })
+                  }
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="activeBacklogs">Active Backlogs</InputLabel>
+                <Select labelId='activeBacklogs' name='activeBacklogs' label='Active Backlogs' value={userFilters?.activeBacklogs} onChange={handleUserFilterChange}>
+                  {
+                    filterFields && filterFields?.students?.activeBacklogs.map((e) => {
+                      return <MenuItem value={e}>{e}</MenuItem>
+                    })
+                  }
+                </Select>
+              </FormControl>
+              <Box sx={{ marginX: 1, textAlign:'center' }} fullWidth>
+                <div className='whitespace-nowrap text-sm'>Twelth Percentage: {userFilters?.twelfthPercentage[0]}% - {userFilters?.twelfthPercentage[1]}%</div>
                 <Slider
                   value={userFilters?.twelfthPercentage}
                   onChange={handleUserSliderChange('twelfthPercentage')}
@@ -254,11 +260,11 @@ const AdminPage = () => {
                   max={100}
                   step={1}
                   sx={{ width: '20ch' }}
-
+                  disableSwap
                 />
               </Box>
-              <Box sx={{ marginX: 2 }}>
-                <div>CGPA: {userFilters?.cgpa[0]} - {userFilters?.cgpa[1]}</div>
+              <Box  sx={{ marginX: 1, textAlign:'center' }} fullWidth>
+                <div className='whitespace-nowrap text-sm'>CGPA: {userFilters?.cgpa[0]} - {userFilters?.cgpa[1]}</div>
                 <Slider
                   value={userFilters?.cgpa}
                   onChange={handleUserSliderChange('cgpa')}
@@ -267,49 +273,56 @@ const AdminPage = () => {
                   max={10}
                   step={0.1}
                   sx={{ width: '14ch' }}
+                  disableSwap
                 />
               </Box>
-              <Button sx={{ width: '130px', height: '60px', marginX: '2px' }} variant="contained" onClick={applyFilters}>Apply Filters</Button>
-              <Button sx={{ width: '130px', height: '60px', marginX: '2px' }} variant="outlined" onClick={resetFilters}>Reset Filters</Button>
-            </>
+              <Button sx={{ height: '55px' }} variant="outlined" onClick={resetFilters}>
+                <svg width="30px" height="30px" viewBox="-1.5 -2.5 24 24" preserveAspectRatio="xMinYMin" class="jam jam-refresh"><path d='M17.83 4.194l.42-1.377a1 1 0 1 1 1.913.585l-1.17 3.825a1 1 0 0 1-1.248.664l-3.825-1.17a1 1 0 1 1 .585-1.912l1.672.511A7.381 7.381 0 0 0 3.185 6.584l-.26.633a1 1 0 1 1-1.85-.758l.26-.633A9.381 9.381 0 0 1 17.83 4.194zM2.308 14.807l-.327 1.311a1 1 0 1 1-1.94-.484l.967-3.88a1 1 0 0 1 1.265-.716l3.828.954a1 1 0 0 1-.484 1.941l-1.786-.445a7.384 7.384 0 0 0 13.216-1.792 1 1 0 1 1 1.906.608 9.381 9.381 0 0 1-5.38 5.831 9.386 9.386 0 0 1-11.265-3.328z' /></svg>
+              </Button>
+            </div>
           )}
           {tabValue === 'company' && (
-            <>
-              <TextField
-                name="companyName"
-                label="Company Name"
-                value={jobFilters?.companyName}
-                onChange={handleJobFilterChange}
-                margin="normal"
-                sx={{ width: '190px', height: '60px', marginRight: '2px' }}
-              />
-              <TextField
-                name="jobTitle"
-                label="Job Title"
-                value={jobFilters?.jobTitle}
-                onChange={handleJobFilterChange}
-                margin="normal"
-                sx={{ width: '190px', height: '60px', marginRight: '2px' }}
-
-              />
-              <TextField
-                name="location"
-                label="Location"
-                value={jobFilters?.location}
-                onChange={handleJobFilterChange}
-                margin="normal"
-                sx={{ width: '190px', height: '60px', marginRight: '2px' }}
-
-              />
-              <TextField
-                name="type"
-                label="Type"
-                value={jobFilters?.type}
-                onChange={handleJobFilterChange}
-                margin="normal"
-                sx={{ width: '190px', height: '60px', marginRight: '2px' }}
-
-              />
+            <div className='flex w-[90%] gap-5'>
+              <FormControl fullWidth>
+                <InputLabel id="companyName">Company Name</InputLabel>
+                <Select labelId='companyName' name='companyName' label='Company Name' value={jobFilters?.companyName} onChange={handleJobFilterChange}>
+                  {
+                    filterFields && filterFields?.companies?.companyName.map((e) => {
+                      return <MenuItem value={e}>{e}</MenuItem>
+                    })
+                  }
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="jobTitle">Job Title</InputLabel>
+                <Select labelId='jobTitle' name='jobTitle' label='Job Title' value={jobFilters?.jobTitle} onChange={handleJobFilterChange}>
+                  {
+                    filterFields && filterFields?.companies?.jobTitle.map((e) => {
+                      return <MenuItem value={e}>{e}</MenuItem>
+                    })
+                  }
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="location">Location</InputLabel>
+                <Select labelId='location' name='location' label='Location' value={jobFilters?.location} onChange={handleJobFilterChange}>
+                  {
+                    filterFields && filterFields?.companies?.location.map((e) => {
+                      return <MenuItem value={e}>{e}</MenuItem>
+                    })
+                  }
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="type">Type</InputLabel>
+                <Select labelId='type' name='type' label='Type' value={jobFilters?.type} onChange={handleJobFilterChange}>
+                  {
+                    filterFields && filterFields?.companies?.type.map((e) => {
+                      return <MenuItem value={e}>{e}</MenuItem>
+                    })
+                  }
+                </Select>
+              </FormControl>
               <Box sx={{ marginX: 2 }}>
                 <div>CTC: {jobFilters?.ctc[0]} - {jobFilters?.ctc[1]}</div>
                 <Slider
@@ -322,9 +335,10 @@ const AdminPage = () => {
                   sx={{ width: '24ch' }}
                 />
               </Box>
-              <Button sx={{ width: '130px', height: '60px', marginX: '2px' }} variant="contained" onClick={applyFilters}>Apply Filters</Button>
-              <Button sx={{ width: '130px', height: '60px', marginX: '2px' }} variant="outlined" onClick={resetFilters}>Reset Filters</Button>
-            </>
+              <Button sx={{ height: '55px' }} variant="outlined" onClick={resetFilters}>
+                <svg width="30px" height="30px" viewBox="-1.5 -2.5 24 24" preserveAspectRatio="xMinYMin" class="jam jam-refresh"><path d='M17.83 4.194l.42-1.377a1 1 0 1 1 1.913.585l-1.17 3.825a1 1 0 0 1-1.248.664l-3.825-1.17a1 1 0 1 1 .585-1.912l1.672.511A7.381 7.381 0 0 0 3.185 6.584l-.26.633a1 1 0 1 1-1.85-.758l.26-.633A9.381 9.381 0 0 1 17.83 4.194zM2.308 14.807l-.327 1.311a1 1 0 1 1-1.94-.484l.967-3.88a1 1 0 0 1 1.265-.716l3.828.954a1 1 0 0 1-.484 1.941l-1.786-.445a7.384 7.384 0 0 0 13.216-1.792 1 1 0 1 1 1.906.608 9.381 9.381 0 0 1-5.38 5.831 9.386 9.386 0 0 1-11.265-3.328z' /></svg>
+              </Button>
+            </div>
           )}
         </Box>
 

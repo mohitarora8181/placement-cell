@@ -63,7 +63,7 @@ export default function TableListUi({ items }) {
     }, []);
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className='scrollbar-thin'>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
                 <TableHead>
                     <TableRow>
