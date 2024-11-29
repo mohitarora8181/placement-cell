@@ -5,7 +5,7 @@ function setupSocketIO(app) {
     const server = http.createServer(app);
     const io = new SocketIoServer(server,{
         cors: {
-      origin: 'https://pcmsit.vercel.app/', // Frontend URL
+      origin: ['https://pcmsit.vercel.app','http://localhost:3000'], // Frontend URL
       methods: ['GET', 'POST'],
     },
     }); // Use 'new' keyword to instantiate the server
