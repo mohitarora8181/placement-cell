@@ -25,6 +25,7 @@ import Footer from './components/Footer'
 import EditJob from './pages/EditJob'
 import MeetTheTeam from './components/MeetTheTeam'
 import Loader from './components/Loader'
+import StudnetCoordinators from './pages/StudentCoordinators'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null)
@@ -140,6 +141,10 @@ function App() {
         <Route
           path='/admin/post-job'
           element={role === 'admin' ? <AddJob /> : <Navigate to='/' />}
+        />
+        <Route
+          path='/admin/sc'
+          element={role === 'admin' ? <StudnetCoordinators /> : <Navigate to='/' />}
         />
         <Route
           path='/admin/user-search'
