@@ -27,9 +27,19 @@ const StudnetCoordinators = () => {
 
 
   const handleDownload = async () => {
+    if (name.length == 0) {
+      setErrors(prev => ({ ...prev, name: true }));
+      return;
+    }
+    if (mob.length < 10) {
+      setErrors(prev => ({ ...prev, mob: true }));
+      return;
+    }
     const canvas = await html2canvas(document.getElementById('idcard'), { allowTaint: true, useCORS: true });
-    downloadjs(canvas.toDataURL('image/png'), 'StudentName-PC-IDCard', 'image/png');
+    downloadjs(canvas.toDataURL('image/png'), `${name}-PC-IDCard`, 'image/png');
   }
+
+  const releaseError = (key) => { setErrors(prev => ({ ...prev, [key]: false })); }
 
   useEffect(() => {
     document.body.style.lineHeight = 0.5;
@@ -97,19 +107,19 @@ const StudnetCoordinators = () => {
           </div>
           <div className='w-1/2 flex flex-col gap-5 p-10'>
             <div className='w-full flex gap-5'>
-              <TextField fullWidth onChange={(e) => setName(e.target.value)} label='Name' />
-              <DatePicker sx={{ width: '100%' }} onChange={(e) => setDob(new Date(e).toLocaleDateString())} label='Date of Birth' />
+              <TextField error={errors.name} onFocus={() => releaseError('name')} fullWidth onChange={(e) => setName(e.target.value)} label='Name' />
+              <DatePicker onFocus={() => releaseError('dob')} sx={{ width: '100%' }} onChange={(e) => setDob(new Date(e).toLocaleDateString())} label='Date of Birth' />
             </div>
             <div className='w-full flex gap-5'>
-              <TextField fullWidth onChange={(e) => setCourse(e.target.value)} label='Course' />
-              <TextField fullWidth onChange={(e) => setBranch(e.target.value)} label='Branch' />
+              <TextField error={errors.course} onFocus={() => releaseError('course')} fullWidth onChange={(e) => setCourse(e.target.value)} label='Course' />
+              <TextField error={errors.branch} onFocus={() => releaseError('branch')} fullWidth onChange={(e) => setBranch(e.target.value)} label='Branch' />
             </div>
             <div className='w-full flex gap-5'>
-              <TextField type='tel' fullWidth onChange={(e) => setMob(e.target.value)} label='Mobile Number' />
-              <TextField type='email' fullWidth onChange={(e) => setEmail(e.target.value)} label='Email' />
+              <TextField error={errors.mob} onFocus={() => releaseError('mob')} type='tel' fullWidth onChange={(e) => setMob(e.target.value)} label='Mobile Number' />
+              <TextField error={errors.email} onFocus={() => releaseError('email')} type='email' fullWidth onChange={(e) => setEmail(e.target.value)} label='Email' />
             </div>
             <div className='w-full flex gap-5'>
-              <TextField type='tel' fullWidth onChange={(e)=>setStImg(e.target.value)} label='Student Photo ( Public Embeded Link )' />
+              <TextField type='tel' fullWidth onChange={(e) => setStImg(e.target.value)} label='Student Photo ( Public Embeded Link )' />
             </div>
             <div className='w-full flex justify-center self-end'>
               <Button sx={{ width: '150px' }} variant='contained' onClick={handleDownload}>Download</Button>
