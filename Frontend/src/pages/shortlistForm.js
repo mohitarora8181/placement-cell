@@ -40,6 +40,7 @@ const ShortlistForm = () => {
             setStudents(filteredJobs[0].shortlistedStudents)
           } else {
             setSendAsLink(true)
+            setStudents(null)
           }
         } catch (error) {
           console.error('Error fetching job details:', error);
@@ -120,7 +121,7 @@ const ShortlistForm = () => {
               className="w-full p-3 border rounded-md shadow-sm bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition"
             >
               <option value="" disabled>Select a company</option>
-              {companyNames.map(({companyName, _id,jobTitle}) => (
+              {companyNames.map(({ companyName, _id, jobTitle }) => (
                 <option key={_id} value={_id}>
                   {companyName} - {jobTitle}
                 </option>

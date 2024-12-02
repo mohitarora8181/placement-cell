@@ -91,43 +91,43 @@ const Navbar = () => {
 
     fetchStoredNotifications()
 
-    const socket = io(process.env.REACT_APP_BACKEND_URL)
+  //   const socket = io(process.env.REACT_APP_BACKEND_URL)
 
-    socket.on('connect', () => {
-      console.log('Socket connected:', socket.id)
-    })
+  //   socket.on('connect', () => {
+  //     console.log('Socket connected:', socket.id)
+  //   })
 
-    socket.on('disconnect', () => {
-      console.log('Socket disconnected')
-    })
+  //   socket.on('disconnect', () => {
+  //     console.log('Socket disconnected')
+  //   })
 
-    socket.on('newJob', (job) => {
-      console.log('New job received:', job)
-      const newNotification = {
-        userId,
-        jobId: job._id,
-        company: job.companyName,
-        title: job.jobTitle,
-        message: `A new job "${job.jobTitle}" has been posted by ${job.companyName}.`,
-        createdAt: new Date(),
-      }
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        { company: job.companyName, title: job.jobTitle },
-      ])
-      setNewJobsCount((prevCount) => prevCount + 1)
-    })
-    socket.on('notification', (notification) => {
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        notification,
-      ])
-      setNewJobsCount((prevCount) => prevCount + 1)
-    })
+  //   socket.on('newJob', (job) => {
+  //     console.log('New job received:', job)
+  //     const newNotification = {
+  //       userId,
+  //       jobId: job._id,
+  //       company: job.companyName,
+  //       title: job.jobTitle,
+  //       message: `A new job "${job.jobTitle}" has been posted by ${job.companyName}.`,
+  //       createdAt: new Date(),
+  //     }
+  //     setNotifications((prevNotifications) => [
+  //       ...prevNotifications,
+  //       { company: job.companyName, title: job.jobTitle },
+  //     ])
+  //     setNewJobsCount((prevCount) => prevCount + 1)
+  //   })
+  //   socket.on('notification', (notification) => {
+  //     setNotifications((prevNotifications) => [
+  //       ...prevNotifications,
+  //       notification,
+  //     ])
+  //     setNewJobsCount((prevCount) => prevCount + 1)
+  //   })
 
-    return () => {
-      socket.disconnect()
-    }
+  //   return () => {
+  //     socket.disconnect()
+  //   }
   }, [])
 
   const handleNotificationClick = () => {
@@ -137,7 +137,7 @@ const Navbar = () => {
 
   const handleMarkAllAsRead = async () => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/notifications/${userId}`)
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}api/notifications/${userId}`)
       setNotifications([])
       setNewJobsCount(0)
     } catch (error) {

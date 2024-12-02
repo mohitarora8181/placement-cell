@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminNav from '../components/AdminNav';
 import AddJob from '../pages/AddJob';
-import { Tabs, Tab, Box, Button, Slider, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Tabs, Tab, Box, Button, Slider, Select, MenuItem, InputLabel, FormControl, Checkbox } from '@mui/material';
 import axios from 'axios';
 import UserCard from '../components/UserCard';
 import JobData from '../components/JobData';
@@ -183,7 +183,7 @@ const AdminPage = () => {
         </Tabs>
 
         {/* Filters Section */}
-        <Box sx={{ display: { sm: 'none', xs: 'none', md: 'flex' }, gap: '4px', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
+        <Box sx={{ display: tabValue == 'add-job' ? 'none' : { sm: 'none', xs: 'none', md: 'flex' }, gap: '4px', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
           {tabValue === 'student' && (
             <div className='w-[99%] flex gap-3'>
               <Button sx={{ height: '55px' }} variant="outlined" onClick={() => {
@@ -250,8 +250,8 @@ const AdminPage = () => {
                   }
                 </Select>
               </FormControl>
-              <Box sx={{ marginX: 1, textAlign:'center' }} fullWidth>
-                <div className='whitespace-nowrap text-sm'>Twelth Percentage: {userFilters?.twelfthPercentage[0]}% - {userFilters?.twelfthPercentage[1]}%</div>
+              <Box sx={{ marginX: 1, textAlign: 'center' }} fullWidth>
+                <div className='whitespace-nowrap text-sm'>Twelfth Percentage: {userFilters?.twelfthPercentage[0]}% - {userFilters?.twelfthPercentage[1]}%</div>
                 <Slider
                   value={userFilters?.twelfthPercentage}
                   onChange={handleUserSliderChange('twelfthPercentage')}
@@ -263,7 +263,7 @@ const AdminPage = () => {
                   disableSwap
                 />
               </Box>
-              <Box  sx={{ marginX: 1, textAlign:'center' }} fullWidth>
+              <Box sx={{ marginX: 1, textAlign: 'center' }} fullWidth>
                 <div className='whitespace-nowrap text-sm'>CGPA: {userFilters?.cgpa[0]} - {userFilters?.cgpa[1]}</div>
                 <Slider
                   value={userFilters?.cgpa}

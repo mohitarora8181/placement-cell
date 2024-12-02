@@ -24,8 +24,6 @@ const StudnetCoordinators = () => {
 
   const [errors, setErrors] = useState({ name: false, stImg: false, dob: false, course: false, branch: false, mob: false, email: false });
 
-
-
   const handleDownload = async () => {
     if (name.length == 0) {
       setErrors(prev => ({ ...prev, name: true }));
@@ -56,54 +54,10 @@ const StudnetCoordinators = () => {
       <AdminNav />
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <div className='w-full h-[85vh] items-center flex gap-5 p-10 justify-center align-middle'>
-          <div id='idcard' className='w-[600px] h-[400px] outline outline-1 rounded-sm self-center px-10 py-5 flex flex-col gap-5'>
-            <p className='w-full text-center whitespace-nowrap text-xl font-semibold py-2 bg-gray-200 leading-5'>Placement Coordinator - ID Card</p>
-            <div className='flex gap-5 w-full border-b border-b-red-500 p-2'>
-              <img className='w-24 h-24 rounded-full' src='https://assets.collegedunia.com/public/college_data/images/logos/1515217934msit.png' />
-              <span className='w-full flex flex-col justify-center'>
-                <p className='w-full text-center whitespace-nowrap text-lg font-semibold'>Maharaja Surajmal Institute of technology</p>
-                <p className='w-full text-center whitespace-nowrap text-lg font-semibold'>( Affilated to GGSIPU )</p>
-                <p className='w-full text-center whitespace-nowrap text-sm font-medium text-gray-600'>C-4 , Janakpuri, New Delhi-110058 , Tel : 011-45037193</p>
-              </span>
-            </div>
-            <div className='flex gap-8 w-full h-full px-2'>
-              <div className='w-1/4 h-full content-center flex flex-col gap-10'>
-                <img className='w-24 h-24 rounded-md border overflow-hidden' src={stImg} />
-                <span className='w-full flex gap-3 border-b'>
-                  <p className='w-full text-center whitespace-nowrap text-xs font-normal text-gray-500'>Student's Signature</p>
-                </span>
-              </div>
-              <div className='w-full h-full flex flex-col gap-3'>
-                <span className='w-full flex justify-center gap-5'>
-                  <span className='w-1/2 flex gap-3 border-b border-dashed'>
-                    <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Name : </p>
-                    <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{name}</p>
-                  </span>
-                  <span className='w-1/2 flex gap-3 border-b border-dashed'>
-                    <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Date of Birth : </p>
-                    <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{dob}</p>
-                  </span>
-                </span>
-                <span className='w-full flex justify-center gap-5'>
-                  <span className='w-1/2 flex gap-3 border-b border-dashed'>
-                    <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Course : </p>
-                    <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{course}</p>
-                  </span>
-                  <span className='w-1/2 flex gap-3 border-b border-dashed'>
-                    <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Branch : </p>
-                    <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{branch}</p>
-                  </span>
-                </span>
-                <span className='w-full flex gap-3 border-b border-dashed'>
-                  <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Mobile Number : </p>
-                  <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{mob}</p>
-                </span>
-                <span className='w-full flex gap-3 border-b border-dashed'>
-                  <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Email : </p>
-                  <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{email}</p>
-                </span>
-              </div>
-            </div>
+          <div className='w-[700px] h-[500px] overflow-y-auto flex flex-col gap-3 py-5'>
+            {/* {data.map(({ name, mob }) => */}
+            <IDCard name={name} stImg={stImg} dob={dob} course={course} branch={branch} mob={mob} email={email} />
+            {/* )} */}
           </div>
           <div className='w-1/2 flex flex-col gap-5 p-10'>
             <div className='w-full flex gap-5'>
@@ -130,6 +84,59 @@ const StudnetCoordinators = () => {
     </div>
 
   )
+}
+
+
+const IDCard = ({ name, stImg, dob, course, branch, mob, email }) => {
+  return <div id='idcard' className='w-[600px] h-[400px] select-none outline outline-1 rounded-sm self-center px-10 py-5 flex flex-col gap-5'>
+    <p className='w-full text-center whitespace-nowrap text-xl font-semibold py-2 bg-gray-200 leading-5'>Placement Coordinator - ID Card</p>
+    <div className='flex gap-5 w-full border-b border-b-red-500 p-2'>
+      <img className='w-24 h-24 rounded-full' src='https://assets.collegedunia.com/public/college_data/images/logos/1515217934msit.png' />
+      <span className='w-full flex flex-col justify-center'>
+        <p className='w-full text-center whitespace-nowrap text-lg font-semibold'>Maharaja Surajmal Institute of technology</p>
+        <p className='w-full text-center whitespace-nowrap text-lg font-semibold'>( Affilated to GGSIPU )</p>
+        <p className='w-full text-center whitespace-nowrap text-sm font-medium text-gray-600'>C-4 , Janakpuri, New Delhi-110058 , Tel : 011-45037193</p>
+      </span>
+    </div>
+    <div className='flex gap-8 w-full h-full px-2'>
+      <div className='w-1/4 h-full content-center flex flex-col gap-10'>
+        <img className='w-24 h-24 rounded-md border overflow-hidden' src={stImg} />
+        <span className='w-full flex gap-3 border-b'>
+          <p className='w-full text-center whitespace-nowrap text-xs font-normal text-gray-500'>Student's Signature</p>
+        </span>
+      </div>
+      <div className='w-full h-full flex flex-col gap-3'>
+        <span className='w-full flex justify-center gap-5'>
+          <span className='w-1/2 flex gap-3 border-b border-dashed'>
+            <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Name : </p>
+            <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{name}</p>
+          </span>
+          <span className='w-1/2 flex gap-3 border-b border-dashed'>
+            <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Date of Birth : </p>
+            <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{dob}</p>
+          </span>
+        </span>
+        <span className='w-full flex justify-center gap-5'>
+          <span className='w-1/2 flex gap-3 border-b border-dashed'>
+            <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Course : </p>
+            <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{course}</p>
+          </span>
+          <span className='w-1/2 flex gap-3 border-b border-dashed'>
+            <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Branch : </p>
+            <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{branch}</p>
+          </span>
+        </span>
+        <span className='w-full flex gap-3 border-b border-dashed'>
+          <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Mobile Number : </p>
+          <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{mob}</p>
+        </span>
+        <span className='w-full flex gap-3 border-b border-dashed'>
+          <p className='w-fit text-left whitespace-nowrap text-sm font-normal text-gray-500'>Email : </p>
+          <p className='w-full text-left whitespace-nowrap text-md font-normal text-black'>{email}</p>
+        </span>
+      </div>
+    </div>
+  </div>
 }
 
 export default StudnetCoordinators

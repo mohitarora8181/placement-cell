@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
     },
     diplomaPercentage: {
         type: Number
-        
+
     },
     nationality: {
         type: String,
@@ -97,7 +97,12 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    
+
+    isPC: {
+        type: Boolean,
+        default: false
+    },
+
     linkedin: {
         type: String,
         trim: true
