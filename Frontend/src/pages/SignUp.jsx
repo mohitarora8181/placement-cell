@@ -29,7 +29,6 @@ const SignUp = () => {
   const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
-    // username: '',
     fullname: '',
     email: '',
     password: '',
@@ -78,14 +77,54 @@ const SignUp = () => {
       return
     }
 
+    if (formData.contactNumber.length < 10) {
+      toast.error('Wrong Contact Number')
+      setLoading(false)
+      return
+    }
+
+    if (formData.twelfthPercentage > 100) {
+      toast.error('Twelfth Percentage should between 0 to 100')
+      setLoading(false)
+      return
+    }
+
+    if (formData.tenthPercentage > 100) {
+      toast.error('Tenth Percentage should between 0 to 100')
+      setLoading(false)
+      return
+    }
+
+    if (formData.diplomaPercentage > 100) {
+      toast.error('Diploma Percentage should between 0 to 100')
+      setLoading(false)
+      return
+    }
+
+    if (formData.cgpa > 10) {
+      toast.error('CGPA should between 0 to 10')
+      setLoading(false)
+      return
+    }
+
+    if (!formData.linkedin.includes("linkedin.com")) {
+      toast.error('Wrong Linkedin Url')
+      setLoading(false)
+      return
+    }
+
+    if (!formData.github.includes("github.com")) {
+      toast.error('Wrong Github Url')
+      setLoading(false)
+      return
+    }
+
     try {
       const config = {
         headers: {
           'Content-type': 'application/json',
         },
-      }
-
-      formData.username = formData.email.split("@")[0];
+      };
 
       const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}api/users/sign-up`,
@@ -316,13 +355,13 @@ const SignUp = () => {
                         : key === 'github'
                           ? 'GitHub'
                           : key === 'leetCode'
-                            ? 'LeetCode'
+                            ? 'LeetCode ( or any another )'
                             : key === 'twelfthPercentage'
                               ? '12th Percentage ( Type 0 if N.A.)'
                               : key === 'diplomaPercentage'
                                 ? 'Diploma Percentage ( Type 0 if N.A.)'
                                 : key == 'dob'
-                                  ? ''
+                                  ? 'DOB'
                                   : key == 'school12th'
                                     ? 'School'
                                     : capitalizeFirstLetter(key.replace(/([A-Z])/g, ' $1').trim())

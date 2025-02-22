@@ -5,7 +5,7 @@ import generateToken from '../config/generateToken.js';
 
 const signup = asyncHandler(async (req, res) => {
     const {
-        username, email, fullname, password, dob, degree, course,classes, twelfthPercentage, diplomaPercentage,
+        email, fullname, password, dob, degree, course, classes, twelfthPercentage, diplomaPercentage,
         nationality, cgpa, address, school12th, tenthPercentage, gapYear, yearOfPassing, activeBacklogs,
         contactNumber, linkedin, github, leetCode
     } = req.body;
@@ -17,6 +17,7 @@ const signup = asyncHandler(async (req, res) => {
     }
 
     try {
+        let username = email.split("@")[0];
         const user = await User.create({
             username,
             email,
@@ -54,7 +55,7 @@ const signup = asyncHandler(async (req, res) => {
             twelfthPercentage: user.twelfthPercentage,
             diplomaPercentage: user.diplomaPercentage,
             nationality: user.nationality,
-            classes:user.classes,
+            classes: user.classes,
             cgpa: user.cgpa,
             address: user.address,
             school12th: user.school12th,
@@ -109,45 +110,45 @@ const authUser = asyncHandler(async (req, res) => {
 
 const getUsers = async (req, res) => {
     const {
-      degree,
-      course,
-      twelfthPercentage,
-      classes,  
-      cgpa,
-      yearOfPassing,
-      gapYear,
-      activeBacklogs,
+        degree,
+        course,
+        twelfthPercentage,
+        classes,
+        cgpa,
+        yearOfPassing,
+        gapYear,
+        activeBacklogs,
     } = req.query;
-  
+
     try {
-      const filters = {};
-      if (degree) filters.degree = new RegExp(degree, 'i');
-      if (course) filters.course = new RegExp(course, 'i');
-      if (classes) filters.classes = new RegExp(classes, 'i');  
-  
-      if (twelfthPercentage) {
-        const [minTwelfth, maxTwelfth] = twelfthPercentage.split(',').map(Number);
-        filters.twelfthPercentage = { $gte: minTwelfth, $lte: maxTwelfth };
-      }
-  
-      if (cgpa) {
-        const [minCgpa, maxCgpa] = cgpa.split(',').map(Number);
-        filters.cgpa = { $gte: minCgpa, $lte: maxCgpa };
-      }
-  
-      if (yearOfPassing) filters.yearOfPassing = Number(yearOfPassing);
-      if (gapYear) filters.gapYear = Number(gapYear);
-      if (activeBacklogs) filters.activeBacklogs = Number(activeBacklogs);
-  
-      
-      console.log('Applying filters:', filters);
-  
-      const users = await User.find(filters);
-      res.json(users);
+        const filters = {};
+        if (degree) filters.degree = new RegExp(degree, 'i');
+        if (course) filters.course = new RegExp(course, 'i');
+        if (classes) filters.classes = new RegExp(classes, 'i');
+
+        if (twelfthPercentage) {
+            const [minTwelfth, maxTwelfth] = twelfthPercentage.split(',').map(Number);
+            filters.twelfthPercentage = { $gte: minTwelfth, $lte: maxTwelfth };
+        }
+
+        if (cgpa) {
+            const [minCgpa, maxCgpa] = cgpa.split(',').map(Number);
+            filters.cgpa = { $gte: minCgpa, $lte: maxCgpa };
+        }
+
+        if (yearOfPassing) filters.yearOfPassing = Number(yearOfPassing);
+        if (gapYear) filters.gapYear = Number(gapYear);
+        if (activeBacklogs) filters.activeBacklogs = Number(activeBacklogs);
+
+
+        console.log('Applying filters:', filters);
+
+        const users = await User.find(filters);
+        res.json(users);
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching users' });
+        res.status(500).json({ message: 'Error fetching users' });
     }
-  };
-  
+};
+
 
 export { signup, authUser, getUsers };
