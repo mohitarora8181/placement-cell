@@ -29,7 +29,7 @@ const SignUp = () => {
   const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
-    username: '',
+    // username: '',
     fullname: '',
     email: '',
     password: '',
@@ -47,7 +47,7 @@ const SignUp = () => {
     address: '',
     gapYear: '',
     activeBacklogs: '',
-    nationality: '',
+    nationality: 'Indian',
     linkedin: '',
     github: '',
     leetCode: '',
@@ -85,6 +85,8 @@ const SignUp = () => {
         },
       }
 
+      formData.username = formData.email.split("@")[0];
+
       const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}api/users/sign-up`,
         formData,
@@ -106,6 +108,10 @@ const SignUp = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  function capitalizeFirstLetter(val) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
   }
 
   return (
@@ -308,20 +314,30 @@ const SignUp = () => {
                       key === 'linkedin'
                         ? 'LinkedIn'
                         : key === 'github'
-                        ? 'GitHub'
-                        : key === 'leetCode'
-                        ? 'LeetCode'
-                        : key.replace(/([A-Z])/g, ' $1').trim()
+                          ? 'GitHub'
+                          : key === 'leetCode'
+                            ? 'LeetCode'
+                            : key === 'twelfthPercentage'
+                              ? '12th Percentage ( Type 0 if N.A.)'
+                              : key === 'diplomaPercentage'
+                                ? 'Diploma Percentage ( Type 0 if N.A.)'
+                                : key == 'dob'
+                                  ? ''
+                                  : key == 'school12th'
+                                    ? 'School'
+                                    : capitalizeFirstLetter(key.replace(/([A-Z])/g, ' $1').trim())
                     }
                     name={key}
                     type={
-                      key === 'password'
-                        ? showPassword
-                          ? 'text'
-                          : 'password'
-                        : key === 'dob'
-                        ? 'date'
-                        : 'text'
+                      key === 'email'
+                        ? 'email'
+                        : key === 'password'
+                          ? showPassword
+                            ? 'text'
+                            : 'password'
+                          : key === 'dob'
+                            ? 'date'
+                            : 'text'
                     }
                     value={formData[key]}
                     onChange={handleChange}
@@ -329,26 +345,26 @@ const SignUp = () => {
                     InputProps={
                       key === 'password'
                         ? {
-                            style: { color: '#f5f5f5' },
-                            endAdornment: (
-                              <InputAdornment position='end'>
-                                <IconButton
-                                  onClick={handleClickShowPassword}
-                                  edge='end'
-                                  style={{
-                                    color: '#f5f5f5',
-                                    backgroundColor: 'transparent',
-                                  }}
-                                >
-                                  {showPassword ? (
-                                    <VisibilityOff />
-                                  ) : (
-                                    <Visibility />
-                                  )}
-                                </IconButton>
-                              </InputAdornment>
-                            ),
-                          }
+                          style: { color: '#f5f5f5' },
+                          endAdornment: (
+                            <InputAdornment position='end'>
+                              <IconButton
+                                onClick={handleClickShowPassword}
+                                edge='end'
+                                style={{
+                                  color: '#f5f5f5',
+                                  backgroundColor: 'transparent',
+                                }}
+                              >
+                                {showPassword ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }
                         : { style: { color: '#f5f5f5' } }
                     }
                     onFocus={(e) => {

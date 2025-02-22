@@ -53,7 +53,7 @@ const Profile = () => {
   };
 
   if (!user) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   const handleEditProfile = () => {
@@ -126,7 +126,7 @@ const Profile = () => {
             </Paper>
           </Grid>
         </Grid>
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <Typography variant="h5" gutterBottom style={{ color: '#333333', fontWeight: 'bold' }}>
             Applied Jobs
           </Typography>
@@ -187,7 +187,7 @@ const Profile = () => {
               </Typography>
             )}
           </Grid>
-        </div>
+        </div> */}
       </div>
     </>
   );

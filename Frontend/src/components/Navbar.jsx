@@ -218,15 +218,15 @@ const Navbar = () => {
       open={isMobileMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
           <Badge badgeContent={0} color='error'>
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
+      </MenuItem> */}
+      {/* <MenuItem>
         <IconButton
           size='large'
           aria-label={`show ${newJobsCount} new notifications`}
@@ -238,7 +238,7 @@ const Navbar = () => {
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem
         onClick={() => {
           navigate('/home/user-profile')
@@ -279,7 +279,7 @@ const Navbar = () => {
           <Link to='/home'>
             <img className='h-20 -mx-1' src={logo} alt='msit-logo' />
           </Link>
-          <Search>
+          {/* <Search>
             <SearchIconWrapper>
               <SearchIcon sx={{ color: '#D1D5DB' }} />
             </SearchIconWrapper>
@@ -291,7 +291,7 @@ const Navbar = () => {
               inputProps={{ 'aria-label': 'search' }}
               sx={{ color: '#D1D5DB' }}
             />
-          </Search>
+          </Search> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
@@ -303,7 +303,7 @@ const Navbar = () => {
                 {/* <MailIcon sx={{ color: '#D1D5DB' }} /> */}
               </Badge>
             </IconButton>
-            <IconButton
+            {/* <IconButton
               size='large'
               aria-label={`show ${newJobsCount} new notifications`}
               color='inherit'
@@ -312,7 +312,7 @@ const Navbar = () => {
               <Badge badgeContent={newJobsCount} color='error'>
                 <NotificationsIcon sx={{ color: '#D1D5DB' }} />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               size='large'
               edge='end'
