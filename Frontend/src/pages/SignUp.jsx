@@ -107,7 +107,7 @@ const SignUp = () => {
       return
     }
 
-    if (!formData.linkedin.includes("linkedin.com")) {
+    if (!formData.linkedin.toLowerCase().includes("linkedin.com")) {
       toast.error('Wrong Linkedin Url')
       setLoading(false)
       return
@@ -343,6 +343,18 @@ const SignUp = () => {
                       color: '#f5f5f5',
                       borderColor: '#666',
                     }}
+                    sx={{
+                      backgroundColor: '#444',
+                      '& input': {
+                        color: '#fff',
+                      },
+                      '& input:-webkit-autofill': {
+                        WebkitBoxShadow: '0 0 0 1000px #444 inset',
+                        WebkitTextFillColor: '#fff',
+                        transition: 'background-color 5000s ease-in-out 0s',
+                      }
+                    }}
+                    onWheel={(e) => e.target.blur()}
                     label={
                       key === 'linkedin'
                         ? 'LinkedIn'
