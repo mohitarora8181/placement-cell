@@ -113,12 +113,6 @@ const SignUp = () => {
       return
     }
 
-    if (!formData.github.includes("github.com")) {
-      toast.error('Wrong Github Url')
-      setLoading(false)
-      return
-    }
-
     try {
       const config = {
         headers: {
@@ -340,7 +334,7 @@ const SignUp = () => {
                     key={key}
                     variant='outlined'
                     margin='normal'
-                    required
+                    required={key == 'github' || key == 'leetCode' ? false : true}
                     style={{
                       width: '100%',
                       maxWidth: '585px',
@@ -353,9 +347,9 @@ const SignUp = () => {
                       key === 'linkedin'
                         ? 'LinkedIn'
                         : key === 'github'
-                          ? 'GitHub'
+                          ? 'GitHub ( Optional )'
                           : key === 'leetCode'
-                            ? 'LeetCode ( or any another )'
+                            ? 'LeetCode ( Optional )'
                             : key === 'twelfthPercentage'
                               ? '12th Percentage ( Type 0 if N.A.)'
                               : key === 'diplomaPercentage'

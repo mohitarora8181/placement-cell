@@ -12,7 +12,7 @@ const signup = asyncHandler(async (req, res) => {
 
     const userExist = await User.findOne({ email });
     if (userExist) {
-        res.status(400);
+        res.status(400).json({ message: 'Email already exist ( Try Sign In )' });
         throw new Error("Email already exists");
     }
 
