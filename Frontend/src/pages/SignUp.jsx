@@ -370,7 +370,9 @@ const SignUp = () => {
                             : 'password'
                           : key === 'dob'
                             ? 'date'
-                            : 'text'
+                            : (key == 'twelfthPercentage' || key == 'diplomaPercentage' || key == 'tenthPercentage' || key == 'cgpa' || key == 'gapYear' || key == 'yearOfPassing' || key == "activeBacklogs")
+                              ? 'number'
+                              : 'text'
                     }
                     value={formData[key]}
                     onChange={handleChange}
