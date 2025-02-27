@@ -14,7 +14,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userId && token) {
+    if (userId && token && user == null) {
       const fetchUserData = async () => {
         try {
           const userResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/users/profile/${userId}`, {

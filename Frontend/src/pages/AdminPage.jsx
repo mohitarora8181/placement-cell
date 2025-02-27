@@ -354,7 +354,7 @@ const AdminPage = () => {
                       <UserCard key={user?._id} user={user} />
                     ))}
               </div>
-              {toggleView && users.length > 0 && <p className='text-sm p-5 cursor-pointer hover:underline-offset-2 underline' onClick={downloadExcel}>Download Excel file for this data</p>}
+              {toggleView && users.length > 0 && <p className='text-sm p-5 cursor-pointer hover:underline-offset-2 underline' onClick={downloadExcel}>Download Excel file for this data [ {users.length - 1} rows ] </p>}
             </>
           )}
           {tabValue === 'company' && (

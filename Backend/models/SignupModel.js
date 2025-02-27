@@ -21,6 +21,12 @@ const userSchema = new mongoose.Schema({
         trim: true,
         index: true
     },
+    enrollmentNumber: {
+        type: Number,
+        required: true,
+        trim: true,
+        index: true
+    },
     password: {
         type: String,
         required: [true, 'Password is required']

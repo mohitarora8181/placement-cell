@@ -161,6 +161,17 @@ const SignIn = () => {
               autoComplete='email'
               autoFocus
               value={email}
+              sx={{
+                backgroundColor: '#444',
+                '& input': {
+                  color: '#fff',
+                },
+                '& input:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 1000px #444 inset',
+                  WebkitTextFillColor: '#fff',
+                  transition: 'background-color 5000s ease-in-out 0s',
+                }
+              }}
               onChange={(e) => setEmail(e.target.value)}
               style={{
                 marginBottom: '16px',
@@ -183,6 +194,17 @@ const SignIn = () => {
               id='password'
               autoComplete='current-password'
               value={password}
+              sx={{
+                backgroundColor: '#444',
+                '& input': {
+                  color: '#fff',
+                },
+                '& input:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 1000px #444 inset',
+                  WebkitTextFillColor: '#fff',
+                  transition: 'background-color 5000s ease-in-out 0s',
+                }
+              }}
               onChange={(e) => setPassword(e.target.value)}
               style={{
                 marginBottom: '16px',

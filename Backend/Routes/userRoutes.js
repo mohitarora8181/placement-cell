@@ -13,12 +13,12 @@ router.post('/sign-up', signup);
 router.post('/sign-in', authUser);
 router.get('/find', getUsers);
 
-router.get('/profile/:userId', protect,async (req, res) => {
+router.get('/profile/:userId', protect, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
       .populate('appliedJobs', 'jobTitle companyName location type imageURL ctc')
       //.select('username fullname email dob course degree resumeURL appliedJobs');
-      .select('fullname email dob degree course twelfthPercentage classes diplomaPercentage nationality cgpa address school12th tenthPercentage gapYear yearOfPassing activeBacklogs contactNumber resumeURL linkedin github leetCode');
+      .select('fullname email dob degree course twelfthPercentage classes enrollmentNumber diplomaPercentage nationality cgpa address school12th tenthPercentage gapYear yearOfPassing activeBacklogs contactNumber resumeURL linkedin github leetCode');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -84,7 +84,7 @@ router.post('/apply', async (req, res) => {
 
 router.get('/find', async (req, res) => {
   try {
-    const users = await User.find().select('fullname email dob classes degree course twelfthPercentage diplomaPercentage nationality cgpa address school12th tenthPercentage gapYear yearOfPassing activeBacklogs contactNumber resumeURL leetCode linkedin github');
+    const users = await User.find().select('fullname email dob classes enrollmentNumber degree course twelfthPercentage diplomaPercentage nationality cgpa address school12th tenthPercentage gapYear yearOfPassing activeBacklogs contactNumber resumeURL leetCode linkedin github');
     res.json(users);
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -143,14 +143,14 @@ router.get('/:userId', protect, async (req, res) => {
 });
 router.get('/user-profile/:userId', protect, adminOnly, async (req, res) => {
   try {
-      const user = await User.findById(req.params.userId);
-      if (!user) {
-          return res.status(404).json({ message: 'User not found' });
-      }
-      res.json(user);
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
   } catch (error) {
-      console.error('Error fetching user profile:', error);
-      res.status(500).json({ message: 'Internal server error' });
+    console.error('Error fetching user profile:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -158,8 +158,10 @@ router.put('/update-profile/:id', protect, async (req, res) => {
   const userId = req.params.id;
   const updatedData = req.body;
 
+  console.log(updatedData)
+
   try {
-    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true, allowNull: false });
     res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: 'Failed to update profile' });

@@ -21,7 +21,7 @@ const CardContainer = styled('div')(({ theme }) => ({
   margin: '12px',
   overflow: 'hidden', // Ensure no horizontal scrollbar
   position: 'relative',
-  cursor:'pointer'
+  cursor: 'pointer'
 }));
 
 const ProfileImage = styled('div')({
@@ -29,7 +29,7 @@ const ProfileImage = styled('div')({
   width: '150px',
   borderRadius: '50%',
   overflow: 'hidden',
-  margin:'auto',
+  margin: 'auto',
   marginBottom: '20px',
   backgroundColor: '#e0f7fa',
   display: 'flex',
@@ -53,10 +53,10 @@ const UserDetail = styled('p')({
 });
 
 const InfoContainer = styled('div')({
-  display:'flex',
-  flex:'col',
-  justifyContent:'center',
-  alignItems:'center',
+  display: 'flex',
+  flex: 'col',
+  justifyContent: 'center',
+  alignItems: 'center',
   marginTop: 'auto',
   paddingTop: '10px',
   borderTop: '1px solid #e0e0e0',
@@ -101,6 +101,7 @@ const UserCard = ({ user }) => {
         <UserDetail><strong>Email:</strong> {user.email}</UserDetail>
         <UserDetail><strong>Branch:</strong> {user.course}</UserDetail>
         <UserDetail><strong>Batch:</strong> {user.yearOfPassing}</UserDetail>
+        <UserDetail><strong>Enrollment Number :</strong> {user.enrollmentNumber}</UserDetail>
 
       </UserInfo>
       <InfoContainer >

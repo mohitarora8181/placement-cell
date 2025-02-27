@@ -37,6 +37,7 @@ const SignUp = () => {
     degree: 'Bachelor of Technology',
     course: '',
     classes: '',
+    enrollmentNumber: '',
     yearOfPassing: '',
     cgpa: '',
     twelfthPercentage: '',
@@ -79,6 +80,12 @@ const SignUp = () => {
 
     if (formData.contactNumber.length < 10) {
       toast.error('Wrong Contact Number')
+      setLoading(false)
+      return
+    }
+
+    if (formData.enrollmentNumber.length < 10) {
+      toast.error('Wrong Enrollment Number')
       setLoading(false)
       return
     }
@@ -382,7 +389,7 @@ const SignUp = () => {
                             : 'password'
                           : key === 'dob'
                             ? 'date'
-                            : (key == 'twelfthPercentage' || key == 'diplomaPercentage' || key == 'tenthPercentage' || key == 'cgpa' || key == 'gapYear' || key == 'yearOfPassing' || key == "activeBacklogs")
+                            : (key == 'twelfthPercentage' || key == 'enrollmentNumber' || key == 'diplomaPercentage' || key == 'tenthPercentage' || key == 'cgpa' || key == 'gapYear' || key == 'yearOfPassing' || key == "activeBacklogs")
                               ? 'number'
                               : 'text'
                     }

@@ -18,7 +18,6 @@ const EditProfile = () => {
           const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/users/profile/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           })
-          console.log(response)
           setUserData({
             fullname: response.data.fullname || '',
             email: response.data.email || '',
@@ -26,6 +25,7 @@ const EditProfile = () => {
             degree: response.data.degree || '',
             course: response.data.course || '',
             classes: response.data.classes || '',
+            enrollmentNumber: response.data.enrollmentNumber || '',
             twelfthPercentage: response.data.twelfthPercentage || '',
             diplomaPercentage: response.data.diplomaPercentage || '',
             nationality: response.data.nationality || '',
@@ -78,6 +78,11 @@ const EditProfile = () => {
     }
 
     try {
+      Object.entries(userData).forEach(([key, val]) => {
+        if (val == "") {
+          userData[key] = 0;
+        }
+      });
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}api/users/update-profile/${userId}`,
         userData,
@@ -171,10 +176,21 @@ const EditProfile = () => {
                 style={{ marginBottom: '16px' }}
               />
               <TextField
+                label='Enrollment Number'
+                fullWidth
+                name='enrollmentNumber'
+                type='number'
+                onWheel={(e) => e.target.blur()}
+                value={userData.enrollmentNumber || ''}
+                onChange={handleInputChange}
+                style={{ marginBottom: '16px' }}
+              />
+              <TextField
                 label='12th Percentage'
                 fullWidth
                 name='twelfthPercentage'
                 type='number'
+                onWheel={(e) => e.target.blur()}
                 value={userData.twelfthPercentage || ''}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}
@@ -184,6 +200,7 @@ const EditProfile = () => {
                 fullWidth
                 name='diplomaPercentage'
                 type='number'
+                onWheel={(e) => e.target.blur()}
                 value={userData.diplomaPercentage || ''}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}
@@ -201,6 +218,7 @@ const EditProfile = () => {
                 fullWidth
                 name='cgpa'
                 type='number'
+                onWheel={(e) => e.target.blur()}
                 value={userData.cgpa || ''}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}
@@ -226,6 +244,7 @@ const EditProfile = () => {
                 fullWidth
                 name='tenthPercentage'
                 type='number'
+                onWheel={(e) => e.target.blur()}
                 value={userData.tenthPercentage || ''}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}
@@ -235,6 +254,7 @@ const EditProfile = () => {
                 fullWidth
                 name='gapYear'
                 type='number'
+                onWheel={(e) => e.target.blur()}
                 value={userData.gapYear || ''}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}
@@ -244,6 +264,7 @@ const EditProfile = () => {
                 fullWidth
                 name='yearOfPassing'
                 type='number'
+                onWheel={(e) => e.target.blur()}
                 value={userData.yearOfPassing || ''}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}
@@ -253,6 +274,7 @@ const EditProfile = () => {
                 fullWidth
                 name='activeBacklogs'
                 type='number'
+                onWheel={(e) => e.target.blur()}
                 value={userData.activeBacklogs || ''}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}

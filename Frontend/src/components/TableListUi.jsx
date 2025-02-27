@@ -67,7 +67,7 @@ export default function TableListUi({ items }) {
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
                 <TableHead>
                     <TableRow>
-                        <StyledTableCell align="left">Username</StyledTableCell>
+                        <StyledTableCell align="left">Enrollment Number</StyledTableCell>
                         <StyledTableCell align="left">Full Name</StyledTableCell>
                         <StyledTableCell align="left">Email</StyledTableCell>
                         <StyledTableCell align="left">Contact Number</StyledTableCell>
@@ -90,7 +90,7 @@ export default function TableListUi({ items }) {
                 <TableBody>
                     {items.map((row) => (
                         <StyledTableRow onClick={() => handleClick(row?._id)} key={row?._id}>
-                            <StyledTableCell align="left">{row?.username}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.enrollmentNumber}</StyledTableCell>
                             <StyledTableCell align="left">{row?.fullname}</StyledTableCell>
                             <StyledTableCell align="left">{row?.email}</StyledTableCell>
                             <StyledTableCell align="left">{row?.contactNumber}</StyledTableCell>

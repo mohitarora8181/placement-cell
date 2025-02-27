@@ -7,7 +7,7 @@ const signup = asyncHandler(async (req, res) => {
     const {
         email, fullname, password, dob, degree, course, classes, twelfthPercentage, diplomaPercentage,
         nationality, cgpa, address, school12th, tenthPercentage, gapYear, yearOfPassing, activeBacklogs,
-        contactNumber, linkedin, github, leetCode
+        contactNumber, linkedin, github, leetCode, enrollmentNumber
     } = req.body;
 
     const userExist = await User.findOne({ email });
@@ -22,6 +22,7 @@ const signup = asyncHandler(async (req, res) => {
             username,
             email,
             fullname,
+            enrollmentNumber,
             password,
             dob,
             degree,
@@ -49,6 +50,7 @@ const signup = asyncHandler(async (req, res) => {
             username: user.username,
             email: user.email,
             fullname: user.fullname,
+            enrollmentNumber: user.enrollmentNumber,
             dob: user.dob,
             degree: user.degree,
             course: user.course,
