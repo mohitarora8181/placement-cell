@@ -325,6 +325,7 @@ const SignUp = () => {
                       <MenuItem value='CSE-1'>CSE-1</MenuItem>
                       <MenuItem value='CSE-2'>CSE-2</MenuItem>
                       <MenuItem value='CSE-3'>CSE-3</MenuItem>
+                      <MenuItem value='CSE-3'>CSE-4</MenuItem>
                       <MenuItem value='IT-1'>IT-1</MenuItem>
                       <MenuItem value='IT-2'>IT-2</MenuItem>
                       <MenuItem value='IT-3'>IT-3</MenuItem>
