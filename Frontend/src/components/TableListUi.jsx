@@ -74,6 +74,7 @@ export default function TableListUi({ items }) {
                         <StyledTableCell align="left">Date of Birth</StyledTableCell>
                         <StyledTableCell align="left">Degree</StyledTableCell>
                         <StyledTableCell align="left">Course</StyledTableCell>
+                        <StyledTableCell align="left">Class</StyledTableCell>
                         <StyledTableCell align="left">12th Percentage</StyledTableCell>
                         <StyledTableCell align="left">Diploma Percentage</StyledTableCell>
                         <StyledTableCell align="left">Nationality</StyledTableCell>
@@ -97,6 +98,7 @@ export default function TableListUi({ items }) {
                             <StyledTableCell align="left">{new Date(row?.dob).toLocaleDateString()}</StyledTableCell>
                             <StyledTableCell align="left">{row?.degree}</StyledTableCell>
                             <StyledTableCell align="left">{row?.course}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.classes}</StyledTableCell>
                             <StyledTableCell align="left">{row?.twelfthPercentage}</StyledTableCell>
                             <StyledTableCell align="left">{row?.diplomaPercentage}</StyledTableCell>
                             <StyledTableCell align="left">{row?.nationality}</StyledTableCell>

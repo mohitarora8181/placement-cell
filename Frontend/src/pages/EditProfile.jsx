@@ -27,15 +27,15 @@ const EditProfile = () => {
             classes: response.data.classes || '',
             enrollmentNumber: response.data.enrollmentNumber || '',
             twelfthPercentage: response.data.twelfthPercentage || '',
-            diplomaPercentage: response.data.diplomaPercentage || '',
+            diplomaPercentage: response.data.diplomaPercentage,
             nationality: response.data.nationality || '',
             cgpa: response.data.cgpa || '',
             address: response.data.address || '',
             school12th: response.data.school12th || '',
             tenthPercentage: response.data.tenthPercentage || '',
-            gapYear: response.data.gapYear || '',
+            gapYear: response.data.gapYear,
             yearOfPassing: response.data.yearOfPassing || '',
-            activeBacklogs: response.data.activeBacklogs || '',
+            activeBacklogs: response.data.activeBacklogs,
             contactNumber: response.data.contactNumber || '',
             linkedin: response.data.linkedin || '',
             github: response.data.github || '',
@@ -201,7 +201,7 @@ const EditProfile = () => {
                 name='diplomaPercentage'
                 type='number'
                 onWheel={(e) => e.target.blur()}
-                value={userData.diplomaPercentage || ''}
+                value={userData.diplomaPercentage}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}
               />
@@ -255,7 +255,7 @@ const EditProfile = () => {
                 name='gapYear'
                 type='number'
                 onWheel={(e) => e.target.blur()}
-                value={userData.gapYear || ''}
+                value={userData.gapYear}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}
               />
@@ -275,7 +275,7 @@ const EditProfile = () => {
                 name='activeBacklogs'
                 type='number'
                 onWheel={(e) => e.target.blur()}
-                value={userData.activeBacklogs || ''}
+                value={userData.activeBacklogs}
                 onChange={handleInputChange}
                 style={{ marginBottom: '16px' }}
               />
