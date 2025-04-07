@@ -78,11 +78,11 @@ const EditProfile = () => {
     }
 
     try {
-      Object.entries(userData).forEach(([key, val]) => {
-        if (val == "") {
-          userData[key] = 0;
-        }
-      });
+      // Object.entries(userData).forEach(([key, val]) => {
+      //   if (val == "") {
+      //     userData[key] = 0;
+      //   }
+      // });
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}api/users/update-profile/${userId}`,
         userData,
