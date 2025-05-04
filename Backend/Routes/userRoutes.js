@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post('/sign-up', signup);
 router.post('/sign-in', authUser);
-router.get('/find', getUsers);
+router.get('/find',protect, getUsers);
 
 router.get('/profile/:userId', protect, async (req, res) => {
   try {
@@ -81,49 +81,6 @@ router.post('/apply', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-router.get('/find', async (req, res) => {
-  try {
-    const users = await User.find().select('fullname email dob classes enrollmentNumber degree course twelfthPercentage diplomaPercentage nationality cgpa address school12th tenthPercentage gapYear yearOfPassing activeBacklogs contactNumber resumeURL leetCode linkedin github');
-    res.json(users);
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ message: 'Internal server error', error });
-  }
-});
-// router.get('/api/users/find', protect, async (req, res) => {
-//   const {
-//     degree,
-//     course,
-//     twelfthPercentage,
-//     nationality,
-//     cgpa,
-//     yearOfPassing,
-//     gapYear,
-//     activeBacklogs
-//   } = req.query;
-
-//   try {
-//     const filters = {};
-//     if (degree) filters.degree = degree;
-//     if (course) filters.course = course;
-//     if (twelfthPercentage) filters.twelfthPercentage = twelfthPercentage;
-//     if (nationality) filters.nationality = nationality;
-//     if (cgpa) filters.cgpa = cgpa;
-//     if (yearOfPassing) filters.yearOfPassing = yearOfPassing;
-//     if (gapYear) filters.gapYear = gapYear;
-//     if (activeBacklogs) filters.activeBacklogs = activeBacklogs;
-
-//     // Log the filters to verify
-//     console.log('Applying filters:', filters);
-
-//     const users = await User.find(filters);
-//     res.json(users);
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error fetching users' });
-//   }
-// });
-
 
 
 

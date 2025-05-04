@@ -76,59 +76,8 @@ const NotifyButton = styled('button')(({ theme }) => ({
 }))
 
 const AdminNav = ({ currentVal }) => {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchType, setSearchType] = useState('jobs')
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const savedSearchType = localStorage.getItem('searchType') || 'jobs'
-    setSearchType(savedSearchType)
-  }, [])
-
-  useEffect(() => {
-    if (currentVal === 'student') {
-      axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}/api/users/find`)
-        .then((response) => {
-          // Handle user data
-        })
-        .catch((error) => {
-          console.error('Error fetching users:', error)
-        })
-    } else if (currentVal === 'company') {
-      axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}api/jobs`)
-        .then((response) => {
-          // Handle job data
-        })
-        .catch((error) => {
-          console.error('Error fetching jobs:', error)
-        })
-    }
-  }, [currentVal])
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      const route =
-        searchType === 'jobs'
-          ? `/search?query=${encodeURIComponent(searchQuery)}`
-          : `/admin/user-search?query=${encodeURIComponent(searchQuery)}`
-      navigate(route)
-    }
-  }
-
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleSearch()
-    }
-  }
-
-  const handleSearchTypeChange = (event, newSearchType) => {
-    if (newSearchType) {
-      setSearchType(newSearchType)
-      localStorage.setItem('searchType', newSearchType)
-    }
-  }
 
   const logOut = () => {
     const resp = confirm('Do you want to logout ?');
@@ -144,7 +93,7 @@ const AdminNav = ({ currentVal }) => {
     navigate('/shortlisted-students') // Route to the page that manages shortlisted students
   }
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, zIndex: 500 }} className="sticky top-0 left-0 w-full bg-white border-b border-b-gray-50">
       <AppBar position='static' sx={{ backgroundColor: '#FFF' }}>
         <Toolbar>
           <Typography
@@ -157,65 +106,9 @@ const AdminNav = ({ currentVal }) => {
               <img className='h-24 mx-2' src={logo} alt='logo' />
             </Link>
           </Typography>
-          <div className='hidden md:block'>
-            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon sx={{ color: '#000' }} />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder={
-                    searchType === 'jobs' ? 'Search Jobs...' : 'Search Users...'
-                  }
-                  inputProps={{ 'aria-label': 'search' }}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                />
-              </Search>
-              <ToggleButtonGroup
-                value={searchType}
-                exclusive
-                onChange={handleSearchTypeChange}
-                sx={{ marginLeft: 2 }}
-              >
-                <ToggleButton
-                  value='jobs'
-                  sx={{
-                    backgroundColor: searchType === 'jobs' ? '#FFA500' : '#FFF',
-                    color: searchType === 'jobs' ? '#FFF' : '#000',
-                    border: '1px solid #FFA500',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Companies
-                </ToggleButton>
-                <ToggleButton
-                  value='users'
-                  sx={{
-                    backgroundColor:
-                      searchType === 'users' ? '#FFA500' : '#FFF',
-                    color: searchType === 'users' ? '#FFF' : '#000',
-                    border: '1px solid #FFA500',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Students
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Box>
-          </div>
 
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton sx={{ marginInline: '5px', border: 'gray 1px solid' }} color='inherit' onClick={handleShortlistedClick}>
-              <ChecklistIcon
-                sx={{
-                  color: '#000',
-                  display: { xs: 'none', sm: 'none', md: 'block' },
-                }}
-              />
-            </IconButton>
-            <NotifyButton onClick={handleNotifyClick} sx={{ marginRight: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <NotifyButton onClick={handleNotifyClick}>
               🔔
             </NotifyButton>
             <LogoutButton onClick={logOut}>Log Out</LogoutButton>

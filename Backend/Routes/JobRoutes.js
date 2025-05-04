@@ -264,19 +264,15 @@ router.get('/companies', async (req, res) => {
 //Endpoint for fetching fields for filtering companies data
 router.get('/filterFields', async (req, res) => {
   try {
-    const companyName = await Job.distinct('companyName');
-    const jobTitle = await Job.distinct('jobTitle');
-    const type = await Job.distinct('type');
-    const location = await Job.distinct('location');
 
-    const degree = await User.distinct('degree');
-    const course = await User.distinct('course');
-    const yearOfPassing = await User.distinct('yearOfPassing');
-    const gapYear = await User.distinct('gapYear');
-    const activeBacklogs = await User.distinct('activeBacklogs');
+    const degree = await User.distinct('degree', { isAdmin: { $ne: true } });
+    const course = await User.distinct('course', { isAdmin: { $ne: true } });
+    const classes = await User.distinct('classes', { isAdmin: { $ne: true } });
+    const yearOfPassing = await User.distinct('yearOfPassing', { isAdmin: { $ne: true } });
+    const activeBacklogs = await User.distinct('activeBacklogs', { isAdmin: { $ne: true } });
 
 
-    res.json({ companies: { companyName, jobTitle, type, location }, students: { degree, course, yearOfPassing, gapYear, activeBacklogs } });
+    res.json({ degree, course, yearOfPassing, activeBacklogs, classes });
 
   } catch (error) {
     console.error('Error fetching companies filter fields:', error); // Log detailed error

@@ -1,14 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Typography, Grid, Avatar, Paper, Button } from '@mui/material';
+import { Typography, Grid, Avatar, Paper, Divider, Box } from '@mui/material';
 import AdminNav from '../components/AdminNav';
 import Loader from '../components/Loader'
+import PersonIcon from '@mui/icons-material/Person';
+import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
+import SchoolIcon from '@mui/icons-material/School';
+import LinkIcon from '@mui/icons-material/Link';
+
+// Reusable detail component for displaying a field and its value
+const DetailField = ({ label, value, link, href }) => (
+  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
+    <strong>{label}:</strong>{' '}
+    {link && value ? (
+      <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+        {link}
+      </a>
+    ) : (
+      value || (label === 'Resume' ? 'Not provided' : 'Loading...')
+    )}
+  </Typography>
+);
+
+// Section header component for consistent styling
+const SectionHeader = ({ icon, title }) => (
+  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, mt: 3 }}>
+    {icon}
+    <Typography variant="h6" color="primary" style={{ fontWeight: 'bold', marginLeft: '8px' }}>
+      {title}
+    </Typography>
+    <Divider sx={{ ml: 2, flex: 1 }} />
+  </Box>
+);
 
 const UserProfile = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
-  const [showMore, setShowMore] = useState(false); // State to toggle "Show More"
   const token = localStorage.getItem('token')?.trim();
 
   useEffect(() => {
@@ -21,16 +49,31 @@ const UserProfile = () => {
       .catch(error => {
         console.error('Error fetching user data:', error);
       });
-  }, [userId]);
+  }, [userId, token]);
 
-  const handleToggleShowMore = () => {
-    setShowMore(!showMore); // Toggle showMore state
+  const formatEnrollmentNumber = (enrollmentNumber, expectedLength = 11) => {
+    if (!enrollmentNumber) return enrollmentNumber;
+    const strNumber = String(enrollmentNumber);
+    if (strNumber.length === expectedLength) return strNumber;
+    if (strNumber.length < expectedLength) {
+      return strNumber.padStart(expectedLength, '0');
+    }
+    return strNumber;
+  };
+
+  const formatDate = (dateString) => {
+    return dateString ? new Date(dateString).toLocaleDateString() : 'Loading...';
+  };
+
+  // Extract domain from URL for display purposes
+  const formatUrl = (url) => {
+    return url ? url.replace(/^https?:\/\/(www\.)?/, '') : 'Not provided';
   };
 
   return user ? (
     <>
       <AdminNav />
-      <div className="container mx-auto p-5 w-[80%] shadow-md mt-5 rounded-md" style={{ backgroundColor: '#ffffff', color: '#333333', height: 'screen' }}>
+      <div className="container mx-auto p-5 w-[80%] shadow-md mt-5 rounded-md overflow-hidden" style={{ backgroundColor: '#ffffff', color: '#333333', minHeight: '80vh' }}>
         <Grid container spacing={3}>
           {/* Profile Information */}
           <Grid item xs={12} md={4} className="text-center">
@@ -47,149 +90,113 @@ const UserProfile = () => {
           {/* User Details */}
           <Grid item xs={12} md={8}>
             <Paper elevation={3} sx={{ padding: 3, borderRadius: 2, backgroundColor: '#ffffff' }}>
-              <Typography variant="h5" gutterBottom style={{ color: '#333333', fontWeight: 'bold' }}>
-                User Information
-              </Typography>
+              {/* Personal Information */}
+              <SectionHeader icon={<PersonIcon color="primary" />} title="Personal Information" />
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Full Name" value={user.fullname} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Date of Birth" value={formatDate(user.dob)} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Nationality" value={user.nationality} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Address" value={user.address} />
+                </Grid>
+              </Grid>
 
-              {/* Displaying basic details */}
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Email:</strong> {user.email || 'Loading...'}
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Date of Birth:</strong> {user.dob ? new Date(user.dob).toLocaleDateString() : 'Loading...'}
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Contact Number:</strong> {user.contactNumber || 'Loading...'}
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Degree:</strong> {user.degree || 'Loading...'}
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Course:</strong> {user.course || 'Loading...'}
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Class:</strong> {user.classes || 'Loading...'}
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>CGPA:</strong> {user.cgpa || 'Loading...'}
-              </Typography>
+              {/* Contact Information */}
+              <SectionHeader icon={<ContactPhoneIcon color="primary" />} title="Contact Information" />
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Email" value={user.email} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Contact Number" value={user.contactNumber} />
+                </Grid>
+              </Grid>
 
-              {/* Conditionally rendering more details */}
-              {showMore && (
-                <>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>12th Percentage:</strong> {user.twelfthPercentage || 'Not provided'}
-                  </Typography>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>10th Percentage:</strong> {user.tenthPercentage || 'Not provided'}
-                  </Typography>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>Gap Year:</strong> {user.gapYear || 'No gap'}
-                  </Typography>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>Year of Passing:</strong> {user.yearOfPassing || 'Loading...'}
-                  </Typography>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>Nationality:</strong> {user.nationality || 'Loading...'}
-                  </Typography>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>Address:</strong> {user.address || 'Loading...'}
-                  </Typography>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>Active Backlogs:</strong> {user.activeBacklogs || 'None'}
-                  </Typography>
+              {/* Academic Information */}
+              <SectionHeader icon={<SchoolIcon color="primary" />} title="Academic Information" />
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Degree" value={user.degree} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Course" value={user.course} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Class" value={user.classes} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField
+                    label="Enrollment Number"
+                    value={formatEnrollmentNumber(user.enrollmentNumber)}
+                    link={` ${formatEnrollmentNumber(user.enrollmentNumber)}`}
+                    href={`https://www.ipuranklist.com/student/${formatEnrollmentNumber(user.enrollmentNumber)}`}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="CGPA" value={user.cgpa} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Year of Passing" value={user.yearOfPassing} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="12th Percentage" value={user.twelfthPercentage || 'Not provided'} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="10th Percentage" value={user.tenthPercentage || 'Not provided'} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Active Backlogs" value={user.activeBacklogs || 'None'} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField label="Gap Year" value={user.gapYear || 'No gap'} />
+                </Grid>
+                <Grid item xs={12}>
+                  <DetailField
+                    label="Resume"
+                    value={user.resumeURL}
+                    link="View Resume"
+                    href={user.resumeURL}
+                  />
+                </Grid>
+              </Grid>
 
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>Resume URL:</strong> <a href={user.resumeURL} target="_blank" rel="noopener noreferrer">{user.resumeURL || 'Not provided'}</a>
-                  </Typography>
-
-                  {/* Social Links */}
-                  <Typography variant="h6" gutterBottom style={{ color: '#333333', fontWeight: 'bold', marginTop: '16px' }}>
-                    Social Profiles
-                  </Typography>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>LinkedIn:</strong> <a href={user.linkedin} target="_blank" rel="noopener noreferrer">{user.linkedin || 'Not provided'}</a>
-                  </Typography>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>GitHub:</strong> <a href={user.github} target="_blank" rel="noopener noreferrer">{user.github || 'Not provided'}</a>
-                  </Typography>
-                  <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                    <strong>LeetCode:</strong> <a href={user.leetCode} target="_blank" rel="noopener noreferrer">{user.leetCode || 'Not provided'}</a>
-                  </Typography>
-                </>
-              )}
-
-              {/* Show More / Show Less Button */}
-              <Button variant="outlined" color="primary" onClick={handleToggleShowMore} style={{ marginTop: '16px' }}>
-                {showMore ? 'Show Less' : 'Show More'}
-              </Button>
+              {/* Social Profiles */}
+              <SectionHeader icon={<LinkIcon color="primary" />} title="Social Profiles" />
+              <Grid container spacing={2} columns={1}>
+                <Grid item xs={12} md={6}>
+                  <DetailField
+                    label="LinkedIn"
+                    value={user.linkedin}
+                    link={formatUrl(user.linkedin)}
+                    href={user.linkedin}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField
+                    label="GitHub"
+                    value={user.github}
+                    link={formatUrl(user.github)}
+                    href={user.github}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <DetailField
+                    label="LeetCode"
+                    value={user.leetCode}
+                    link={formatUrl(user.leetCode)}
+                    href={user.leetCode}
+                  />
+                </Grid>
+              </Grid>
             </Paper>
           </Grid>
         </Grid>
-
-        {/* Applied Jobs Section */}
-        <div className="mt-8">
-          <Typography variant="h5" gutterBottom style={{ color: '#333333', fontWeight: 'bold', padding: '6' }}>
-            Applied Jobs
-          </Typography>
-          <Grid container spacing={2}>
-            {user.appliedJobs && user.appliedJobs.length > 0 ? (
-              user.appliedJobs.map((job) => (
-                <Grid item xs={12} md={12} key={job._id}>
-                  <Paper
-                    elevation={2}
-                    sx={{
-                      padding: 2,
-                      borderRadius: 2,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 2,
-                      background: '#e0e0e0',
-                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-                      color: '#333333'
-                    }}
-                  >
-                    {job.imageURL ? (
-                      <img
-                        src={job.imageURL}
-                        alt={job.jobTitle}
-                        style={{ width: 150, height: 100, objectFit: 'cover', borderRadius: 4 }}
-                      />
-                    ) : (
-                      <div style={{ width: 150, height: 100, backgroundColor: '#d0d0d0', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Typography variant="body2" color="textSecondary">No Image Available</Typography>
-                      </div>
-                    )}
-                    <div style={{ flex: 1 }}>
-                      <Typography variant="h6" component="div" gutterBottom style={{ color: '#333333', fontWeight: 'bold' }}>
-                        {job.jobTitle}
-                      </Typography>
-                      <Typography variant="body1" style={{ color: '#555555' }}>
-                        <strong>Company:</strong> {job.companyName}
-                      </Typography>
-                      <Typography variant="body1" style={{ color: '#555555' }}>
-                        <strong>Location:</strong> {job.location}
-                      </Typography>
-                      <Typography variant="body1" style={{ color: '#555555' }}>
-                        <strong>Type:</strong> {job.type}
-                      </Typography>
-                      <Typography variant="body2" style={{ color: '#555555', marginTop: '8px' }}>
-                        {job.jobDescription}
-                      </Typography>
-                      <Typography variant="body2" style={{ color: '#555555' }}>
-                        <strong>CTC:</strong> {job.ctc ? `${job.ctc} lacs` : 'Not Specified'}
-                      </Typography>
-                    </div>
-                  </Paper>
-                </Grid>
-              ))
-            ) : (
-              <Typography variant="body1" style={{ color: '#555555', textAlign: 'center' }}>
-                No jobs applied yet.
-              </Typography>
-            )}
-          </Grid>
-        </div>
       </div>
     </>
   ) : (
@@ -198,4 +205,3 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
-

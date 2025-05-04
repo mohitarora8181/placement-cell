@@ -1,29 +1,56 @@
 import React, { useEffect, useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import { Button, TextField, Typography, Grid, Paper } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Typography,
+  Grid,
+  Paper,
+  Box,
+  Divider,
+  Card,
+  Container,
+  IconButton,
+  Tooltip
+} from '@mui/material';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
+import {
+  School,
+  LocationOn,
+  Phone,
+  Email,
+  Cake,
+  LinkedIn,
+  GitHub,
+  Code,
+  Description,
+  Edit,
+  CalendarMonth,
+  OpenInNew,
+  WorkOutline
+} from '@mui/icons-material';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
-  const [resumeURL, setResumeURL] = useState('');
+  const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem('userId')?.trim();
   const token = localStorage.getItem('token')?.trim();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userId && token && user == null) {
+    if (userId && token) {
       const fetchUserData = async () => {
         try {
           const userResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/users/profile/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setUser(userResponse.data);
-          setResumeURL(userResponse.data.resumeURL || '');
+          setLoading(false);
         } catch (error) {
           console.error('Error fetching user data:', error);
+          setLoading(false);
         }
       };
 
@@ -31,166 +58,350 @@ const Profile = () => {
     }
   }, [userId, token]);
 
-  const handleResumeURLChange = (event) => {
-    setResumeURL(event.target.value);
+  const handleEditProfile = () => {
+    navigate('/edit-profile');
   };
 
-  const handleSubmitURL = async () => {
-    if (!resumeURL) {
-      alert('Please provide a resume URL.');
-      return;
-    }
-
-    try {
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/users/update-resume/${userId}`, { resumeURL }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      alert('Resume URL updated successfully!');
-    } catch (error) {
-      console.error('Error updating resume URL:', error);
-      alert('Failed to update resume URL.');
-    }
-  };
-
-  if (!user) {
+  if (loading) {
     return <Loader />;
   }
 
-  const handleEditProfile = () => {
-    navigate('/edit-profile');
+  if (!user) {
+    return (
+      <Container>
+        <Typography variant="h5" color="error" align="center" sx={{ mt: 8 }}>
+          Unable to load profile data. Please try again later.
+        </Typography>
+      </Container>
+    );
+  }
+
+  const formatEnrollmentNumber = (enrollmentNumber, expectedLength = 11) => {
+    if (!enrollmentNumber) return enrollmentNumber;
+    const strNumber = String(enrollmentNumber);
+    if (strNumber.length === expectedLength) return strNumber;
+    if (strNumber.length < expectedLength) {
+      return strNumber.padStart(expectedLength, '0');
+    }
+    return strNumber;
   };
 
   return (
     <>
       <Navbar />
-      <div className="container mx-auto p-5" style={{ backgroundColor: '#f9f9f9', color: '#333333' }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={4} className="text-center">
-            <Avatar
-              sx={{ width: 150, height: 150, margin: '0 auto', border: '2px solid #333333' }}
-              alt={user.fullname || 'Profile Picture'}
-              src={user.photoURL || 'https://source.unsplash.com/200x200/?profile pic'}
-            />
-            <Typography variant="h4" gutterBottom mt={2} style={{ color: '#333333', fontWeight: 'bold' }}>
-              {user.fullname || 'Loading...'}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Paper elevation={3} sx={{ padding: 3, borderRadius: 2, backgroundColor: '#ffffff' }}>
-              <Typography variant="h5" gutterBottom style={{ color: '#333333', fontWeight: 'bold' }}>
-                User Information
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Email:</strong> {user.email || 'Loading...'}
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Date of Birth:</strong> {user.dob ? new Date(user.dob).toLocaleDateString() : 'Loading...'}
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Course:</strong> {user.course || 'Loading...'}
-              </Typography>
-              <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
-                <strong>Degree:</strong> {user.degree || 'Loading...'}
-              </Typography>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
+        <Box sx={{ position: 'relative', mb: 6 }}>
+          {/* Cover Photo */}
+          <Box
+            sx={{
+              height: 200,
+              borderRadius: 2,
+              backgroundColor: '#1976d2',
+              backgroundImage: 'linear-gradient(135deg, #1976d2 0%, #64b5f6 100%)',
+              mb: -10,
+              boxShadow: 3
+            }}
+          />
 
-              <div className="mt-4">
-                <TextField
-                  label="Resume URL"
-                  fullWidth
-                  value={resumeURL}
-                  onChange={handleResumeURLChange}
-                  variant="outlined"
-                  sx={{ marginBottom: 2 }}
-                  InputProps={{
-                    style: { color: '#333333', backgroundColor: '#f0f0f0' }
+          {/* Profile Picture and Name Section */}
+          <Paper
+            elevation={3}
+            sx={{
+              p: 3,
+              mx: 2,
+              borderRadius: 2,
+              position: 'relative',
+              zIndex: 1,
+            }}
+          >
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={4} md={3} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Avatar
+                  src={user.photoURL || 'https://source.unsplash.com/random/?portrait'}
+                  alt={user.fullname}
+                  sx={{
+                    width: 150,
+                    height: 150,
+                    border: '4px solid white',
+                    boxShadow: 2,
+                    mb: 2
                   }}
                 />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSubmitURL}
-                  sx={{ marginRight: 2 }}
-                  style={{ backgroundColor: '#007bff', color: '#ffffff' }}
-                >
-                  Update Resume URL
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleEditProfile}
-                  style={{ backgroundColor: '#6c757d', color: '#ffffff' }}
-                >
-                  Edit Profile
-                </Button>
-              </div>
-            </Paper>
-          </Grid>
-        </Grid>
-        {/* <div className="mt-8">
-          <Typography variant="h5" gutterBottom style={{ color: '#333333', fontWeight: 'bold' }}>
-            Applied Jobs
-          </Typography>
-          <Grid container spacing={2}>
-            {user.appliedJobs && user.appliedJobs.length > 0 ? (
-              user.appliedJobs.map((job) => (
-                <Grid item xs={12} md={12} key={job._id}>
-                  <Paper
-                    elevation={2}
-                    sx={{
-                      padding: 2,
-                      borderRadius: 2,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 2,
-                      background: '#e0e0e0', // Lighter background for job cards
-                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Optional: subtle shadow
-                      color: '#333333' // Text color
-                    }}
-                  >
-                    {job.imageURL ? (
-                      <img
-                        src={job.imageURL}
-                        alt={job.jobTitle}
-                        style={{ width: 150, height: 100, objectFit: 'cover', borderRadius: 4 }}
-                      />
-                    ) : (
-                      <div style={{ width: 150, height: 100, backgroundColor: '#d0d0d0', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Typography variant="body2" color="textSecondary">No Image Available</Typography>
-                      </div>
+                <Box sx={{ textAlign: 'center', width: '100%' }}>
+                  <Typography variant="h5" fontWeight="bold" gutterBottom>
+                    {user.fullname}
+                  </Typography>
+                  <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+                    Enrollment:
+                    <a href={`https://www.ipuranklist.com/student/${formatEnrollmentNumber(user.enrollmentNumber)}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                      {` ${formatEnrollmentNumber(user.enrollmentNumber)}`}
+                    </a>
+                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 2 }}>
+                    {user.linkedin && (
+                      <Tooltip title="LinkedIn">
+                        <IconButton
+                          color="primary"
+                          component="a"
+                          href={user.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <LinkedIn />
+                        </IconButton>
+                      </Tooltip>
                     )}
-                    <div style={{ flex: 1 }}>
-                      <Typography variant="h6" component="div" gutterBottom style={{ color: '#333333', fontWeight: 'bold' }}>
-                        {job.jobTitle}
+                    {user.github && (
+                      <Tooltip title="GitHub">
+                        <IconButton
+                          color="primary"
+                          component="a"
+                          href={user.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <GitHub />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {user.leetCode && (
+                      <Tooltip title="LeetCode">
+                        <IconButton
+                          color="primary"
+                          component="a"
+                          href={user.leetCode}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Code />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </Box>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleEditProfile}
+                    startIcon={<Edit />}
+                    sx={{ mt: 3 }}
+                    fullWidth
+                  >
+                    Edit Profile
+                  </Button>
+                </Box>
+              </Grid>
+
+              <Grid item xs={12} sm={8} md={9}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                  <Typography variant="h4" fontWeight="bold">
+                    Student Profile
+                  </Typography>
+                </Box>
+                <Divider sx={{ mb: 3 }} />
+
+                <Grid container spacing={3}>
+                  {/* Personal Information */}
+                  <Grid item xs={12} md={6}>
+                    <Card elevation={2} sx={{ p: 2, height: '100%' }}>
+                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+                        <Person sx={{ mr: 1 }} fontSize="small" /> Personal Information
                       </Typography>
-                      <Typography variant="body1" style={{ color: '#555555' }}>
-                        <strong>Company:</strong> {job.companyName}
+
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <Email fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">{user.email}</Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <Phone fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">{user.contactNumber}</Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <Cake fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">
+                          {new Date(user.dob).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <LocationOn fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">{user.address}</Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Public fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">{user.nationality}</Typography>
+                      </Box>
+                    </Card>
+                  </Grid>
+
+                  {/* Academic Information */}
+                  <Grid item xs={12} md={6}>
+                    <Card elevation={2} sx={{ p: 2, height: '100%' }}>
+                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+                        <School sx={{ mr: 1 }} fontSize="small" /> Academic Information
                       </Typography>
-                      <Typography variant="body1" style={{ color: '#555555' }}>
-                        <strong>Location:</strong> {job.location}
+
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <School fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">
+                          <strong>{user.degree}</strong> in {user.course}
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <Class fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">Class: {user.classes}</Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <Grade fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">CGPA: {user.cgpa}</Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <CalendarMonth fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">Graduation Year: {user.yearOfPassing}</Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Report fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                        <Typography variant="body1">Active Backlogs: {user.activeBacklogs}</Typography>
+                      </Box>
+                    </Card>
+                  </Grid>
+
+                  {/* Academic Records */}
+                  <Grid item xs={12}>
+                    <Card elevation={2} sx={{ p: 2 }}>
+                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+                        <WorkOutline sx={{ mr: 1 }} fontSize="small" /> Previous Education
                       </Typography>
-                      <Typography variant="body1" style={{ color: '#555555' }}>
-                        <strong>Type:</strong> {job.type}
-                      </Typography>
-                      <Typography variant="body2" style={{ color: '#555555', marginTop: '8px' }}>
-                        {job.jobDescription}
-                      </Typography>
-                      <Typography variant="body2" style={{ color: '#555555' }}>
-                        <strong>CTC:</strong> {job.ctc ? `${job.ctc} lacs` : 'Not Specified'}
-                      </Typography>
-                    </div>
-                  </Paper>
+
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sm={4}>
+                          {/* Using a fixed height box to ensure all columns are same height */}
+                          <Box sx={{
+                            p: 2,
+                            border: '1px solid #e0e0e0',
+                            borderRadius: 1,
+                            textAlign: 'center',
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center'
+                          }}>
+                            <Typography variant="subtitle2" color="text.secondary">10th Percentage</Typography>
+                            <Typography variant="h5" fontWeight="medium" color="primary">
+                              {user.tenthPercentage}%
+                            </Typography>
+                          </Box>
+                        </Grid>
+
+                        <Grid item xs={12} sm={4}>
+                          <Box sx={{
+                            p: 2,
+                            border: '1px solid #e0e0e0',
+                            borderRadius: 1,
+                            textAlign: 'center',
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center'
+                          }}>
+                            <Typography variant="subtitle2" color="text.secondary">12th Percentage</Typography>
+                            <Typography variant="h5" fontWeight="medium" color="primary">
+                              {user.twelfthPercentage}%
+                            </Typography>
+                          </Box>
+                        </Grid>
+
+                        <Grid item xs={12} sm={4}>
+                          <Box sx={{
+                            p: 2,
+                            border: '1px solid #e0e0e0',
+                            borderRadius: 1,
+                            textAlign: 'center',
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center'
+                          }}>
+                            <Typography variant="subtitle2" color="text.secondary">Diploma Percentage</Typography>
+                            <Typography variant="h5" fontWeight="medium" color="primary">
+                              {user.diplomaPercentage > 0 ? `${user.diplomaPercentage}%` : 'N/A'}
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      </Grid>
+
+                      <Box sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                              <WatchLater fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                              <Typography variant="body1">Gap Year(s): {user.gapYear}</Typography>
+                            </Box>
+                          </Grid>
+
+                          {user.school12th && (
+                            <Grid item xs={12} md={6}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                                <School fontSize="small" color="action" sx={{ mr: 1.5 }} />
+                                <Typography variant="body1">12th School: {user.school12th}</Typography>
+                              </Box>
+                            </Grid>
+                          )}
+                        </Grid>
+                      </Box>
+                    </Card>
+                  </Grid>
+
+                  {/* Resume */}
+                  {user.resumeURL && (
+                    <Grid item xs={12}>
+                      <Card elevation={2} sx={{ p: 2 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Typography variant="h6" fontWeight="bold" sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Description sx={{ mr: 1 }} fontSize="small" /> Resume
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            component="a"
+                            href={user.resumeURL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            startIcon={<OpenInNew />}
+                          >
+                            View Resume
+                          </Button>
+                        </Box>
+                      </Card>
+                    </Grid>
+                  )}
                 </Grid>
-              ))
-            ) : (
-              <Typography variant="body1" style={{ color: '#555555', textAlign: 'center' }}>
-                No jobs applied yet.
-              </Typography>
-            )}
-          </Grid>
-        </div> */}
-      </div>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Box>
+      </Container>
     </>
   );
 };
+
+// Add the missing icons imports
+const Person = Email;
+const Class = School;
+const Grade = School;
+const Report = School;
+const GradeOutlined = School;
+const WatchLater = CalendarMonth;
+const Public = LocationOn;
 
 export default Profile;

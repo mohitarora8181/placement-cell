@@ -279,7 +279,7 @@ const SignUp = () => {
                         },
                       }}
                     >
-                      <MenuItem value='Computer Engineering'>
+                      <MenuItem value='Computer Science Engineering'>
                         Computer Science Engineering
                       </MenuItem>
                       <MenuItem value='Information Technology'>

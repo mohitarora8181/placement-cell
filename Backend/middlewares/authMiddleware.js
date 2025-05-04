@@ -9,13 +9,13 @@ const protect = asyncHandler(async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
             token = req.headers.authorization.split(' ')[1];
-            console.log('Token received:', token); // Debug token
+            // console.log('Token received:', token); // Debug token
 
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            console.log('Decoded token:', decoded); // Debug decoded token
+            // console.log('Decoded token:', decoded); // Debug decoded token
 
             req.user = await User.findById(decoded.id).select('-password');
-            console.log('User found:', req.user); // Debug user
+            // console.log('User found:', req.user); // Debug user
 
             if (!req.user) {
                 return res.status(401).json({ message: 'Not authorized, user not found' });
