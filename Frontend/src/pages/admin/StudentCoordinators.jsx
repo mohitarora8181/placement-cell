@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import AdminNav from '../components/AdminNav'
 import downloadjs from 'downloadjs';
 import html2canvas from 'html2canvas';
 import { Button, TextField } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
-import axios from 'axios';
 
 const StudnetCoordinators = () => {
 
@@ -33,15 +31,13 @@ const StudnetCoordinators = () => {
       setErrors(prev => ({ ...prev, mob: true }));
       return;
     }
+    document.body.style.lineHeight = 0.5;
     const canvas = await html2canvas(document.getElementById('idcard'), { allowTaint: true, useCORS: true });
     downloadjs(canvas.toDataURL('image/png'), `${name}-PC-IDCard`, 'image/png');
+    document.body.style.lineHeight = 1;
   }
 
   const releaseError = (key) => { setErrors(prev => ({ ...prev, [key]: false })); }
-
-  useEffect(() => {
-    document.body.style.lineHeight = 0.5;
-  }, []);
 
   // const handleDriveImage = async (e) => {
   //   const fullLink = e.target.value;
@@ -51,7 +47,6 @@ const StudnetCoordinators = () => {
 
   return (
     <div className='h-full w-full'>
-      <AdminNav />
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <div className='w-full h-[85vh] items-center flex gap-5 p-10 justify-center align-middle'>
           <div className='w-[700px] h-[500px] overflow-y-auto flex flex-col gap-3 py-5'>

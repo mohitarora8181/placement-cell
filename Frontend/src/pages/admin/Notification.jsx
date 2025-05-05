@@ -18,12 +18,7 @@ import {
   Grid,
   List,
   ListItem,
-  ListItemText,
   IconButton,
-  ListItemSecondaryAction,
-  Card,
-  CardContent,
-  Badge,
   Tooltip,
   Dialog,
   DialogActions,
@@ -39,7 +34,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EmailIcon from '@mui/icons-material/Email';
 import DoDisturbOffIcon from '@mui/icons-material/DoDisturbOff';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import AdminNav from '../components/AdminNav';
 import axios from 'axios';
 import { format } from 'date-fns';
 
@@ -194,7 +188,6 @@ const NotificationForm = () => {
 
   return (
     <>
-      <AdminNav />
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={3}>
           {/* Notifications History Panel */}

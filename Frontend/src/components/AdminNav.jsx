@@ -87,11 +87,9 @@ const AdminNav = ({ currentVal }) => {
     }
   }
   const handleNotifyClick = () => {
-    navigate('/notify')
+    navigate('/admin/notify')
   }
-  const handleShortlistedClick = () => {
-    navigate('/shortlisted-students') // Route to the page that manages shortlisted students
-  }
+  
   return (
     <Box sx={{ flexGrow: 1, zIndex: 500 }} className="sticky top-0 left-0 w-full bg-white border-b border-b-gray-50">
       <AppBar position='static' sx={{ backgroundColor: '#FFF' }}>

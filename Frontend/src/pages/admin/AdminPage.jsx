@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import AdminNav from '../components/AdminNav';
-import { Tabs, Tab, Box, Button, Slider, Select, MenuItem, InputLabel, FormControl, Checkbox } from '@mui/material';
+import { Tabs, Tab, Box, Button, Slider, Select, MenuItem, InputLabel, FormControl, Checkbox, Typography } from '@mui/material';
 import axios from 'axios';
-import UserCard from '../components/UserCard';
-import TableListUi from '../components/TableListUi';
+import UserCard from '../../components/UserCard';
+import TableListUi from '../../components/TableListUi';
+import FormCreator from '../../components/FormCreator';
+import FormList from '../../components/FormList';
 import * as XLSX from 'xlsx';
 
 const AdminPage = () => {
   const [tabValue, setTabValue] = useState(localStorage.getItem('adminTab') || 'student');
   const [users, setUsers] = useState([]);
+  const [forms, setForms] = useState([]);
   const [toggleView, setToggleView] = useState(false);
   const [userFilters, setUserFilters] = useState({
     degree: 'Bachelor of Technology',
@@ -21,8 +23,6 @@ const AdminPage = () => {
     activeBacklogs: ''
   });
   const [filterFields, setFilterFields] = useState();
-  const [headerVisible, setHeaderVisible] = useState(true);
-  const lastScrollY = useRef(0);
   const headerRef = useRef(null);
   const headerHeight = useRef(0);
 
@@ -75,9 +75,26 @@ const AdminPage = () => {
           }
         });
         setUsers(response.data);
+      } else if (tabValue === 'forms') {
+        refreshForms();
       }
     } catch (error) {
       console.error(`Error fetching ${tabValue}:`, error.response ? error.response.data : error.message);
+    }
+  };
+
+  const refreshForms = async () => {
+    if (tabValue === 'forms') {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/forms`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`
+          }
+        });
+        setForms(response.data);
+      } catch (error) {
+        console.error('Error fetching forms:', error);
+      }
     }
   };
 
@@ -108,8 +125,6 @@ const AdminPage = () => {
 
   return (
     <>
-      <AdminNav />
-
       {/* Fixed Position Header with Show/Hide behavior */}
       <Box
         ref={headerRef}
@@ -129,6 +144,7 @@ const AdminPage = () => {
           sx={{ borderBottom: 1, borderColor: 'divider', padding: 1 }}
         >
           <Tab label="Students" value="student" />
+          <Tab label="Forms" value="forms" />
         </Tabs>
 
         {/* Filters Section */}
@@ -265,6 +281,27 @@ const AdminPage = () => {
             </div>
             {toggleView && users.length > 0 && <p className='text-sm p-5 cursor-pointer hover:underline-offset-2 underline' onClick={downloadExcel}>Download Excel file for this data [ {users?.filter(user => !user?.isAdmin).length} rows ] </p>}
           </>
+        )}
+
+        {tabValue === 'forms' && (
+          <Box>
+            <FormCreator filterFields={filterFields} />
+
+            {forms.length === 0 ? (
+              <Box sx={{ textAlign: 'center', mt: 4 }}>
+                <Typography variant="h6" color="text.secondary">
+                  No forms created yet
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Click the "Create Form" button to get started
+                </Typography>
+              </Box>
+            ) : (
+              <Box>
+                <FormList forms={forms} refreshForms={refreshForms} filterFields={filterFields} />
+              </Box>
+            )}
+          </Box>
         )}
       </Box>
     </>

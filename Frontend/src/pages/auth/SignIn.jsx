@@ -16,8 +16,8 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import logo from '../images/logo-pc.png'
-import image1 from '../images/image1.jpg'
+import logo from '../../images/logo-pc.png'
+import image1 from '../../images/image1.jpg'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 

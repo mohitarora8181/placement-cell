@@ -4,6 +4,7 @@ import User from "../models/SignupModel.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import Notification from "../models/NotificationModel.js";
 import nodemailer from "nodemailer";
+import { createForm, deleteForm, getAllForms, getFormById, updateForm } from "../controller/form.controller.js";
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -12,6 +13,13 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD,
   }
 });
+
+router.post('/forms/create', protect, createForm);
+router.get('/forms/:id', protect, getFormById);
+router.put('/forms/:id', protect, updateForm);
+router.delete('/forms', protect, deleteForm);
+router.get('/forms', protect, getAllForms);
+
 
 router.post('/notify', protect, async (req, res) => {
   const { to, department, emails, message, subject } = req.body;

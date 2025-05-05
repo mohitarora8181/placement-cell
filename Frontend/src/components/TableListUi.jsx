@@ -40,7 +40,7 @@ export default function TableListUi({ items }) {
     const navigate = useNavigate();
 
     const handleClick = (userId) => {
-        navigate(`/user-profile/${userId}`);
+        navigate(`/admin/user-profile/${userId}`);
     };
 
     return (

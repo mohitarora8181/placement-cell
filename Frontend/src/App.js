@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Navigate, Outlet } from 'react-router-dom';
 import axios from 'axios';
 
 // Page Components
 import Home from './pages/Home';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
+import SignIn from './pages/auth/SignIn';
+import SignUp from './pages/auth/SignUp';
 import Profile from './pages/Profile';
-import EditProfile from './pages/EditProfile';
-import AdminPage from './pages/AdminPage';
-import UserProfile from './pages/UserProfile';
-import NotificationForm from './pages/Notification';
-import StudnetCoordinators from './pages/StudentCoordinators';
 import MeetTheTeam from './components/MeetTheTeam';
+import EditProfile from './pages/EditProfile';
+import AdminPage from './pages/admin/AdminPage';
+import UserProfile from './pages/admin/UserProfile';
+import NotificationForm from './pages/admin/Notification';
+import StudnetCoordinators from './pages/admin/StudentCoordinators';
 
 // UI Components
 import Footer from './components/Footer';
 import Loader from './components/Loader';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import AdminNav from './components/AdminNav';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -107,10 +108,12 @@ function App() {
         <Route path='/edit-profile' element={role === 'user' ? <EditProfile /> : <Navigate to='/' />} />
 
         {/* Admin Routes */}
-        <Route path='/admin' element={role === 'admin' ? <AdminPage /> : <Navigate to='/' />} />
-        <Route path='/admin/sc' element={role === 'admin' ? <StudnetCoordinators /> : <Navigate to='/' />} />
-        <Route path='/notify' element={role === 'admin' ? <NotificationForm /> : <Navigate to='/' />} />
-        <Route path='/user-profile/:userId' element={role === 'admin' ? <UserProfile /> : <Navigate to='/' />} />
+        <Route path='/admin' element={<AdminLayout role={role} />}>
+          <Route index element={<AdminPage />} />
+          <Route path='sc' element={<StudnetCoordinators />} />
+          <Route path='notify' element={<NotificationForm />} />
+          <Route path='user-profile/:userId' element={<UserProfile />} />
+        </Route>
 
         {/* Fallback Route */}
         <Route path='*' element={role === 'admin' ? <AdminPage /> : <Home />} />
@@ -120,5 +123,19 @@ function App() {
     </div>
   );
 }
+
+
+const AdminLayout = ({ role }) => {
+  if (role !== 'admin') {
+    return <Navigate to='/' />;
+  }
+
+  return (
+    <>
+      <AdminNav/>
+      <Outlet />
+    </>
+  );
+};
 
 export default App;

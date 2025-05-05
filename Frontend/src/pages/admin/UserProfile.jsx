@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Typography, Grid, Avatar, Paper, Divider, Box } from '@mui/material';
-import AdminNav from '../components/AdminNav';
-import Loader from '../components/Loader'
+import Loader from '../../components/Loader'
 import PersonIcon from '@mui/icons-material/Person';
 import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import SchoolIcon from '@mui/icons-material/School';
@@ -72,7 +71,6 @@ const UserProfile = () => {
 
   return user ? (
     <>
-      <AdminNav />
       <div className="container mx-auto p-5 w-[80%] shadow-md mt-5 rounded-md overflow-hidden" style={{ backgroundColor: '#ffffff', color: '#333333', minHeight: '80vh' }}>
         <Grid container spacing={3}>
           {/* Profile Information */}
