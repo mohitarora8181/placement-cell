@@ -230,6 +230,14 @@ const SignIn = () => {
               onFocus={(e) => (e.target.style.backgroundColor = '#555')}
               onBlur={(e) => (e.target.style.backgroundColor = '#444')}
             />
+            <Box sx={{textAlign: 'end', cursor: "pointer" }}>
+              <Link href="/forgot-password" style={{ textDecoration: 'none' }}>
+                <Typography variant="body2" style={{ color: '#BB86FC' }}>
+                  Forgot password ?
+                </Typography>
+              </Link>
+            </Box>
+
             <Button
               sx={{
                 background: '#BB86FC',
@@ -273,6 +281,7 @@ const SignIn = () => {
                 Don't have an account?
               </Link>
             </Typography>
+
             <Typography
               variant='body2'
               align='center'

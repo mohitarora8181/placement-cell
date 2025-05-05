@@ -476,9 +476,9 @@ const EditProfile = () => {
                 {userData.resumeURL && (
                   <Grid item xs={12}>
                     <Alert severity="info" sx={{ mt: 1 }}>
-                      Your resume is currently available at{' '}
-                      <a href={userData.resumeURL} target="_blank" rel="noopener noreferrer">
-                        this link
+                      Your resume needs to be currently available at this{' '}
+                      <a href={userData.resumeURL} target="_blank" className='underline' rel="noopener noreferrer">
+                        link
                       </a>
                     </Alert>
                   </Grid>

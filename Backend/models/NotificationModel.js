@@ -1,27 +1,22 @@
 import mongoose from "mongoose";
 
 const notificationSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  jobId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Job',
-    //required: true,
-  },
   message: {
     type: String,
     required: true,
     trim: true,
   },
-  read: {
-    type: Boolean,
-    default: false,
+  subject: {
+    type: String,
+    trim: true,
   },
+  notificationType: {
+    type: String,
+    enum: ['all', 'specific']
+  },
+  emails: [String]
 }, {
-  timestamps: true, // Automatically includes createdAt and updatedAt fields
+  timestamps: true,
 });
 
 const Notification = mongoose.model('Notification', notificationSchema);

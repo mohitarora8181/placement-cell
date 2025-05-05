@@ -119,7 +119,9 @@ const userSchema = new mongoose.Schema({
     leetCode: {
         type: String,
         trim: true
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
 }, {
     timestamps: true
 });
