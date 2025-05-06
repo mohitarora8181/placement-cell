@@ -7,14 +7,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useNavigate } from 'react-router-dom';
+import { Chip, Tooltip, IconButton, Link, Box, CircularProgress, Typography } from '@mui/material';
+import { LinkedIn, GitHub, Code as CodeIcon, Description } from '@mui/icons-material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: 'lightgray',
         color: 'black',
         fontWeight: 'bold',
-        fontSize: '18px',
+        fontSize: '16px',
         whiteSpace: 'nowrap',
         border: '0.5px solid gray'
     },
@@ -34,14 +35,56 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-
-
-export default function TableListUi({ items }) {
-    const navigate = useNavigate();
+export default function TableListUi({ items, loading = false }) {
 
     const handleClick = (userId) => {
-        navigate(`/admin/user-profile/${userId}`);
+        window.open(`/admin/user-profile/${userId}`,'_blank');
     };
+
+    // Function to check if a field has valid data
+    const hasValidData = (value) => {
+        return value && value !== "0" && value !== 0 && value !== "0.0";
+    };
+
+    // Format date function
+    const formatDate = (dateString) => {
+        if (!dateString || dateString === "0001-01-01T00:00:00.000Z") return "---";
+        return new Date(dateString).toLocaleDateString();
+    };
+
+    if (loading) {
+        return (
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                py: 6,
+                minHeight: 200
+            }}>
+                <CircularProgress size={40} sx={{ mb: 2 }} />
+                <Typography variant="body1" color="text.secondary">
+                    Loading student data...
+                </Typography>
+            </Box>
+        );
+    }
+
+    // If items is empty or null
+    if (!items || items.length === 0) {
+        return (
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                py: 4
+            }}>
+                <Typography variant="body1" color="text.secondary">
+                    No student data available.
+                </Typography>
+            </Box>
+        );
+    }
 
     return (
         <TableContainer component={Paper} className='scrollbar-thin'>
@@ -49,46 +92,122 @@ export default function TableListUi({ items }) {
                 <TableHead>
                     <TableRow>
                         <StyledTableCell align="left">Degree</StyledTableCell>
+                        <StyledTableCell align="left">Name</StyledTableCell>
                         <StyledTableCell align="left">Enrollment Number</StyledTableCell>
-                        <StyledTableCell align="left">Full Name</StyledTableCell>
+                        <StyledTableCell align="left">DOB</StyledTableCell>
                         <StyledTableCell align="left">Course</StyledTableCell>
                         <StyledTableCell align="left">Class</StyledTableCell>
-                        <StyledTableCell align="left">Email</StyledTableCell>
-                        <StyledTableCell align="left">Contact Number</StyledTableCell>
-                        <StyledTableCell align="left">Date of Birth</StyledTableCell>
-                        <StyledTableCell align="left">Address</StyledTableCell>
-                        <StyledTableCell align="left">12th School</StyledTableCell>
-                        <StyledTableCell align="left">10th Percentage</StyledTableCell>
-                        <StyledTableCell align="left">12th Percentage</StyledTableCell>
-                        <StyledTableCell align="left">Diploma Percentage</StyledTableCell>
                         <StyledTableCell align="left">CGPA</StyledTableCell>
+                        <StyledTableCell align="left">10th %</StyledTableCell>
+                        <StyledTableCell align="left">12th %</StyledTableCell>
+                        <StyledTableCell align="left">Diploma %</StyledTableCell>
+                        <StyledTableCell align="left">School 12th</StyledTableCell>
                         <StyledTableCell align="left">Gap Year</StyledTableCell>
-                        <StyledTableCell align="left">Year of Passing</StyledTableCell>
-                        <StyledTableCell align="left">Active Backlogs</StyledTableCell>
-                        <StyledTableCell align="left">Nationality</StyledTableCell>
+                        <StyledTableCell align="left">Passing Year</StyledTableCell>
+                        <StyledTableCell align="left">Backlogs</StyledTableCell>
+                        <StyledTableCell align="left">Email</StyledTableCell>
+                        <StyledTableCell align="left">Contact</StyledTableCell>
+                        <StyledTableCell align="left">Address</StyledTableCell>
+                        <StyledTableCell align="left">Profiles</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {items.map((row) => (
                         <StyledTableRow onClick={() => handleClick(row?._id)} key={row?._id}>
-                            <StyledTableCell align="left">{row?.degree}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.enrollmentNumber}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.fullname}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.course}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.classes}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.email}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.contactNumber}</StyledTableCell>
-                            <StyledTableCell align="left">{new Date(row?.dob).toLocaleDateString()}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.address}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.school12th}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.tenthPercentage}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.twelfthPercentage}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.diplomaPercentage}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.cgpa}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.gapYear}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.yearOfPassing}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.activeBacklogs}</StyledTableCell>
-                            <StyledTableCell align="left">{row?.nationality}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.degree || "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{row?.fullname || "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.enrollmentNumber) ? row.enrollmentNumber : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{formatDate(row?.dob)}</StyledTableCell>
+                            <StyledTableCell align="left">
+                                {hasValidData(row?.course) ? (
+                                    <Chip
+                                        label={row.course}
+                                        size="small"
+                                        sx={{
+                                            bgcolor: 'rgba(25, 118, 210, 0.1)',
+                                            fontSize: '0.75rem'
+                                        }}
+                                    />
+                                ) : "---"}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.classes) ? row.classes : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.cgpa) ? row.cgpa : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.tenthPercentage) ? row.tenthPercentage : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.twelfthPercentage) ? row.twelfthPercentage : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.diplomaPercentage) ? row.diplomaPercentage : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.school12th) ? row.school12th : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.gapYear) ? row.gapYear : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.yearOfPassing) ? row.yearOfPassing : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.activeBacklogs) ? row.activeBacklogs : "0"}</StyledTableCell>
+                            <StyledTableCell align="left">
+                                <Tooltip title={`Email: ${row?.email}`}>
+                                    <span>{row?.email}</span>
+                                </Tooltip>
+                            </StyledTableCell>
+                            <StyledTableCell align="left">{hasValidData(row?.contactNumber) ? row.contactNumber : "---"}</StyledTableCell>
+                            <StyledTableCell align="left">
+                                {hasValidData(row?.address) ? (
+                                    <Tooltip title={row.address}>
+                                        <span>{row.address.length > 20 ? `${row.address.substring(0, 20)}...` : row.address}</span>
+                                    </Tooltip>
+                                ) : "---"}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    {hasValidData(row?.resumeURL) && (
+                                        <Tooltip title="Resume">
+                                            <IconButton
+                                                size="small"
+                                                href={row.resumeURL}
+                                                target="_blank"
+                                                onClick={(e) => e.stopPropagation()}
+                                                color="primary"
+                                            >
+                                                <Description fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+                                    {hasValidData(row?.linkedin) && (
+                                        <Tooltip title="LinkedIn">
+                                            <IconButton
+                                                size="small"
+                                                href={row.linkedin}
+                                                target="_blank"
+                                                onClick={(e) => e.stopPropagation()}
+                                                color="primary"
+                                            >
+                                                <LinkedIn fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+                                    {hasValidData(row?.github) && (
+                                        <Tooltip title="GitHub">
+                                            <IconButton
+                                                size="small"
+                                                href={row.github}
+                                                target="_blank"
+                                                onClick={(e) => e.stopPropagation()}
+                                                color="primary"
+                                            >
+                                                <GitHub fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+                                    {hasValidData(row?.leetCode) && (
+                                        <Tooltip title="LeetCode">
+                                            <IconButton
+                                                size="small"
+                                                href={row.leetCode}
+                                                target="_blank"
+                                                onClick={(e) => e.stopPropagation()}
+                                                color="primary"
+                                            >
+                                                <CodeIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+                                </div>
+                            </StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>

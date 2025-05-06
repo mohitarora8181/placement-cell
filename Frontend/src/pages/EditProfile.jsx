@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
-  Button, 
-  TextField, 
-  Grid, 
-  Paper, 
-  Typography, 
-  Container, 
+import {
+  Button,
+  TextField,
+  Grid,
+  Paper,
+  Typography,
+  Container,
   Box,
   Divider,
   IconButton,
@@ -14,12 +14,12 @@ import {
   Snackbar,
   Card
 } from '@mui/material'
-import { 
-  Save, 
-  Person, 
-  School, 
-  LocationOn, 
-  Link as LinkIcon, 
+import {
+  Save,
+  Person,
+  School,
+  LocationOn,
+  Link as LinkIcon,
   Description,
   ArrowBack,
   WorkOutline
@@ -32,7 +32,7 @@ const EditProfile = () => {
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(true)
   const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' })
-  
+
   const userId = localStorage.getItem('userId')?.trim()
   const token = localStorage.getItem('token')?.trim()
   const navigate = useNavigate()
@@ -125,11 +125,12 @@ const EditProfile = () => {
         message: 'Profile updated successfully!',
         severity: 'success'
       })
-      
+
       // We'll use setTimeout to ensure the user sees the success message before redirecting
       setTimeout(() => {
-        navigate('/profile')
-      }, 1500)
+        navigate(-1, { replace: true });
+      }, 500);
+
     } catch (error) {
       console.error('Error updating profile:', error)
       setNotification({
@@ -148,18 +149,18 @@ const EditProfile = () => {
     <>
       <Navbar />
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Paper 
-          elevation={3} 
-          sx={{ 
-            borderRadius: 2, 
+        <Paper
+          elevation={3}
+          sx={{
+            borderRadius: 2,
             overflow: 'hidden',
             mb: 4
           }}
         >
           <Box sx={{ p: 3, bgcolor: 'primary.main', color: 'white', display: 'flex', alignItems: 'center' }}>
-            <IconButton 
-              sx={{ mr: 2, color: 'white' }} 
-              onClick={() => navigate('/profile')}
+            <IconButton
+              sx={{ mr: 2, color: 'white' }}
+              onClick={() => navigate(-1, { replace: true })}
             >
               <ArrowBack />
             </IconButton>
@@ -175,7 +176,7 @@ const EditProfile = () => {
                 <Person sx={{ mr: 1 }} /> Personal Information
               </Typography>
               <Divider sx={{ mb: 3 }} />
-              
+
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                   <TextField
@@ -245,14 +246,14 @@ const EditProfile = () => {
                 </Grid>
               </Grid>
             </Card>
-            
+
             {/* Academic Information Section */}
             <Card elevation={1} sx={{ mb: 4, p: 3, borderRadius: 2 }}>
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: 'primary.main' }}>
                 <School sx={{ mr: 1 }} /> Academic Information
               </Typography>
               <Divider sx={{ mb: 3 }} />
-              
+
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                   <TextField
@@ -348,14 +349,14 @@ const EditProfile = () => {
                 </Grid>
               </Grid>
             </Card>
-            
+
             {/* Previous Education Section */}
             <Card elevation={1} sx={{ mb: 4, p: 3, borderRadius: 2 }}>
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: 'primary.main' }}>
                 <WorkOutline sx={{ mr: 1 }} /> Previous Education
               </Typography>
               <Divider sx={{ mb: 3 }} />
-              
+
               <Grid container spacing={2}>
                 <Grid item xs={12} md={4}>
                   <TextField
@@ -406,14 +407,14 @@ const EditProfile = () => {
                 </Grid>
               </Grid>
             </Card>
-            
+
             {/* Social Links Section */}
             <Card elevation={1} sx={{ mb: 4, p: 3, borderRadius: 2 }}>
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: 'primary.main' }}>
                 <LinkIcon sx={{ mr: 1 }} /> Social Links
               </Typography>
               <Divider sx={{ mb: 3 }} />
-              
+
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
@@ -453,14 +454,14 @@ const EditProfile = () => {
                 </Grid>
               </Grid>
             </Card>
-            
+
             {/* Resume Section */}
             <Card elevation={1} sx={{ mb: 4, p: 3, borderRadius: 2 }}>
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: 'primary.main' }}>
                 <Description sx={{ mr: 1 }} /> Resume
               </Typography>
               <Divider sx={{ mb: 3 }} />
-              
+
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
@@ -490,7 +491,7 @@ const EditProfile = () => {
             <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between', borderTop: 1, borderColor: 'divider', pt: 3 }}>
               <Button
                 variant="outlined"
-                onClick={() => navigate('/profile')}
+                onClick={() => navigate(-1, { replace: true })}
                 size="large"
               >
                 Cancel
@@ -508,16 +509,16 @@ const EditProfile = () => {
           </Box>
         </Paper>
       </Container>
-      
-      <Snackbar 
-        open={notification.open} 
-        autoHideDuration={6000} 
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
         onClose={handleCloseNotification}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseNotification} 
-          severity={notification.severity} 
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
           sx={{ width: '100%' }}
           variant="filled"
         >

@@ -32,7 +32,8 @@ const protect = asyncHandler(async (req, res, next) => {
 
 
 const adminOnly = asyncHandler(async (req, res, next) => {
-    if (req.user && req.user.isAdmin) {
+    const adminUser = await User.findOne({ _id: req.headers["x-admin-id"] });
+    if (adminUser?.isAdmin) {
         next();
     } else {
         res.status(403).json({ message: 'Access denied, admin only' });

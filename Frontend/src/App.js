@@ -20,6 +20,7 @@ import Loader from './components/Loader';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import AdminNav from './components/AdminNav';
+import UserForm from './pages/UserForm';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -106,6 +107,7 @@ function App() {
         <Route path='/home/user-profile' element={role === 'user' ? <Profile /> : <Navigate to='/' />} />
         <Route path='/profile' element={role === 'user' ? <Profile /> : <Navigate to='/' />} />
         <Route path='/edit-profile' element={role === 'user' ? <EditProfile /> : <Navigate to='/' />} />
+        <Route path='/form/:formId' element={role === 'user' ? <UserForm /> : <Navigate to='/' />} />
 
         {/* Admin Routes */}
         <Route path='/admin' element={<AdminLayout role={role} />}>
@@ -132,7 +134,7 @@ const AdminLayout = ({ role }) => {
 
   return (
     <>
-      <AdminNav/>
+      <AdminNav />
       <Outlet />
     </>
   );

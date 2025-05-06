@@ -36,6 +36,7 @@ const FormCreator = ({ filterFields }) => {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         formType: '',
+        title: '',
         description: '',
         // Interview specific fields
         companyName: '',
@@ -64,6 +65,7 @@ const FormCreator = ({ filterFields }) => {
         // Reset form data and errors when closing
         setFormData({
             formType: '',
+            title: '',
             description: '',
             companyName: '',
             jobDescription: '',
@@ -124,6 +126,10 @@ const FormCreator = ({ filterFields }) => {
             if (!formData.testTimeLocation.trim()) newErrors.testTimeLocation = 'Time and location are required';
         }
 
+        if (formData.formType === 'general') {
+            if (!formData.title?.trim()) newErrors.title = 'Title is required';
+        }
+
         // Target audience validation
         if (formData.audienceType === 'specific') {
             if (formData.selectedDepartments.length === 0) {
@@ -154,7 +160,7 @@ const FormCreator = ({ filterFields }) => {
                     title = formData.testName;
                     break;
                 case 'general':
-                    title = 'General Announcement';
+                    title = formData.title || 'General Announcement';
                     break;
                 default:
                     title = 'New Form';
@@ -190,7 +196,8 @@ const FormCreator = ({ filterFields }) => {
                 payload,
                 {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`,
+                        "x-admin-id": localStorage.getItem("userId")?.trim()
                     }
                 }
             );
@@ -525,12 +532,24 @@ const FormCreator = ({ filterFields }) => {
                         {/* General Form Fields */}
                         {formData.formType === 'general' && (
                             <>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Title"
+                                        name="title"
+                                        value={formData.title || ''}
+                                        onChange={handleInputChange}
+                                        required
+                                        error={!!errors.title}
+                                        helperText={errors.title}
+                                    />
+                                </Grid>
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
                                         label="Description"
                                         name="description"
-                                        value={formData.description}
+                                        value={formData.description || ''}
                                         onChange={handleInputChange}
                                         multiline
                                         rows={4}

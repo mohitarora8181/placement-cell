@@ -7,10 +7,12 @@ import Typography from '@mui/material/Typography'
 import InputBase from '@mui/material/InputBase'
 import IconButton from '@mui/material/IconButton'
 import SearchIcon from '@mui/icons-material/Search'
+import LogoutIcon from '@mui/icons-material/Logout'
+import NotificationsIcon from '@mui/icons-material/Notifications'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios' // Ensure axios is imported
+import axios from 'axios'
 import logo from '../images/logo-pc.png'
 import ChecklistIcon from '@mui/icons-material/Checklist'
 
@@ -50,34 +52,47 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const LogoutButton = styled('button')(({ theme }) => ({
-  backgroundColor: '#D32F2F', // Red background
-  color: '#FFF', // White text
-  border: 'none',
-  padding: theme.spacing(1, 3),
-  borderRadius: theme.shape.borderRadius,
+  backgroundColor: 'transparent',
+  color: '#D32F2F',
+  border: '1px solid #D32F2F',
+  padding: '8px 16px',
+  borderRadius: '5px',
   fontSize: '16px',
   cursor: 'pointer',
+  fontWeight: 'semibold',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+  transition: 'all 0.2s',
   '&:hover': {
-    backgroundColor: '#B71C1C', // Darker red on hover
+    backgroundColor: 'rgba(211, 47, 47, 0.08)',
+    borderColor: '#B71C1C',
+    color: '#B71C1C',
   },
 }))
+
 const NotifyButton = styled('button')(({ theme }) => ({
-  backgroundColor: '#f50057', // Same color as the Log Out button (adjust as needed)
-  color: '#fff',
-  border: 'none',
+  backgroundColor: 'transparent',
+  color: '#1976d2',
+  border: '1px solid #1976d2',
   borderRadius: '5px',
-  padding: '10px 20px',
+  padding: '8px 16px',
   cursor: 'pointer',
   fontSize: '16px',
-  fontWeight: 'bold',
+  fontWeight: 'semibold',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.2s',
   '&:hover': {
-    backgroundColor: '#c51162', // Darker shade on hover
+    backgroundColor: 'rgba(25, 118, 210, 0.08)',
+    borderColor: '#1565c0',
+    color: '#1565c0',
   },
 }))
 
 const AdminNav = ({ currentVal }) => {
   const navigate = useNavigate()
-
 
   const logOut = () => {
     const resp = confirm('Do you want to logout ?');
@@ -86,30 +101,38 @@ const AdminNav = ({ currentVal }) => {
       navigate('/sign-in')
     }
   }
+
   const handleNotifyClick = () => {
     navigate('/admin/notify')
   }
-  
+
   return (
     <Box sx={{ flexGrow: 1, zIndex: 500 }} className="sticky top-0 left-0 w-full bg-white border-b border-b-gray-50">
-      <AppBar position='static' sx={{ backgroundColor: '#FFF' }}>
+      <AppBar position='static' sx={{
+        backgroundColor: '#FFF',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
+      }}>
         <Toolbar>
           <Typography
             variant='h6'
             noWrap
             component='div'
-            sx={{ flexGrow: 1, display: {} }}
+            sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}
           >
             <Link to='/admin'>
-              <img className='h-24 mx-2' src={logo} alt='logo' />
+              <img className='h-20 mx-2' src={logo} alt='logo' />
             </Link>
           </Typography>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2}}>
             <NotifyButton onClick={handleNotifyClick}>
-              🔔
+              <NotificationsIcon sx={{ fontSize: 20, mr: 1 }} />
+              Notify
             </NotifyButton>
-            <LogoutButton onClick={logOut}>Log Out</LogoutButton>
+            <LogoutButton onClick={logOut}>
+              <LogoutIcon sx={{ fontSize: 20 }} />
+              Log Out
+            </LogoutButton>
           </Box>
         </Toolbar>
       </AppBar>

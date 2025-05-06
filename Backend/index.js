@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import connectDB from './db/index.js';
 import userRoutes from './Routes/userRoutes.js';
 import adminRoutes from './Routes/AdminRoutes.js';
+import { adminOnly } from './middlewares/authMiddleware.js';
 
 
 const app = express();
@@ -28,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // API Routes
 app.use('/api/users', userRoutes);
-app.use('/api', adminRoutes);
+app.use('/api', adminOnly, adminRoutes);
 
 // Serve static files
 app.get('/', (req, res) => {

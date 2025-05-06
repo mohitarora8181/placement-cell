@@ -62,6 +62,12 @@ const formSchema = new mongoose.Schema({
         trim: true
     },
 
+    // Track interested students
+    interestedStudents: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+
     status: {
         type: String,
         default: 'active',

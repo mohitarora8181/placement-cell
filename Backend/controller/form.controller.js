@@ -1,4 +1,5 @@
 import Forms from '../models/FormModel.js';
+import User from '../models/SignupModel.js';
 
 // Create a new form
 export const createForm = async (req, res) => {
@@ -135,5 +136,46 @@ export const deleteForm = async (req, res) => {
     } catch (error) {
         console.error('Error deleting form:', error);
         res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+export const getFormStudents = async (req, res) => {
+    try {
+        const { formId } = req.params;
+        const form = await Forms.findById(formId);
+
+        if (!form) {
+            return res.status(404).json({ message: 'Form not found' });
+        }
+
+        if (!form.interestedStudents || form.interestedStudents.length === 0) {
+            return res.status(200).json({ students: [] });
+        }
+
+        const students = await User.find(
+            { _id: { $in: form.interestedStudents } },
+            {
+                password: 0,
+                resetPasswordToken: 0,
+                resetPasswordExpire: 0,
+                appliedForms: 0,
+                isAdmin: 0,
+                isPC: 0,
+                createdAt: 0,
+                updatedAt: 0
+            }
+        ).lean();
+
+        res.status(200).json({
+            count: students.length,
+            students: students
+        });
+
+    } catch (error) {
+        console.error('Error fetching form applicants:', error);
+        res.status(500).json({
+            message: 'Server error. Could not fetch student details.',
+            error: error.message
+        });
     }
 };

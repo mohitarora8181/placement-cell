@@ -28,7 +28,12 @@ import {
     FormGroup,
     FormControlLabel,
     Checkbox,
-    CircularProgress
+    CircularProgress,
+    List,
+    ListItem,
+    ListItemAvatar,
+    Avatar,
+    ListItemText
 } from '@mui/material';
 import {
     MoreVert as MoreVertIcon,
@@ -46,10 +51,14 @@ import {
     Group as GroupIcon,
     Edit as EditIcon,
     Save as SaveIcon,
-    CurrencyRupeeSharp
+    CurrencyRupeeSharp,
+    People,
+    OpenInNew
 } from '@mui/icons-material';
 import axios from 'axios';
 import { format } from 'date-fns';
+import TableListUi from './TableListUi';
+import * as XLSX from 'xlsx';
 
 // Form type icons and colors
 const formTypeConfig = {
@@ -89,6 +98,9 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
+    const [studentsList, setStudentsList] = useState([]);
+    const [loadingStudents, setLoadingStudents] = useState(false);
+
     const handleMenuClick = (event, form) => {
         setAnchorEl(event.currentTarget);
         setSelectedForm(form);
@@ -102,6 +114,7 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
         setDialogType('view');
         setOpenDialog(true);
         handleMenuClose();
+        fetchStudentDetails();
     };
 
     const handleDeleteClick = () => {
@@ -125,7 +138,8 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
                 `${process.env.REACT_APP_BACKEND_URL}api/forms`,
                 {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`,
+                        "x-admin-id": localStorage.getItem("userId")?.trim()
                     },
                     data: {
                         id: selectedForm._id
@@ -149,7 +163,8 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
                 { status: 'closed' },
                 {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`,
+                        "x-admin-id": localStorage.getItem("userId")?.trim()
                     }
                 }
             );
@@ -170,7 +185,9 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
                 { status: 'active' },
                 {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`,
+                        "x-admin-id": localStorage.getItem("userId")?.trim()
+
                     }
                 }
             );
@@ -268,7 +285,7 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
             if (!editFormData.testTimeLocation?.trim()) newErrors.testTimeLocation = 'Time and location are required';
         }
 
-        // Target audience validation
+        // Target Students validation
         if (editFormData.audienceType === 'specific') {
             if (!editFormData.selectedDepartments?.length) {
                 newErrors.selectedDepartments = 'Please select at least one department';
@@ -277,6 +294,28 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
+    };
+
+    const fetchStudentDetails = async () => {
+        try {
+            const formId = selectedForm._id;
+            setLoadingStudents(true);
+            const response = await axios.get(
+                `${process.env.REACT_APP_BACKEND_URL}api/forms/${formId}/students`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`,
+                        "x-admin-id": localStorage.getItem("userId")?.trim()
+                    }
+                }
+            );
+            setStudentsList(response.data.students || []);
+        } catch (error) {
+            console.error('Error fetching student details:', error);
+            setStudentsList([]);
+        } finally {
+            setLoadingStudents(false);
+        }
     };
 
     // Save edited form
@@ -314,7 +353,8 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
                 payload,
                 {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')?.trim()}`,
+                        "x-admin-id": localStorage.getItem("userId")?.trim()
                     }
                 }
             );
@@ -338,6 +378,54 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
         }
     };
 
+    const format_DOB_Date = (dateString) => {
+        if (!dateString || dateString === "0001-01-01T00:00:00.000Z") return "---";
+        return new Date(dateString).toLocaleDateString();
+    };
+
+    const downloadExcel = () => {
+        if (!studentsList.length) return;
+        const worksheet = XLSX.utils.json_to_sheet(
+            studentsList.map(student => {
+                const isValid = v => v && v !== "0" && v !== 0;
+
+                return {
+                    'Enrollment Number': student.enrollmentNumber || '---',
+                    'Name': student.fullname || '---',
+                    'D.O.B.': format_DOB_Date(student.dob) || '---',
+                    'Email': student.email || '---',
+                    'Contact': isValid(student.contactNumber) ? student.contactNumber : '---',
+                    'Degree': student.degree || '---',
+                    'Course': student.course || '---',
+                    'Class': isValid(student.classes) ? student.classes : '---',
+                    'CGPA': isValid(student.cgpa) ? student.cgpa : '---',
+                    '10th %': isValid(student.tenthPercentage) ? student.tenthPercentage : '---',
+                    '12th %': isValid(student.twelfthPercentage) ? student.twelfthPercentage : '---',
+                    'Diploma %': isValid(student.diplomaPercentage) ? student.diplomaPercentage : '---',
+                    'Year of Passing': isValid(student.yearOfPassing) ? student.yearOfPassing : '---',
+                    'Active Backlogs': isValid(student.activeBacklogs) ? student.activeBacklogs : '0',
+                    'Resume': isValid(student.resumeURL) ? student.resumeURL : '---',
+                    'LinkedIn': isValid(student.linkedin) ? student.linkedin : '---',
+                    'GitHub': isValid(student.github) ? student.github : '---',
+                    'LeetCode': isValid(student.leetCode) ? student.leetCode : '---'
+                };
+            })
+        );
+
+        const range = XLSX.utils.decode_range(worksheet['!ref']);
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+            const address = XLSX.utils.encode_col(C) + '1';
+            if (!worksheet[address]) continue;
+            worksheet[address].s = { font: { bold: true } };
+        }
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Applicants");
+        const filename = `${selectedForm.title.replace(/[^\w]/g, '_')}_applicants.xlsx`;
+
+        XLSX.writeFile(workbook, filename);
+    };
+
     return (
         <Box sx={{ width: '100%' }}>
             <TableContainer component={Paper} elevation={2}>
@@ -346,7 +434,8 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
                         <TableRow>
                             <TableCell>Type</TableCell>
                             <TableCell>Title</TableCell>
-                            <TableCell>Target Audience</TableCell>
+                            <TableCell>Target Students</TableCell>
+                            <TableCell>Submissions</TableCell>
                             <TableCell>Created</TableCell>
                             <TableCell>Status</TableCell>
                             <TableCell align="right">Actions</TableCell>
@@ -380,6 +469,17 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
                                         />
                                     </Tooltip>
                                 </TableCell>
+
+                                <TableCell>
+                                    <Chip
+                                        label={form.interestedStudents ? form.interestedStudents.length : 0}
+                                        size="small"
+                                        sx={{
+                                            bgcolor: 'rgba(25, 118, 210, 0.1)'
+                                        }}
+                                    />
+                                </TableCell>
+
                                 <TableCell>{formatDate(form.createdAt)}</TableCell>
                                 <TableCell>
                                     <Chip
@@ -445,6 +545,7 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
 
             {/* View/Delete Dialog */}
             <Dialog
+                id='view_form_dialog'
                 open={openDialog}
                 onClose={handleCloseDialog}
                 maxWidth={dialogType === 'view' ? 'md' : 'xs'}
@@ -719,7 +820,7 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
                                     <Grid item xs={12}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                             <GroupIcon sx={{ mr: 1, color: 'text.secondary' }} />
-                                            <Typography variant="subtitle1">Target Audience:</Typography>
+                                            <Typography variant="subtitle1">Target Students:</Typography>
                                         </Box>
                                         <Typography variant="body2" color="text.secondary" sx={{ ml: 4 }}>
                                             {getAudienceLabel(selectedForm)}
@@ -870,6 +971,36 @@ const FormList = ({ forms, refreshForms, filterFields }) => {
                                     <Grid item xs={12}>
                                         <Divider sx={{ my: 1 }} />
                                     </Grid>
+
+                                    {loadingStudents ? (
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
+                                            <CircularProgress />
+                                        </Box>
+                                    ) : studentsList.length > 0 ? (
+                                        <Box sx={{ width: '100%', mt: 2, pl: 2 }}>
+                                            <Typography variant="h6" sx={{ mb: 2 }}>
+                                                Applicants ({studentsList.length})
+                                            </Typography>
+                                            <TableListUi items={studentsList} />
+                                            {studentsList.length > 0 &&
+                                                <p className='text-sm py-5 cursor-pointer hover:underline-offset-2 underline'
+                                                    onClick={downloadExcel}>Download Excel file for this data
+                                                </p>}
+
+                                        </Box>
+                                    ) : (
+                                        <div className='w-full flex justify-center'>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 4 }}>
+                                                <People sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
+                                                <Typography variant="h6" color="text.secondary">
+                                                    No applicants yet
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    When students apply for this opportunity, they will appear here.
+                                                </Typography>
+                                            </Box>
+                                        </div>
+                                    )}
 
                                     <Grid item xs={12}>
                                         <Typography variant="caption" color="text.secondary">

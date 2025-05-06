@@ -61,7 +61,8 @@ const NotificationForm = () => {
       const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/notifications`, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")?.trim()}`
+          "Authorization": `Bearer ${localStorage.getItem("token")?.trim()}`,
+          "x-admin-id": localStorage.getItem("userId")?.trim()
         }
       });
       console.log("Notifications loaded:", data);
@@ -103,7 +104,8 @@ const NotificationForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem("token")?.trim()}`
+          'Authorization': `Bearer ${localStorage.getItem("token")?.trim()}`,
+          "x-admin-id": localStorage.getItem("userId")?.trim()
         },
         body: JSON.stringify(payload),
       });
@@ -118,7 +120,7 @@ const NotificationForm = () => {
         if (notifyTo === 'specific') setEmails('');
         setMessage('');
         setSubject('');
-        
+
         // Refresh the notification list
         fetchNotifications();
       } else {
@@ -148,14 +150,15 @@ const NotificationForm = () => {
 
   const handleDeleteConfirm = async () => {
     if (!selectedNotification) return;
-    
+
     try {
       await axios.delete(`${process.env.REACT_APP_BACKEND_URL}api/notifications/${selectedNotification._id}`, {
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")?.trim()}`
+          "Authorization": `Bearer ${localStorage.getItem("token")?.trim()}`,
+          "x-admin-id": localStorage.getItem("userId")?.trim()
         }
       });
-      
+
       setNotifications(notifications.filter(n => n._id !== selectedNotification._id));
       setSnackbar({
         open: true,
@@ -202,10 +205,10 @@ const NotificationForm = () => {
                 overflow: 'hidden'
               }}
             >
-              <Box sx={{ 
-                p: 2, 
-                display: 'flex', 
-                alignItems: 'center', 
+              <Box sx={{
+                p: 2,
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'space-between',
                 bgcolor: 'primary.light',
                 color: 'white'
@@ -219,10 +222,10 @@ const NotificationForm = () => {
                   </IconButton>
                 </Tooltip>
               </Box>
-              
+
               <Divider />
-              
-              <Box sx={{ overflow: 'auto', flexGrow: 1, maxHeight: '70vh',padding:1 }}>
+
+              <Box sx={{ overflow: 'auto', flexGrow: 1, maxHeight: '70vh', padding: 1 }}>
                 {isNotificationsLoading ? (
                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 4 }}>
                     <CircularProgress />
@@ -237,10 +240,10 @@ const NotificationForm = () => {
                 ) : (
                   <List sx={{ p: 0 }}>
                     {notifications.map((notification) => (
-                      <ListItem 
-                        key={notification._id} 
+                      <ListItem
+                        key={notification._id}
                         divider
-                        sx={{ 
+                        sx={{
                           transition: 'background-color 0.2s',
                           '&:hover': { bgcolor: 'action.hover' },
                         }}
@@ -248,9 +251,9 @@ const NotificationForm = () => {
                         <Box sx={{ width: '100%' }}>
                           <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
                             <EmailIcon fontSize="small" color="primary" sx={{ mr: 1 }} />
-                            <Typography 
-                              variant="subtitle2" 
-                              sx={{ 
+                            <Typography
+                              variant="subtitle2"
+                              sx={{
                                 fontWeight: 'bold',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -261,9 +264,9 @@ const NotificationForm = () => {
                               {notification.subject || 'No Subject'}
                             </Typography>
                             <Tooltip title="Delete">
-                              <IconButton 
-                                edge="end" 
-                                size="small" 
+                              <IconButton
+                                edge="end"
+                                size="small"
                                 onClick={() => handleDeleteClick(notification)}
                                 sx={{ ml: 1 }}
                               >
@@ -271,9 +274,9 @@ const NotificationForm = () => {
                               </IconButton>
                             </Tooltip>
                           </Box>
-                          
-                          <Typography 
-                            variant="body2" 
+
+                          <Typography
+                            variant="body2"
                             color="text.secondary"
                             sx={{
                               overflow: 'hidden',
@@ -285,16 +288,16 @@ const NotificationForm = () => {
                           >
                             {notification.message}
                           </Typography>
-                          
+
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, alignItems: 'center' }}>
                             <Typography variant="caption" color="text.secondary">
                               {formatDate(notification.createdAt)}
                             </Typography>
-                            
+
                             <Tooltip title={notification.notificationType === 'all' ? 'Sent to all students' : 'Sent to specific students'}>
                               <Chip
                                 icon={notification.notificationType === 'all' ? <GroupIcon fontSize="small" /> : <PersonIcon fontSize="small" />}
-                                label={notification.notificationType === 'all' ? 'All' : 
+                                label={notification.notificationType === 'all' ? 'All' :
                                   `${notification.emails?.length || 0} recipient${notification.emails?.length !== 1 ? 's' : ''}`}
                                 size="small"
                                 variant="outlined"

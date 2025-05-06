@@ -4,7 +4,7 @@ import User from "../models/SignupModel.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import Notification from "../models/NotificationModel.js";
 import nodemailer from "nodemailer";
-import { createForm, deleteForm, getAllForms, getFormById, updateForm } from "../controller/form.controller.js";
+import { createForm, deleteForm, getAllForms, getFormById, getFormStudents, updateForm } from "../controller/form.controller.js";
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -19,6 +19,8 @@ router.get('/forms/:id', protect, getFormById);
 router.put('/forms/:id', protect, updateForm);
 router.delete('/forms', protect, deleteForm);
 router.get('/forms', protect, getAllForms);
+
+router.get('/forms/:formId/students', protect, getFormStudents);
 
 
 router.post('/notify', protect, async (req, res) => {

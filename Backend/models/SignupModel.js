@@ -84,10 +84,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    appliedJobs: [
+    appliedForms: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Job'
+            ref: 'Forms'
         }
     ],
     activeBacklogs: {
