@@ -38,12 +38,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function TableListUi({ items, loading = false }) {
 
     const handleClick = (userId) => {
-        window.open(`/admin/user-profile/${userId}`,'_blank');
+        window.open(`/admin/user-profile/${userId}`, '_blank');
     };
 
     // Function to check if a field has valid data
     const hasValidData = (value) => {
         return value && value !== "0" && value !== 0 && value !== "0.0";
+    };
+
+    const ensureAbsoluteUrl = (url) => {
+        if (!url) return '#';
+        if (url.match(/^https?:\/\//i)) {
+            return url;
+        }
+        return `https://${url}`;
     };
 
     // Format date function
@@ -158,7 +166,7 @@ export default function TableListUi({ items, loading = false }) {
                                         <Tooltip title="Resume">
                                             <IconButton
                                                 size="small"
-                                                href={row.resumeURL}
+                                                href={ensureAbsoluteUrl(row.resumeURL)}
                                                 target="_blank"
                                                 onClick={(e) => e.stopPropagation()}
                                                 color="primary"
@@ -171,7 +179,7 @@ export default function TableListUi({ items, loading = false }) {
                                         <Tooltip title="LinkedIn">
                                             <IconButton
                                                 size="small"
-                                                href={row.linkedin}
+                                                href={ensureAbsoluteUrl(row.linkedin)}
                                                 target="_blank"
                                                 onClick={(e) => e.stopPropagation()}
                                                 color="primary"
@@ -184,7 +192,7 @@ export default function TableListUi({ items, loading = false }) {
                                         <Tooltip title="GitHub">
                                             <IconButton
                                                 size="small"
-                                                href={row.github}
+                                                href={ensureAbsoluteUrl(row.github)}
                                                 target="_blank"
                                                 onClick={(e) => e.stopPropagation()}
                                                 color="primary"
@@ -197,7 +205,7 @@ export default function TableListUi({ items, loading = false }) {
                                         <Tooltip title="LeetCode">
                                             <IconButton
                                                 size="small"
-                                                href={row.leetCode}
+                                                href={ensureAbsoluteUrl(row.leetCode)}
                                                 target="_blank"
                                                 onClick={(e) => e.stopPropagation()}
                                                 color="primary"

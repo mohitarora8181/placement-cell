@@ -12,7 +12,8 @@ import {
   IconButton,
   Alert,
   Snackbar,
-  Card
+  Card,
+  CircularProgress
 } from '@mui/material'
 import {
   Save,
@@ -31,6 +32,7 @@ const EditProfile = () => {
   const [userData, setUserData] = useState({})
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
   const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' })
 
   const userId = localStorage.getItem('userId')?.trim()
@@ -44,6 +46,7 @@ const EditProfile = () => {
           setLoading(true)
           const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/users/profile/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
+            timeout: 10000 // 10 second timeout
           })
           setUserData({
             fullname: response.data.fullname || '',
@@ -69,35 +72,83 @@ const EditProfile = () => {
             github: response.data.github || '',
             leetCode: response.data.leetCode || '',
           })
-          setLoading(false)
         } catch (error) {
           console.error('Error fetching user data:', error)
+          setNotification({
+            open: true,
+            message: 'Failed to load profile data. Please try again.',
+            severity: 'error'
+          })
+        } finally {
           setLoading(false)
         }
       }
 
       fetchUserData()
+    } else {
+      setNotification({
+        open: true,
+        message: 'Authentication required. Please log in again.',
+        severity: 'error'
+      })
+      navigate('/sign-in')
     }
-  }, [userId, token])
-
-  // Validation function
-  const validateInputs = () => {
-    const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-    const newErrors = {}
-    if (!userData.fullname?.trim()) newErrors.fullname = 'Full name is required.'
-    if (!emailRegex.test(userData.email)) newErrors.email = 'Enter a valid email address.'
-    if (userData.github && !urlRegex.test(userData.github)) newErrors.github = 'Enter a valid GitHub URL.'
-    if (userData.leetCode && !urlRegex.test(userData.leetCode)) newErrors.leetCode = 'Enter a valid LeetCode URL.'
-    if (userData.linkedin && !urlRegex.test(userData.linkedin)) newErrors.linkedin = 'Enter a valid LinkedIn URL.'
-
-    return newErrors
-  }
+  }, [userId, token, navigate])
 
   const handleInputChange = (event) => {
     const { name, value } = event.target
+    // Clear error for this field when the user makes changes
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }))
+    }
     setUserData({ ...userData, [name]: value })
+  }
+
+  // Validation function
+  const validateInputs = () => {
+    const newErrors = {}
+    if (!userData.fullname?.trim()) {
+      newErrors.fullname = 'Full name is required'
+    }
+
+    if (!userData.enrollmentNumber) {
+      newErrors.enrollmentNumber = 'Enrollment number is required'
+    }
+
+    if (userData.cgpa && (isNaN(userData.cgpa) || parseFloat(userData.cgpa) < 0 || parseFloat(userData.cgpa) > 10)) {
+      newErrors.cgpa = 'CGPA must be between 0 and 10'
+    }
+
+    if (userData.tenthPercentage && (isNaN(userData.tenthPercentage) || parseFloat(userData.tenthPercentage) < 0 || parseFloat(userData.tenthPercentage) > 100)) {
+      newErrors.tenthPercentage = 'Percentage must be between 0 and 100'
+    }
+
+    if (userData.twelfthPercentage && (isNaN(userData.twelfthPercentage) || parseFloat(userData.twelfthPercentage) < 0 || parseFloat(userData.twelfthPercentage) > 100)) {
+      newErrors.twelfthPercentage = 'Percentage must be between 0 and 100'
+    }
+
+    if (userData.diplomaPercentage && (isNaN(userData.diplomaPercentage) || parseFloat(userData.diplomaPercentage) < 0 || parseFloat(userData.diplomaPercentage) > 100)) {
+      newErrors.diplomaPercentage = 'Percentage must be between 0 and 100'
+    }
+
+    const validateSimpleUrl = (url, domain) => {
+      if (!url || url.trim() === '') return true
+      return url.includes(domain)
+    }
+
+    if (!validateSimpleUrl(userData.linkedin, 'linkedin.com')) {
+      newErrors.linkedin = 'Please enter a valid LinkedIn URL (containing linkedin.com)'
+    }
+
+    if (!validateSimpleUrl(userData.github, 'github.com')) {
+      newErrors.github = 'Please enter a valid GitHub URL (containing github.com)'
+    }
+
+    if (!validateSimpleUrl(userData.leetCode, 'leetcode.com')) {
+      newErrors.leetCode = 'Please enter a valid LeetCode URL (containing leetcode.com)'
+    }
+
+    return newErrors
   }
 
   const handleSubmit = async () => {
@@ -106,43 +157,80 @@ const EditProfile = () => {
       setErrors(validationErrors)
       setNotification({
         open: true,
-        message: 'Please correct the errors before submitting',
+        message: 'Please fix the errors in the form',
         severity: 'error'
       })
-      return // Stop the form submission if there are errors
+      return
     }
+    if (submitting) return
+
+    setSubmitting(true)
 
     try {
-      await axios.put(
+      const formattedData = {
+        ...userData,
+        cgpa: userData.cgpa === '' ? null : parseFloat(userData.cgpa),
+        tenthPercentage: userData.tenthPercentage === '' ? null : parseFloat(userData.tenthPercentage),
+        twelfthPercentage: userData.twelfthPercentage === '' ? null : parseFloat(userData.twelfthPercentage),
+        diplomaPercentage: userData.diplomaPercentage === '' ? null : parseFloat(userData.diplomaPercentage),
+        yearOfPassing: userData.yearOfPassing === '' ? null : parseInt(userData.yearOfPassing),
+        gapYear: userData.gapYear === '' ? null : parseInt(userData.gapYear),
+        activeBacklogs: userData.activeBacklogs === '' ? null : parseInt(userData.activeBacklogs),
+        enrollmentNumber: userData.enrollmentNumber === '' ? null : userData.enrollmentNumber,
+      }
+
+      const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}api/users/update-profile/${userId}`,
-        userData,
+        formattedData,
         {
           headers: { Authorization: `Bearer ${token}` },
+          timeout: 10000 // 10 second timeout to prevent hanging
         }
       )
+
       setNotification({
         open: true,
         message: 'Profile updated successfully!',
         severity: 'success'
       })
 
-      // We'll use setTimeout to ensure the user sees the success message before redirecting
       setTimeout(() => {
-        navigate(-1, { replace: true });
-      }, 500);
+        navigate(-1, { replace: true })
+      }, 1000)
 
     } catch (error) {
       console.error('Error updating profile:', error)
+
+      const errorMessage = error.response?.data?.message ||
+        'Failed to update profile. Please try again.'
+
       setNotification({
         open: true,
-        message: 'Failed to update profile.',
+        message: errorMessage,
         severity: 'error'
       })
+    } finally {
+      setSubmitting(false)
     }
   }
 
   const handleCloseNotification = () => {
     setNotification({ ...notification, open: false })
+  }
+
+  // Show loading state when initially fetching data
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <Container maxWidth="lg" sx={{ py: 8, textAlign: 'center' }}>
+          <CircularProgress size={60} />
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Loading profile data...
+          </Typography>
+        </Container>
+      </>
+    )
   }
 
   return (
@@ -188,6 +276,7 @@ const EditProfile = () => {
                     error={!!errors.fullname}
                     helperText={errors.fullname || ''}
                     sx={{ mb: 2 }}
+                    required
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -200,6 +289,7 @@ const EditProfile = () => {
                     error={!!errors.email}
                     helperText={errors.email || ''}
                     sx={{ mb: 2 }}
+                    disabled
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -210,6 +300,8 @@ const EditProfile = () => {
                     type="date"
                     value={userData.dob ? userData.dob.split('T')[0] : ''}
                     onChange={handleInputChange}
+                    error={!!errors.dob}
+                    helperText={errors.dob || ''}
                     sx={{ mb: 2 }}
                     InputLabelProps={{ shrink: true }}
                   />
@@ -221,6 +313,8 @@ const EditProfile = () => {
                     name="contactNumber"
                     value={userData.contactNumber || ''}
                     onChange={handleInputChange}
+                    error={!!errors.contactNumber}
+                    helperText={errors.contactNumber || ''}
                     sx={{ mb: 2 }}
                   />
                 </Grid>
@@ -231,6 +325,8 @@ const EditProfile = () => {
                     name="nationality"
                     value={userData.nationality || ''}
                     onChange={handleInputChange}
+                    error={!!errors.nationality}
+                    helperText={errors.nationality || ''}
                     sx={{ mb: 2 }}
                   />
                 </Grid>
@@ -241,6 +337,8 @@ const EditProfile = () => {
                     name="address"
                     value={userData.address || ''}
                     onChange={handleInputChange}
+                    error={!!errors.address}
+                    helperText={errors.address || ''}
                     sx={{ mb: 2 }}
                   />
                 </Grid>
@@ -262,7 +360,10 @@ const EditProfile = () => {
                     name="degree"
                     value={userData.degree || ''}
                     onChange={handleInputChange}
+                    error={!!errors.degree}
+                    helperText={errors.degree || ''}
                     sx={{ mb: 2 }}
+                    disabled
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -272,7 +373,10 @@ const EditProfile = () => {
                     name="course"
                     value={userData.course || ''}
                     onChange={handleInputChange}
+                    error={!!errors.course}
+                    helperText={errors.course || ''}
                     sx={{ mb: 2 }}
+                    disabled
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -282,7 +386,10 @@ const EditProfile = () => {
                     name="classes"
                     value={userData.classes || ''}
                     onChange={handleInputChange}
+                    error={!!errors.classes}
+                    helperText={errors.classes || ''}
                     sx={{ mb: 2 }}
+                    disabled
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -294,7 +401,10 @@ const EditProfile = () => {
                     onWheel={(e) => e.target.blur()}
                     value={userData.enrollmentNumber || ''}
                     onChange={handleInputChange}
+                    error={!!errors.enrollmentNumber}
+                    helperText={errors.enrollmentNumber || ''}
                     sx={{ mb: 2 }}
+                    required
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -306,6 +416,8 @@ const EditProfile = () => {
                     onWheel={(e) => e.target.blur()}
                     value={userData.cgpa || ''}
                     onChange={handleInputChange}
+                    error={!!errors.cgpa}
+                    helperText={errors.cgpa || 'Enter a value between 0 and 10'}
                     sx={{ mb: 2 }}
                   />
                 </Grid>
@@ -318,6 +430,8 @@ const EditProfile = () => {
                     onWheel={(e) => e.target.blur()}
                     value={userData.yearOfPassing || ''}
                     onChange={handleInputChange}
+                    error={!!errors.yearOfPassing}
+                    helperText={errors.yearOfPassing || ''}
                     sx={{ mb: 2 }}
                   />
                 </Grid>
@@ -330,6 +444,8 @@ const EditProfile = () => {
                     onWheel={(e) => e.target.blur()}
                     value={userData.activeBacklogs !== undefined ? userData.activeBacklogs : ''}
                     onChange={handleInputChange}
+                    error={!!errors.activeBacklogs}
+                    helperText={errors.activeBacklogs || ''}
                     sx={{ mb: 2 }}
                     InputLabelProps={{ shrink: true }}
                   />
@@ -343,6 +459,8 @@ const EditProfile = () => {
                     onWheel={(e) => e.target.blur()}
                     value={userData.gapYear !== undefined ? userData.gapYear : ''}
                     onChange={handleInputChange}
+                    error={!!errors.gapYear}
+                    helperText={errors.gapYear || ''}
                     sx={{ mb: 2 }}
                     InputLabelProps={{ shrink: true }}
                   />
@@ -367,6 +485,8 @@ const EditProfile = () => {
                     onWheel={(e) => e.target.blur()}
                     value={userData.tenthPercentage || ''}
                     onChange={handleInputChange}
+                    error={!!errors.tenthPercentage}
+                    helperText={errors.tenthPercentage || 'Enter a value between 0 and 100'}
                     sx={{ mb: 2 }}
                   />
                 </Grid>
@@ -379,6 +499,8 @@ const EditProfile = () => {
                     onWheel={(e) => e.target.blur()}
                     value={userData.twelfthPercentage || ''}
                     onChange={handleInputChange}
+                    error={!!errors.twelfthPercentage}
+                    helperText={errors.twelfthPercentage || 'Enter a value between 0 and 100'}
                     sx={{ mb: 2 }}
                   />
                 </Grid>
@@ -391,6 +513,8 @@ const EditProfile = () => {
                     onWheel={(e) => e.target.blur()}
                     value={userData.diplomaPercentage !== undefined ? userData.diplomaPercentage : ''}
                     onChange={handleInputChange}
+                    error={!!errors.diplomaPercentage}
+                    helperText={errors.diplomaPercentage || 'Enter a value between 0 and 100'}
                     sx={{ mb: 2 }}
                     InputLabelProps={{ shrink: true }}
                   />
@@ -402,6 +526,8 @@ const EditProfile = () => {
                     name="school12th"
                     value={userData.school12th || ''}
                     onChange={handleInputChange}
+                    error={!!errors.school12th}
+                    helperText={errors.school12th || ''}
                     sx={{ mb: 2 }}
                   />
                 </Grid>
@@ -470,7 +596,8 @@ const EditProfile = () => {
                     name="resumeURL"
                     value={userData.resumeURL || ''}
                     onChange={handleInputChange}
-                    helperText="Paste a link to your resume (Google Drive, Dropbox, etc.)"
+                    error={!!errors.resumeURL}
+                    helperText={errors.resumeURL || 'Paste a link to your resume (Google Drive, Dropbox, etc.)'}
                     sx={{ mb: 2 }}
                   />
                 </Grid>
@@ -493,6 +620,7 @@ const EditProfile = () => {
                 variant="outlined"
                 onClick={() => navigate(-1, { replace: true })}
                 size="large"
+                disabled={submitting}
               >
                 Cancel
               </Button>
@@ -500,10 +628,11 @@ const EditProfile = () => {
                 variant="contained"
                 color="primary"
                 onClick={handleSubmit}
-                startIcon={<Save />}
+                startIcon={submitting ? <CircularProgress size={20} color="inherit" /> : <Save />}
                 size="large"
+                disabled={submitting}
               >
-                Save Changes
+                {submitting ? 'Saving...' : 'Save Changes'}
               </Button>
             </Box>
           </Box>

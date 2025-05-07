@@ -8,12 +8,18 @@ import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import SchoolIcon from '@mui/icons-material/School';
 import LinkIcon from '@mui/icons-material/Link';
 
+// Function to ensure a URL is absolute
+const ensureAbsoluteUrl = (url) => {
+  if (!url) return '';
+  return url.match(/^https?:\/\//i) ? url : `https://${url}`;
+};
+
 // Reusable detail component for displaying a field and its value
 const DetailField = ({ label, value, link, href }) => (
   <Typography variant="body1" style={{ color: '#555555', marginBottom: '8px' }}>
     <strong>{label}:</strong>{' '}
     {link && value ? (
-      <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+      <a href={ensureAbsoluteUrl(href)} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
         {link}
       </a>
     ) : (
@@ -66,7 +72,20 @@ const UserProfile = () => {
 
   // Extract domain from URL for display purposes
   const formatUrl = (url) => {
-    return url ? url.replace(/^https?:\/\/(www\.)?/, '') : 'Not provided';
+    if (!url) return 'Not provided';
+    // Extract domain from URL and return it without the protocol
+    try {
+      const urlObj = new URL(ensureAbsoluteUrl(url));
+      return urlObj.hostname + urlObj.pathname;
+    } catch (e) {
+      // If URL parsing fails, just return the cleaned url
+      return url.replace(/^https?:\/\/(www\.)?/, '');
+    }
+  };
+
+  // Check if a URL is valid and provided
+  const isValidUrl = (url) => {
+    return url && url.trim() !== '';
   };
 
   return user ? (
@@ -155,12 +174,16 @@ const UserProfile = () => {
                   <DetailField label="Gap Year" value={user.gapYear || 'No gap'} />
                 </Grid>
                 <Grid item xs={12}>
-                  <DetailField
-                    label="Resume"
-                    value={user.resumeURL}
-                    link="View Resume"
-                    href={user.resumeURL}
-                  />
+                  {isValidUrl(user.resumeURL) ? (
+                    <DetailField
+                      label="Resume"
+                      value={user.resumeURL}
+                      link="View Resume"
+                      href={ensureAbsoluteUrl(user.resumeURL)}
+                    />
+                  ) : (
+                    <DetailField label="Resume" value="Not provided" />
+                  )}
                 </Grid>
               </Grid>
 
@@ -168,28 +191,40 @@ const UserProfile = () => {
               <SectionHeader icon={<LinkIcon color="primary" />} title="Social Profiles" />
               <Grid container spacing={2} columns={1}>
                 <Grid item xs={12} md={6}>
-                  <DetailField
-                    label="LinkedIn"
-                    value={user.linkedin}
-                    link={formatUrl(user.linkedin)}
-                    href={user.linkedin}
-                  />
+                  {isValidUrl(user.linkedin) ? (
+                    <DetailField
+                      label="LinkedIn"
+                      value={user.linkedin}
+                      link={formatUrl(user.linkedin)}
+                      href={ensureAbsoluteUrl(user.linkedin)}
+                    />
+                  ) : (
+                    <DetailField label="LinkedIn" value="Not provided" />
+                  )}
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <DetailField
-                    label="GitHub"
-                    value={user.github}
-                    link={formatUrl(user.github)}
-                    href={user.github}
-                  />
+                  {isValidUrl(user.github) ? (
+                    <DetailField
+                      label="GitHub"
+                      value={user.github}
+                      link={formatUrl(user.github)}
+                      href={ensureAbsoluteUrl(user.github)}
+                    />
+                  ) : (
+                    <DetailField label="GitHub" value="Not provided" />
+                  )}
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <DetailField
-                    label="LeetCode"
-                    value={user.leetCode}
-                    link={formatUrl(user.leetCode)}
-                    href={user.leetCode}
-                  />
+                  {isValidUrl(user.leetCode) ? (
+                    <DetailField
+                      label="LeetCode"
+                      value={user.leetCode}
+                      link={formatUrl(user.leetCode)}
+                      href={ensureAbsoluteUrl(user.leetCode)}
+                    />
+                  ) : (
+                    <DetailField label="LeetCode" value="Not provided" />
+                  )}
                 </Grid>
               </Grid>
             </Paper>

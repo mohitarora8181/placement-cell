@@ -32,6 +32,12 @@ import {
   WorkOutline
 } from '@mui/icons-material';
 
+// Function to ensure a URL is absolute
+const ensureAbsoluteUrl = (url) => {
+  if (!url) return '#';
+  return url.match(/^https?:\/\//i) ? url : `https://${url}`;
+};
+
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -86,6 +92,11 @@ const Profile = () => {
     return strNumber;
   };
 
+  // Check if URL exists and is not empty
+  const hasValidUrl = (url) => {
+    return url && url.trim() !== '';
+  };
+
   return (
     <>
       <Navbar />
@@ -133,17 +144,22 @@ const Profile = () => {
                   </Typography>
                   <Typography variant="subtitle1" color="text.secondary" gutterBottom>
                     Enrollment:
-                    <a href={`https://www.ipuranklist.com/student/${formatEnrollmentNumber(user.enrollmentNumber)}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    <a
+                      href={`https://www.ipuranklist.com/student/${formatEnrollmentNumber(user.enrollmentNumber)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
                       {` ${formatEnrollmentNumber(user.enrollmentNumber)}`}
                     </a>
                   </Typography>
                   <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 2 }}>
-                    {user.linkedin && (
+                    {hasValidUrl(user.linkedin) && (
                       <Tooltip title="LinkedIn">
                         <IconButton
                           color="primary"
                           component="a"
-                          href={user.linkedin}
+                          href={ensureAbsoluteUrl(user.linkedin)}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -151,12 +167,12 @@ const Profile = () => {
                         </IconButton>
                       </Tooltip>
                     )}
-                    {user.github && (
+                    {hasValidUrl(user.github) && (
                       <Tooltip title="GitHub">
                         <IconButton
                           color="primary"
                           component="a"
-                          href={user.github}
+                          href={ensureAbsoluteUrl(user.github)}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -164,12 +180,12 @@ const Profile = () => {
                         </IconButton>
                       </Tooltip>
                     )}
-                    {user.leetCode && (
+                    {hasValidUrl(user.leetCode) && (
                       <Tooltip title="LeetCode">
                         <IconButton
                           color="primary"
                           component="a"
-                          href={user.leetCode}
+                          href={ensureAbsoluteUrl(user.leetCode)}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -214,28 +230,28 @@ const Profile = () => {
 
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                         <Phone fontSize="small" color="action" sx={{ mr: 1.5 }} />
-                        <Typography variant="body1">{user.contactNumber}</Typography>
+                        <Typography variant="body1">{user.contactNumber || 'Not provided'}</Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                         <Cake fontSize="small" color="action" sx={{ mr: 1.5 }} />
                         <Typography variant="body1">
-                          {new Date(user.dob).toLocaleDateString('en-US', {
+                          {user.dob ? new Date(user.dob).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
-                          })}
+                          }) : 'Not provided'}
                         </Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                         <LocationOn fontSize="small" color="action" sx={{ mr: 1.5 }} />
-                        <Typography variant="body1">{user.address}</Typography>
+                        <Typography variant="body1">{user.address || 'Not provided'}</Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Public fontSize="small" color="action" sx={{ mr: 1.5 }} />
-                        <Typography variant="body1">{user.nationality}</Typography>
+                        <Typography variant="body1">{user.nationality || 'Not provided'}</Typography>
                       </Box>
                     </Card>
                   </Grid>
@@ -250,28 +266,28 @@ const Profile = () => {
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                         <School fontSize="small" color="action" sx={{ mr: 1.5 }} />
                         <Typography variant="body1">
-                          <strong>{user.degree}</strong> in {user.course}
+                          <strong>{user.degree || 'Not specified'}</strong> in {user.course || 'Not specified'}
                         </Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                         <Class fontSize="small" color="action" sx={{ mr: 1.5 }} />
-                        <Typography variant="body1">Class: {user.classes}</Typography>
+                        <Typography variant="body1">Class: {user.classes || 'Not specified'}</Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                         <Grade fontSize="small" color="action" sx={{ mr: 1.5 }} />
-                        <Typography variant="body1">CGPA: {user.cgpa}</Typography>
+                        <Typography variant="body1">CGPA: {user.cgpa || 'Not specified'}</Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                         <CalendarMonth fontSize="small" color="action" sx={{ mr: 1.5 }} />
-                        <Typography variant="body1">Graduation Year: {user.yearOfPassing}</Typography>
+                        <Typography variant="body1">Graduation Year: {user.yearOfPassing || 'Not specified'}</Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Report fontSize="small" color="action" sx={{ mr: 1.5 }} />
-                        <Typography variant="body1">Active Backlogs: {user.activeBacklogs}</Typography>
+                        <Typography variant="body1">Active Backlogs: {user.activeBacklogs !== undefined ? user.activeBacklogs : 'Not specified'}</Typography>
                       </Box>
                     </Card>
                   </Grid>
@@ -285,7 +301,6 @@ const Profile = () => {
 
                       <Grid container spacing={2}>
                         <Grid item xs={12} sm={4}>
-                          {/* Using a fixed height box to ensure all columns are same height */}
                           <Box sx={{
                             p: 2,
                             border: '1px solid #e0e0e0',
@@ -298,7 +313,7 @@ const Profile = () => {
                           }}>
                             <Typography variant="subtitle2" color="text.secondary">10th Percentage</Typography>
                             <Typography variant="h5" fontWeight="medium" color="primary">
-                              {user.tenthPercentage}%
+                              {user.tenthPercentage ? `${user.tenthPercentage}%` : 'N/A'}
                             </Typography>
                           </Box>
                         </Grid>
@@ -316,7 +331,7 @@ const Profile = () => {
                           }}>
                             <Typography variant="subtitle2" color="text.secondary">12th Percentage</Typography>
                             <Typography variant="h5" fontWeight="medium" color="primary">
-                              {user.twelfthPercentage}%
+                              {user.twelfthPercentage ? `${user.twelfthPercentage}%` : 'N/A'}
                             </Typography>
                           </Box>
                         </Grid>
@@ -334,7 +349,7 @@ const Profile = () => {
                           }}>
                             <Typography variant="subtitle2" color="text.secondary">Diploma Percentage</Typography>
                             <Typography variant="h5" fontWeight="medium" color="primary">
-                              {user.diplomaPercentage > 0 ? `${user.diplomaPercentage}%` : 'N/A'}
+                              {user.diplomaPercentage ? `${user.diplomaPercentage}%` : 'N/A'}
                             </Typography>
                           </Box>
                         </Grid>
@@ -345,7 +360,7 @@ const Profile = () => {
                           <Grid item xs={12} md={6}>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                               <WatchLater fontSize="small" color="action" sx={{ mr: 1.5 }} />
-                              <Typography variant="body1">Gap Year(s): {user.gapYear}</Typography>
+                              <Typography variant="body1">Gap Year(s): {user.gapYear !== undefined ? user.gapYear : 'Not specified'}</Typography>
                             </Box>
                           </Grid>
 
@@ -363,7 +378,7 @@ const Profile = () => {
                   </Grid>
 
                   {/* Resume */}
-                  {user.resumeURL && (
+                  {hasValidUrl(user.resumeURL) && (
                     <Grid item xs={12}>
                       <Card elevation={2} sx={{ p: 2 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -374,7 +389,7 @@ const Profile = () => {
                             variant="outlined"
                             color="primary"
                             component="a"
-                            href={user.resumeURL}
+                            href={ensureAbsoluteUrl(user.resumeURL)}
                             target="_blank"
                             rel="noopener noreferrer"
                             startIcon={<OpenInNew />}
